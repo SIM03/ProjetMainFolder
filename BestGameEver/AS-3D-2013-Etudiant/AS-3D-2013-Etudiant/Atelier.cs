@@ -22,7 +22,7 @@ namespace AtelierXNA
       RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
       RessourcesManager<Model> GestionnaireDeModèles { get; set; }
       RessourcesManager<Effect> GestionnaireDeShaders { get; set; }
-      Caméra CaméraJeu { get; set; }
+      Camera CaméraJeu { get; set; }
 
       public InputManager GestionInput { get; private set; }
 
@@ -76,7 +76,7 @@ namespace AtelierXNA
          Services.AddService(typeof(RessourcesManager<Model>), GestionnaireDeModèles);
          Services.AddService(typeof(RessourcesManager<Effect>), GestionnaireDeShaders);
          Services.AddService(typeof(InputManager), GestionInput);
-         Services.AddService(typeof(Caméra), CaméraJeu);
+         Services.AddService(typeof(Camera), CaméraJeu);
          GestionSprites = new SpriteBatch(GraphicsDevice);
          Services.AddService(typeof(SpriteBatch), GestionSprites);
          base.Initialize();
