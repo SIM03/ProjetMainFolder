@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
 
-namespace AtelierXNA
+namespace TOOLS
 {
     public class InputManager : Microsoft.Xna.Framework.GameComponent
     {

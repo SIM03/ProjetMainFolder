@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 
-namespace AtelierXNA
+namespace TOOLS
 {
    public class AfficheurFPS : Microsoft.Xna.Framework.DrawableGameComponent
    {

@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace AtelierXNA
+namespace TOOLS
 {
-   public class CaméraSubjective : Camera
+   public class CaméraSubjective : Caméra
    {
       const float ACCÉLÉRATION = 0.001f;
       const float VITESSE_INITIALE_ROTATION = 5f;

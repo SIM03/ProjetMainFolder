@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 
-namespace AtelierXNA
+namespace TOOLS
 {
    public class ObjetDeBase : Microsoft.Xna.Framework.DrawableGameComponent
    {

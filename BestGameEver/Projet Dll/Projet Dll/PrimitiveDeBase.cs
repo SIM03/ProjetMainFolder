@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 
-namespace AtelierXNA
+namespace TOOLS
 {
    public abstract class PrimitiveDeBase : Microsoft.Xna.Framework.DrawableGameComponent
    {

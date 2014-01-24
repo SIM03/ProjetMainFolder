@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
-namespace AtelierXNA
+namespace TOOLS
 {
    public abstract class Tuile : PrimitiveDeBaseAnimée
    {
