@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AS-3D-2013-Etudiant", "AS-3D-2013-Etudiant\AS-3D-2013-Etudiant\AS-3D-2013-Etudiant.csproj", "{EB4DE677-8937-4ED9-B218-8D37D8454549}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "AS-3D-2013-EtudiantContent", "AS-3D-2013-Etudiant\AS-3D-2013-EtudiantContent\AS-3D-2013-EtudiantContent.contentproj", "{26FE4BF2-EC8A-48D0-9CCE-27AA59DC6664}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EB4DE677-8937-4ED9-B218-8D37D8454549}.Debug|x86.ActiveCfg = Debug|x86
+		{EB4DE677-8937-4ED9-B218-8D37D8454549}.Debug|x86.Build.0 = Debug|x86
+		{EB4DE677-8937-4ED9-B218-8D37D8454549}.Release|x86.ActiveCfg = Release|x86
+		{EB4DE677-8937-4ED9-B218-8D37D8454549}.Release|x86.Build.0 = Release|x86
+		{26FE4BF2-EC8A-48D0-9CCE-27AA59DC6664}.Debug|x86.ActiveCfg = Debug|x86
+		{26FE4BF2-EC8A-48D0-9CCE-27AA59DC6664}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
