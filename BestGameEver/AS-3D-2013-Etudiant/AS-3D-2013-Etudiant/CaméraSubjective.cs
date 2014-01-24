@@ -63,7 +63,7 @@ namespace AtelierXNA
       {
          Latéral = Vector3.Normalize(Vector3.Cross(Direction, OrientationVerticale));
          Direction = Vector3.Normalize(Direction);
-         OrientationVerticale = Vector3.Normalize(OrientationVerticale);
+         OrientationVerticale = Vector3.Up;
          Vue = Matrix.CreateLookAt(Position, Position + Direction, OrientationVerticale);
          GénérerFrustum();
       }
@@ -125,7 +125,7 @@ namespace AtelierXNA
       {
          GérerLacet();
          GérerTangage();
-         GérerRoulis();
+         //GérerRoulis();
       }
 
       private void GérerLacet()
@@ -142,17 +142,17 @@ namespace AtelierXNA
          {
             Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Latéral, DELTA_TANGAGE * rotationTangage * VitesseRotation));
             Latéral = Vector3.Normalize(Vector3.Cross(Direction, OrientationVerticale));
-            OrientationVerticale = Vector3.Transform(OrientationVerticale, Matrix.CreateFromAxisAngle(Latéral, DELTA_TANGAGE * rotationTangage * VitesseRotation));
+            //OrientationVerticale = Vector3.Transform(OrientationVerticale, Matrix.CreateFromAxisAngle(Latéral, DELTA_TANGAGE * rotationTangage * VitesseRotation));
          }
          
       }
 
-      private void GérerRoulis()
-      {
-         int rotationRoulis = (GérerTouche(Keys.PageDown) - GérerTouche(Keys.PageUp));
-         if (rotationRoulis != 0)
-            OrientationVerticale = Vector3.Transform(OrientationVerticale, Matrix.CreateFromAxisAngle(Direction, DELTA_ROULIS * rotationRoulis * VitesseRotation));
-      }
+      //private void GérerRoulis()
+      //{
+      //   int rotationRoulis = (GérerTouche(Keys.PageDown) - GérerTouche(Keys.PageUp));
+      //   if (rotationRoulis != 0)
+      //      OrientationVerticale = Vector3.Transform(OrientationVerticale, Matrix.CreateFromAxisAngle(Direction, DELTA_ROULIS * rotationRoulis * VitesseRotation));
+      //}
 
       private void GestionClavier()
       {
