@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C# Express 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameOli", "GameOli\GameOli\GameOli.csproj", "{DFD1ACCE-F0C4-4176-A3CB-11D35D51B727}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "GameOliContent", "GameOli\GameOliContent\GameOliContent.contentproj", "{B0D1BA20-9E4C-480F-B1C1-722A260AD33B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DFD1ACCE-F0C4-4176-A3CB-11D35D51B727}.Debug|x86.ActiveCfg = Debug|x86
+		{DFD1ACCE-F0C4-4176-A3CB-11D35D51B727}.Debug|x86.Build.0 = Debug|x86
+		{DFD1ACCE-F0C4-4176-A3CB-11D35D51B727}.Release|x86.ActiveCfg = Release|x86
+		{DFD1ACCE-F0C4-4176-A3CB-11D35D51B727}.Release|x86.Build.0 = Release|x86
+		{B0D1BA20-9E4C-480F-B1C1-722A260AD33B}.Debug|x86.ActiveCfg = Debug|x86
+		{B0D1BA20-9E4C-480F-B1C1-722A260AD33B}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
