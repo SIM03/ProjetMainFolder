@@ -1,5 +1,14 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.GamerServices;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+
 
 namespace TOOLS
 {
@@ -20,6 +29,7 @@ namespace TOOLS
 
       float IntervalleMAJ { get; set; }
       float TempsÉcouléDepuisMAJ { get; set; }
+      MouseState OriginalMouseState { get; set; }
       InputManager GestionInput { get; set; }
 
       bool estEnZoom;
@@ -46,12 +56,13 @@ namespace TOOLS
       {
          IntervalleMAJ = intervalleMAJ;
          CréerVolumeDeVisualisation(OUVERTURE_OBJECTIF, DISTANCE_PLAN_RAPPROCHÉ, DISTANCE_PLAN_ÉLOIGNÉ);
-         CréerPointDeVue(positionCaméra, cible, Vector3.Up);
+         CréerPointDeVue(positionCaméra, cible, OrientationVerticale);
          EstEnZoom = false;
       }
 
       public override void Initialize()
       {
+         GérerSouris();
          VitesseRotation = VITESSE_INITIALE_ROTATION;
          VitesseTranslation = VITESSE_INITIALE_TRANSLATION;
          TempsÉcouléDepuisMAJ = 0;
@@ -89,9 +100,16 @@ namespace TOOLS
                GérerRotation();
                CréerPointDeVue();
             }
+            GérerSouris();
             TempsÉcouléDepuisMAJ = 0;
          }
          base.Update(gameTime);
+      }
+
+      private void GérerSouris()
+      {
+          Mouse.SetPosition(Game.Window.ClientBounds.Width / 2, Game.Window.ClientBounds.Height / 2);
+          OriginalMouseState = Mouse.GetState();
       }
 
       private int GérerTouche(Keys touche)
@@ -114,7 +132,7 @@ namespace TOOLS
          float déplacementDirection = (GérerTouche(Keys.W) - GérerTouche(Keys.S)) * VitesseTranslation;
          float déplacementLatéral = (GérerTouche(Keys.D) - GérerTouche(Keys.A)) * VitesseTranslation;
          if (déplacementDirection != 0)
-            Position += Direction * déplacementDirection;
+            Position += new Vector3(Direction.X, 0, Direction.Z) * déplacementDirection;
          if (déplacementLatéral != 0)
             Position += Latéral * déplacementLatéral;
       }
@@ -127,19 +145,20 @@ namespace TOOLS
 
       private void GérerLacet()
       {
-         int rotationLacet = (GérerTouche(Keys.Left) - GérerTouche(Keys.Right));
-         if (rotationLacet != 0)
-            Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Vector3.Up, DELTA_LACET * rotationLacet * VitesseRotation));
-      }
 
+          int rotationLacet = (int)((OriginalMouseState.X - Mouse.GetState().X) * 0.005f);
+          if (rotationLacet != 0)
+            Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Vector3.Up, DELTA_LACET * rotationLacet * VitesseRotation));
+            
+      }
       private void GérerTangage()
       {
-         int rotationTangage = (GérerTouche(Keys.Down) - GérerTouche(Keys.Up));
-         if (rotationTangage != 0)
-         {
+          int rotationTangage = (int)((OriginalMouseState.Y - Mouse.GetState().Y) * 0.005f);
+          if (rotationTangage != 0)
+          {
             Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Latéral, DELTA_TANGAGE * rotationTangage * VitesseRotation));
             Latéral = Vector3.Normalize(Vector3.Cross(Direction, Vector3.Up));
-         }
+          }
          
       }
 

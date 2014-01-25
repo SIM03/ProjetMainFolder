@@ -48,7 +48,7 @@ namespace TOOLS
          //Initialisation des propriétés de la matrice de vue (point de vue)
          Position = position;
          Cible = cible;
-         OrientationVerticale = orientationVerticale;
+         OrientationVerticale = Vector3.Up;//orientationVerticale;
          //Création de la matrice de vue (point de vue)
          CréerPointDeVue();
       }
@@ -91,7 +91,7 @@ namespace TOOLS
 
       public virtual void Déplacer(Vector3 position, Vector3 cible, Vector3 orientationVerticale)
       {
-         CréerPointDeVue(position, cible, orientationVerticale);
+          CréerPointDeVue(position, cible, orientationVerticale);
       }
    }
 }

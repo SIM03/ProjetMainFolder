@@ -107,34 +107,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Afficheur3D.cs" />
-    <Compile Include="AfficheurFPS.cs" />
-    <Compile Include="BoutonDeCommande.cs" />
-    <Compile Include="Caméra.cs" />
-    <Compile Include="CaméraSubjective.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="InputManager.cs" />
-    <Compile Include="ObjetDeBase.cs" />
-    <Compile Include="ObjetDemo.cs" />
-    <Compile Include="Plan.cs" />
-    <Compile Include="PlanTexturé.cs" />
-    <Compile Include="PrimitiveDeBase.cs" />
-    <Compile Include="PrimitiveDeBaseAnimée.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="RessourceDeBase.cs" />
-    <Compile Include="RessourcesManager.cs" />
-    <Compile Include="Terrain.cs" />
-    <Compile Include="Tuile.cs" />
-    <Compile Include="TuileColorée.cs" />
-    <Compile Include="TuileTexturée.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BestGameEver\Projet Dll\Projet Dll\Projet Dll.csproj">
+      <Project>{DEEDB99F-6A6C-4CFA-BCE8-FC3358A05164}</Project>
+      <Name>Projet Dll</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GameOliContent\GameOliContent.contentproj">
       <Name>GameOliContent</Name>
       <XnaReferenceType>Content</XnaReferenceType>

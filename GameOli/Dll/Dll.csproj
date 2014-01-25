@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <ProjectGuid>{DEEDB99F-6A6C-4CFA-BCE8-FC3358A05164}</ProjectGuid>
+    <ProjectGuid>{6F9FDE5E-8C0B-4C02-8F1B-3EB5205DCF73}</ProjectGuid>
     <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Projet_Dll</RootNamespace>
-    <AssemblyName>Projet Dll</AssemblyName>
+    <RootNamespace>Dll</RootNamespace>
+    <AssemblyName>Dll</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
     <XnaPlatform>Windows</XnaPlatform>
     <XnaProfile>HiDef</XnaProfile>
-    <XnaCrossPlatformGroupID>537a0f38-5ba9-4f52-acb0-610eb281edd4</XnaCrossPlatformGroupID>
+    <XnaCrossPlatformGroupID>cb957168-b074-44bd-bc5e-b0f1be68cd80</XnaCrossPlatformGroupID>
     <XnaOutputType>Library</XnaOutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -92,24 +92,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Afficheur3D.cs" />
-    <Compile Include="AfficheurFPS.cs" />
-    <Compile Include="Caméra.cs" />
-    <Compile Include="CaméraSubjective.cs" />
-    <Compile Include="InputManager.cs" />
-    <Compile Include="ObjetDeBase.cs" />
-    <Compile Include="ObjetDemo.cs" />
-    <Compile Include="Plan.cs" />
-    <Compile Include="PlanTexturé.cs" />
-    <Compile Include="PrimitiveDeBase.cs" />
-    <Compile Include="PrimitiveDeBaseAnimée.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RessourceDeBase.cs" />
-    <Compile Include="RessourcesManager.cs" />
-    <Compile Include="Terrain.cs" />
-    <Compile Include="Tuile.cs" />
-    <Compile Include="TuileColorée.cs" />
-    <Compile Include="TuileTexturée.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
