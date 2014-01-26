@@ -32,8 +32,8 @@ namespace GameOli
             Content.RootDirectory = "Content";
             PériphériqueGraphique.SynchronizeWithVerticalRetrace = false;
             IsFixedTimeStep = false;
-            IsMouseVisible = true;
-            
+            IsMouseVisible = false;
+            PériphériqueGraphique.ToggleFullScreen();
         }
 
         
@@ -43,16 +43,14 @@ namespace GameOli
             GestionnaireDeTextures = new RessourcesManager<Texture2D>(this, "Textures");
             GestionnaireDeModèles = new RessourcesManager<Model>(this, "Models");
             GestionInput = new InputManager(this);
-            int hello = Window.ClientBounds.Height;
             Components.Add(GestionInput);
-
 
             Vector3 positionCaméra = new Vector3(1, 100, 10);
             CaméraJeu = new CaméraSubjective(this, positionCaméra, new Vector3(0, 0, 0), INTERVALLE_MAJ_STANDARD);
             //CaméraJeu = new CaméraFixe(this, positionCaméra, positionTuileDragon, Vector3.Up);
             Components.Add(CaméraJeu);
-
-            Components.Add(new Terrain(this, 1f, Vector3.Zero, Vector3.Zero, new Vector3(512, 50, 512), "Canyon", "DétailsTerrain", 5, INTERVALLE_MAJ_STANDARD));
+            Components.Add(new ObjetDeDemo(this, "Floor", 1f, new Vector3(0, 0, 0), new Vector3(0, 0, 0), INTERVALLE_MAJ_STANDARD));
+            Components.Add(new Terrain(this, 1f, new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(512, 50,512), "Canyon", "DétailsTerrain", 5, INTERVALLE_MAJ_STANDARD));
 
             Services.AddService(typeof(RessourcesManager<SpriteFont>), GestionnaireDeFonts);
             Services.AddService(typeof(RessourcesManager<Texture2D>), GestionnaireDeTextures);

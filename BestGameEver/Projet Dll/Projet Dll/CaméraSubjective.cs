@@ -29,7 +29,7 @@ namespace TOOLS
 
       float IntervalleMAJ { get; set; }
       float TempsÉcouléDepuisMAJ { get; set; }
-      MouseState OriginalMouseState { get; set; }
+      Vector2 OriginalMouseState { get; set; }
       InputManager GestionInput { get; set; }
 
       bool estEnZoom;
@@ -62,7 +62,7 @@ namespace TOOLS
 
       public override void Initialize()
       {
-         GérerSouris();
+         OriginalMouseState = new Vector2(Game.Window.ClientBounds.Center.X, Game.Window.ClientBounds.Center.Y);
          VitesseRotation = VITESSE_INITIALE_ROTATION;
          VitesseTranslation = VITESSE_INITIALE_TRANSLATION;
          TempsÉcouléDepuisMAJ = 0;
@@ -91,25 +91,17 @@ namespace TOOLS
          float TempsÉcoulé = (float)gameTime.ElapsedGameTime.TotalSeconds;
          TempsÉcouléDepuisMAJ += TempsÉcoulé;
          GestionClavier();
-         if (TempsÉcouléDepuisMAJ >= IntervalleMAJ)
+         
+         if (TempsÉcouléDepuisMAJ >= 0)
          {
-            if (GestionInput.EstEnfoncée(Keys.LeftShift) || GestionInput.EstEnfoncée(Keys.RightShift))
-            {
                GérerAccélération();
                GérerDéplacement();
                GérerRotation();
                CréerPointDeVue();
-            }
-            GérerSouris();
             TempsÉcouléDepuisMAJ = 0;
          }
+         OriginalMouseState = GestionInput.PositionSouris();
          base.Update(gameTime);
-      }
-
-      private void GérerSouris()
-      {
-          Mouse.SetPosition(Game.Window.ClientBounds.Width / 2, Game.Window.ClientBounds.Height / 2);
-          OriginalMouseState = Mouse.GetState();
       }
 
       private int GérerTouche(Keys touche)
@@ -146,14 +138,14 @@ namespace TOOLS
       private void GérerLacet()
       {
 
-          int rotationLacet = (int)((OriginalMouseState.X - Mouse.GetState().X) * 0.005f);
+          int rotationLacet = (int)((OriginalMouseState.X - GestionInput.PositionSouris().X));
           if (rotationLacet != 0)
             Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Vector3.Up, DELTA_LACET * rotationLacet * VitesseRotation));
             
       }
       private void GérerTangage()
       {
-          int rotationTangage = (int)((OriginalMouseState.Y - Mouse.GetState().Y) * 0.005f);
+          int rotationTangage = (int)((OriginalMouseState.Y - GestionInput.PositionSouris().Y));
           if (rotationTangage != 0)
           {
             Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Latéral, DELTA_TANGAGE * rotationTangage * VitesseRotation));

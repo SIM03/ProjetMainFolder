@@ -121,9 +121,10 @@
       <Project>{DEEDB99F-6A6C-4CFA-BCE8-FC3358A05164}</Project>
       <Name>Projet Dll</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GameOliContent\GameOliContent.contentproj">
-      <Name>GameOliContent</Name>
+    <ProjectReference Include="..\GameOliContent\CONTENT_PIPELINE.contentproj">
+      <Name>CONTENT_PIPELINE %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
+      <Project>{B0D1BA20-9E4C-480F-B1C1-722A260AD33B}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
