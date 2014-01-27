@@ -17,11 +17,10 @@ namespace TOOLS
     {
         Keys[] AnciennesTouches { get; set; }
         Keys[] NouvellesTouches { get; set; }
-        public KeyboardState ÉtatClavier { get; set; }
+        KeyboardState ÉtatClavier { get; set; }
+
         ButtonState[] AnciensClics { get; set; }
         ButtonState[] NouveauxClics { get; set; }
-        bool EstSourisActive { get; set; }
-
         const int CLIC_GAUCHE = 0;
         const int CLIC_DROIT = 1;
 
@@ -45,8 +44,8 @@ namespace TOOLS
             ÉtatClavier = Keyboard.GetState();
             NouvellesTouches = ÉtatClavier.GetPressedKeys();
 
-            AnciensClics = NouveauxClics;
-            //EstSourisActive = Mouse.GetState();
+            AnciensClics[CLIC_GAUCHE] = NouveauxClics[CLIC_GAUCHE];
+            AnciensClics[CLIC_DROIT] = NouveauxClics[CLIC_DROIT];
             EtatSouris();
             base.Update(gameTime);
         }
@@ -74,25 +73,28 @@ namespace TOOLS
             return EstNouvelleTouche;
         }
 
-
         public bool EstAncienClicDroit()
         {
-            return NouveauxClics[CLIC_DROIT] == AnciensClics[CLIC_DROIT];
+            return AnciensClics[CLIC_DROIT] == NouveauxClics[CLIC_DROIT] 
+                && AnciensClics[CLIC_GAUCHE] == ButtonState.Pressed;  
         }
 
         public bool EstAncienClicGauche()
         {
-            return NouveauxClics[CLIC_GAUCHE] == AnciensClics[CLIC_GAUCHE];
+            return AnciensClics[CLIC_GAUCHE] == NouveauxClics[CLIC_GAUCHE] 
+                && AnciensClics[CLIC_GAUCHE] == ButtonState.Pressed; 
         }
 
         public bool EstNouveauClicDroit()
         {
-            return AnciensClics[CLIC_DROIT] != NouveauxClics[CLIC_DROIT];
+            return AnciensClics[CLIC_DROIT] != NouveauxClics[CLIC_DROIT] 
+                && NouveauxClics[CLIC_DROIT] != ButtonState.Released;
         }
 
         public bool EstNouveauClicGauche()
         {
-            return AnciensClics[CLIC_GAUCHE] != NouveauxClics[CLIC_GAUCHE];
+            return AnciensClics[CLIC_GAUCHE] != NouveauxClics[CLIC_GAUCHE] 
+                && NouveauxClics[CLIC_GAUCHE] == ButtonState.Released;
         }
 
         public void EtatSouris()
@@ -101,11 +103,14 @@ namespace TOOLS
             NouveauxClics[CLIC_DROIT] = Mouse.GetState().RightButton;
         }
 
-        public Vector2 GetPositionSouris()
+        public Vector2 PositionSouris()
         {
-            return new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
+            int X = Mouse.GetState().X;
+            int Y = Mouse.GetState().Y;
+            return new Vector2(X, Y);
         }
 
     }
 }
 
+    

@@ -60,9 +60,7 @@ namespace TOOLS
         {
             base.LoadContent();
             GestionInput = Game.Services.GetService(typeof(InputManager)) as InputManager;
-            
         }
-
        
         public override void Update(GameTime gameTime)
         {

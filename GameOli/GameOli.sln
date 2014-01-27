@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Executable", "GameOli\GameO
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CONTENT_PIPELINE", "GameOli\GameOliContent\CONTENT_PIPELINE.contentproj", "{B0D1BA20-9E4C-480F-B1C1-722A260AD33B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projet Dll", "..\BestGameEver\Projet Dll\Projet Dll\Projet Dll.csproj", "{DEEDB99F-6A6C-4CFA-BCE8-FC3358A05164}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projet Dll", "Projet Dll\Projet Dll.csproj", "{DEEDB99F-6A6C-4CFA-BCE8-FC3358A05164}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

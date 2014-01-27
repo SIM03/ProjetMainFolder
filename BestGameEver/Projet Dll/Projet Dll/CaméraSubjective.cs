@@ -92,7 +92,7 @@ namespace TOOLS
          TempsÉcouléDepuisMAJ += TempsÉcoulé;
          GestionClavier();
          
-         if (TempsÉcouléDepuisMAJ >= 0)
+         if (TempsÉcouléDepuisMAJ >= 0.05)
          {
                GérerAccélération();
                GérerDéplacement();

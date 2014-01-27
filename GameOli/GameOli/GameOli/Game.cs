@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using TOOLS;
 
-namespace GameOli
+namespace GAME
 {
     class Game : Microsoft.Xna.Framework.Game
     {
@@ -60,6 +60,15 @@ namespace GameOli
             GestionSprites = new SpriteBatch(GraphicsDevice);
             Services.AddService(typeof(SpriteBatch), GestionSprites);
             base.Initialize();
+        }
+
+        protected override void Update(GameTime gameTime)
+        {
+            if (GestionInput.EstNouvelleTouche(Keys.Escape))
+            {
+                Exit();
+            }
+            base.Update(gameTime);
         }
     }
 }
