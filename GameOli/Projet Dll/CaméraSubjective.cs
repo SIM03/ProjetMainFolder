@@ -20,7 +20,7 @@ namespace TOOLS
       const float DELTA_LACET = MathHelper.Pi / 180; // 1 degré à la fois
       const float DELTA_TANGAGE = MathHelper.Pi / 180; // 1 degré à la fois
       const float DELTA_ROULIS = MathHelper.Pi / 180; // 1 degré à la fois
-      const float INTERVALLE_MAJ_STANDARD = 1f / 30f;
+      const float INTERVALLE_MAJ_STANDARD = 1f / 120f;
 
       Vector3 Direction { get; set; }
       Vector3 Latéral { get; set; }
@@ -98,8 +98,9 @@ namespace TOOLS
                GérerDéplacement();
                GérerRotation();
                CréerPointDeVue();
-         
-            TempsÉcouléDepuisMAJ = 0;
+
+               TempsÉcouléDepuisMAJ = 0;
+            
          }
          GestionSouris();
          OriginalMouseState = GestionInput.PositionSouris();
