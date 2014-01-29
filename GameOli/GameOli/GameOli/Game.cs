@@ -57,6 +57,7 @@ namespace GAME
             //CaméraJeu = new CaméraFixe(this, positionCaméra, positionTuileDragon, Vector3.Up);
             Components.Add(CaméraJeu);
             Components.Add(new ObjetDeDemo(this, "Floor", 1f, new Vector3(0, 0, 0), new Vector3(0, 0, 0), INTERVALLE_MAJ_STANDARD));
+            Components.Add(new AfficheurFPS(this,"Arial20",INTERVALLE_MAJ_STANDARD));
             //Components.Add(new Terrain(this, 1f, new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(DIMENSION, 50,DIMENSION), "Canyon", "DétailsTerrain", 5, INTERVALLE_MAJ_STANDARD));
 
             //Murs Gauche
