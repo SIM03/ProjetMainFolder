@@ -19,7 +19,11 @@ Content\Models\ShipDiffuse.xnb
 Content\Textures\BrickRound0108_5_S.xnb
 Content\Textures\BrickBUMP.xnb
 Content\Textures\BrickRound0108_5_S_SPEC.xnb
+Content\Textures\Wall.xnb
 Content\Models\ModelTextures\BrickRound0108_5_S.xnb
+Content\Textures\Roof.xnb
+Content\Textures\Floor.xnb
+Content\Textures\BlackDoor.xnb
 Content\Fonts\Arial20.xnb
 Content\Models\Flat.xnb
 Content\Models\Floor.xnb
@@ -27,7 +31,3 @@ Content\Models\airplane_blue_tex_0.xnb
 Content\Models\TorusSurface_Color_0.xnb
 Content\Models\ShipDiffuse_0.xnb
 Content\Models\ModelTextures\BrickRound0108_5_S_0.xnb
-Content\Textures\Wall.xnb
-Content\Textures\Roof.xnb
-Content\Textures\Floor.xnb
-Content\Textures\BlackDoor.xnb
