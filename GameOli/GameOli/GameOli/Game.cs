@@ -19,6 +19,7 @@ namespace GAME
         const float DIMENSION_Z = 1024;
         Vector2 étenduePlan = new Vector2(DIMENSION_X,DIMENSION_Y);
         Vector2 étenduePlan1 = new Vector2(DIMENSION_X, DIMENSION_X + DIMENSION_Z);
+        Vector2 étenduePlan2 = new Vector2(DIMENSION_X / 4, DIMENSION_Y);
         Vector2 charpentePlan = new Vector2(4,3);
 
         const float INTERVALLE_CALCUL_FPS = 1f;
@@ -57,7 +58,7 @@ namespace GAME
             //CaméraJeu = new CaméraFixe(this, positionCaméra, positionTuileDragon, Vector3.Up);
             Components.Add(CaméraJeu);
             Components.Add(new ObjetDeDemo(this, "Floor", 1f, new Vector3(0, 0, 0), new Vector3(0, 0, 0), INTERVALLE_MAJ_STANDARD));
-            //Components.Add(new Terrain(this, 1f, new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(DIMENSION, 50,DIMENSION), "Canyon", "DétailsTerrain", 5, INTERVALLE_MAJ_STANDARD));
+            //Components.Add(new Terrain(this, 1f, new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(512, 50, 1024), "Canyon", "DétailsTerrain", 5, INTERVALLE_MAJ_STANDARD));
 
             //Murs Gauche
             Components.Add(new PlanTexturé(this, 1f, new Vector3(0, MathHelper.PiOver2, 0), new Vector3(-DIMENSION_X / 2, DIMENSION_Y / 2, 0), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
@@ -92,6 +93,9 @@ namespace GAME
 
             //Plancher
             Components.Add(new PlanTexturé(this, 1f, new Vector3(-MathHelper.PiOver2, 0, 0), new Vector3(0,0, 0), étenduePlan1, charpentePlan, "Floor", INTERVALLE_MAJ_STANDARD));
+
+            //Porte
+            Components.Add(new PlanTexturé(this, 1f, Vector3.Zero, new Vector3(0, DIMENSION_Y / 2, 3 * (-DIMENSION_Z / 4) + 6), étenduePlan2, charpentePlan, "BlackDoor", INTERVALLE_MAJ_STANDARD));
 
             Services.AddService(typeof(RessourcesManager<SpriteFont>), GestionnaireDeFonts);
             Services.AddService(typeof(RessourcesManager<Texture2D>), GestionnaireDeTextures);
