@@ -15,10 +15,10 @@ namespace TOOLS
    public class CaméraSubjective : Caméra
    {
       const float ACCÉLÉRATION = 0.001f;
-      const float VITESSE_INITIALE_ROTATION = 5f;
-      const float VITESSE_INITIALE_TRANSLATION = 0.5f;
-      const float DELTA_LACET = MathHelper.Pi / 180; // 1 degré à la fois
-      const float DELTA_TANGAGE = MathHelper.Pi / 180; // 1 degré à la fois
+      const float VITESSE_INITIALE_ROTATION = 20f;
+      const float VITESSE_INITIALE_TRANSLATION = 10f;
+      const float DELTA_LACET = MathHelper.Pi / 3600; // 1 degré à la fois
+      const float DELTA_TANGAGE = MathHelper.Pi / 3600; // 1 degré à la fois
       const float DELTA_ROULIS = MathHelper.Pi / 180; // 1 degré à la fois
       const float INTERVALLE_MAJ_STANDARD = 1f / 60f;
       const int DEFAULT_BUFFER_SIZE = 10;
