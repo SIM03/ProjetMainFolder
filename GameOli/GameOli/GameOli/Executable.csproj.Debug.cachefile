@@ -15,6 +15,7 @@ Content\Textures\Carte2.xnb
 Content\Textures\Carte3.xnb
 Content\Textures\land.xnb
 Content\Textures\Canyon.xnb
+<<<<<<< HEAD
 Content\Models\ShipDiffuse.xnb
 Content\Textures\BrickRound0108_5_S.xnb
 Content\Textures\BrickBUMP.xnb
@@ -23,11 +24,24 @@ Content\Textures\Wall.xnb
 Content\Models\ModelTextures\BrickRound0108_5_S.xnb
 Content\Textures\Roof.xnb
 Content\Textures\Floor.xnb
+=======
+>>>>>>> origin/Mouse-dev
 Content\Fonts\Arial20.xnb
-Content\Models\Flat.xnb
-Content\Models\Floor.xnb
 Content\Models\airplane_blue_tex_0.xnb
 Content\Models\TorusSurface_Color_0.xnb
+Content\Models\Flat.xnb
+Content\Models\ShipDiffuse.xnb
 Content\Models\ShipDiffuse_0.xnb
+Content\Models\Floor.xnb
+Content\Models\ModelTextures\BrickRound0108_5_S.xnb
 Content\Models\ModelTextures\BrickRound0108_5_S_0.xnb
+<<<<<<< HEAD
 Content\Textures\BlackDoor.xnb
+=======
+Content\Textures\BrickRound0108_5_S.xnb
+Content\Textures\BrickBUMP.xnb
+Content\Textures\BrickRound0108_5_S_SPEC.xnb
+Content\Textures\Wall.xnb
+Content\Textures\Roof.xnb
+Content\Textures\Floor.xnb
+>>>>>>> origin/Mouse-dev

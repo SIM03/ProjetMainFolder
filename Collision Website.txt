@@ -1,0 +1,6 @@
+http://stackoverflow.com/questions/10670260/c-sharp-gravity-simulation-code-acting-weird
+http://www.codeproject.com/Articles/22438/Gravity-and-Collision-Simulation-in-C
+http://stackoverflow.com/questions/3966188/c-sharp-xna-simulate-gravity
+http://www.codeexperts.com/showthread.php?635-Gravity-Simulation-using-C
+http://www.gamedev.net/topic/481263-c-particle-to-particle-gravity/
+http://goltermann.cc/tag/c-sharp/
