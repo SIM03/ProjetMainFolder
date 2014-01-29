@@ -51,6 +51,8 @@ namespace GAME
             GestionnaireDeTextures = new RessourcesManager<Texture2D>(this, "Textures");
             GestionnaireDeModèles = new RessourcesManager<Model>(this, "Models");
             GestionInput = new InputManager(this);
+            Components.Add(new AfficheurFPS(this, "Arial20",INTERVALLE_MAJ_STANDARD));
+
             Components.Add(GestionInput);
 
             Vector3 positionCaméra = new Vector3(0, 100, 10);
@@ -95,7 +97,7 @@ namespace GAME
             Components.Add(new PlanTexturé(this, 1f, new Vector3(-MathHelper.PiOver2, 0, 0), new Vector3(0,0, 0), étenduePlan1, charpentePlan, "Floor", INTERVALLE_MAJ_STANDARD));
 
             //Porte
-            Components.Add(new PlanTexturé(this, 1f, Vector3.Zero, new Vector3(0, DIMENSION_Y / 2, 3 * (-DIMENSION_Z / 4) + 6), étenduePlan2, charpentePlan, "BlackDoor", INTERVALLE_MAJ_STANDARD));
+            Components.Add(new PlanTexturé(this, 1f, Vector3.Zero, new Vector3(1, DIMENSION_Y / 2, 3 * (-DIMENSION_Z / 4) + 10), étenduePlan2, charpentePlan, "BlackDoor", INTERVALLE_MAJ_STANDARD));
 
             Services.AddService(typeof(RessourcesManager<SpriteFont>), GestionnaireDeFonts);
             Services.AddService(typeof(RessourcesManager<Texture2D>), GestionnaireDeTextures);
