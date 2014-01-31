@@ -99,7 +99,7 @@ namespace GAME
             Components.Add(new PlanTexturé(this, 1f, new Vector3(-MathHelper.PiOver2, 0, 0), new Vector3(0,0, 0), étenduePlan1, charpentePlan, "Floor", INTERVALLE_MAJ_STANDARD));
 
             //Porte
-            Components.Add(new PlanTexturé(this, 1f, Vector3.Zero, new Vector3(1, DIMENSION_Y / 2, 3 * (-DIMENSION_Z / 4) + 10), étenduePlan2, charpentePlan, "BlackDoor", INTERVALLE_MAJ_STANDARD));
+            Components.Add(new PlanTexturé(this, 1f, Vector3.Zero, new Vector3(1, DIMENSION_Y / 2, 3 * (-DIMENSION_Z / 4) + 1), étenduePlan2, charpentePlan, "BlackDoor", INTERVALLE_MAJ_STANDARD));
 
             Components.Add(new AfficheurFPS(this, "Arial20", INTERVALLE_MAJ_STANDARD));
             Services.AddService(typeof(RessourcesManager<SpriteFont>), GestionnaireDeFonts);
