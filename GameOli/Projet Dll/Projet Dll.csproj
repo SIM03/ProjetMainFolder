@@ -96,6 +96,7 @@
     <Compile Include="AfficheurFPS.cs" />
     <Compile Include="Caméra.cs" />
     <Compile Include="CaméraSubjective.cs" />
+    <Compile Include="Collision.cs" />
     <Compile Include="InputManager.cs" />
     <Compile Include="ObjetDeBase.cs" />
     <Compile Include="ObjetDemo.cs" />
