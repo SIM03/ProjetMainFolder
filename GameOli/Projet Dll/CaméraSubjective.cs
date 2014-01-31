@@ -24,6 +24,7 @@ namespace TOOLS
       const float INTERVALLE_MAJ_STANDARD = 1f / 60f;
       const int DEFAULT_BUFFER_SIZE = 10;
       const float DEFAULT_INTERPOLATION = 0.7f;
+      const float FACTOR_GRAVITY = 1.02f;
 
       Vector3 Direction { get; set; }
       Vector3 Latéral { get; set; }
@@ -37,6 +38,7 @@ namespace TOOLS
       Queue<Vector2> MouseBuffer { get; set; }
       int BufferSize { get; set; }
       float InterpolationModifier { get; set; }
+      float Gravity { get; set; }
 
       bool estEnZoom;
       bool EstEnZoom
@@ -74,6 +76,7 @@ namespace TOOLS
          MouseBuffer = new Queue<Vector2>();
          VitesseRotation = VITESSE_INITIALE_ROTATION;
          VitesseTranslation = VITESSE_INITIALE_TRANSLATION;
+         Gravity = -2;
          TempsÉcouléDepuisMAJ = 0;
          base.Initialize();
          GestionInput = Game.Services.GetService(typeof(InputManager)) as InputManager;
@@ -103,17 +106,29 @@ namespace TOOLS
 
          if (TempsÉcouléDepuisMAJ >= INTERVALLE_MAJ_STANDARD)
          {
-               GérerAccélération();
-               GérerDéplacement();
-               GérerRotation();
-               CréerPointDeVue();
+            GérerGravity();
+            GérerAccélération();
+            GérerDéplacement();
+            GérerRotation();
+            CréerPointDeVue();
 
-               TempsÉcouléDepuisMAJ = 0;
-            
+            TempsÉcouléDepuisMAJ = 0;
+
          }
          GestionSouris();
          OriginalMouseState = GestionInput.PositionSouris();
          base.Update(gameTime);
+      }
+
+      private void GérerGravity()
+      {
+         Position += new Vector3(0, Gravity, 0);
+         Gravity *= FACTOR_GRAVITY;
+      }
+
+      private bool IsGrounded()
+      {
+         return Position.Y == 0; //Collision.CollideWithFloor();
       }
 
       private int GérerTouche(Keys touche)
@@ -150,18 +165,18 @@ namespace TOOLS
 
       private void GérerLacet(float RotationX)
       {
-          int rotationLacet = (int)RotationX;
-          if (rotationLacet != 0)
+         int rotationLacet = (int)RotationX;
+         if (rotationLacet != 0)
             Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Vector3.Up, DELTA_LACET * rotationLacet * VitesseRotation));
       }
       private void GérerTangage(float RotationY)
       {
-          int rotationTangage = (int)RotationY;
-          if (rotationTangage != 0)
-          {
+         int rotationTangage = (int)RotationY;
+         if (rotationTangage != 0)
+         {
             Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Latéral, DELTA_TANGAGE * rotationTangage * VitesseRotation));
             Latéral = Vector3.Normalize(Vector3.Cross(Direction, Vector3.Up));
-          }
+         }
       }
 
       private void GestionClavier()
@@ -174,44 +189,44 @@ namespace TOOLS
 
       private void GestionSouris()
       {
-          BufferManagement();
-          if (!(GestionInput.PositionSouris().Y <= Game.Window.ClientBounds.Top || GestionInput.PositionSouris().Y >= Game.Window.ClientBounds.Bottom))
-          {
-              Mouse.SetPosition((int)GestionInput.PositionSouris().X, (int)Game.Window.ClientBounds.Center.Y);
-          }
-          if (!(GestionInput.PositionSouris().X >= Game.Window.ClientBounds.Right || GestionInput.PositionSouris().X <= Game.Window.ClientBounds.Left))
-          {
-              Mouse.SetPosition((int)Game.Window.ClientBounds.Center.X, (int)GestionInput.PositionSouris().Y);
-          }
+         BufferManagement();
+         if (!(GestionInput.PositionSouris().Y <= Game.Window.ClientBounds.Top || GestionInput.PositionSouris().Y >= Game.Window.ClientBounds.Bottom))
+         {
+            Mouse.SetPosition((int)GestionInput.PositionSouris().X, (int)Game.Window.ClientBounds.Center.Y);
+         }
+         if (!(GestionInput.PositionSouris().X >= Game.Window.ClientBounds.Right || GestionInput.PositionSouris().X <= Game.Window.ClientBounds.Left))
+         {
+            Mouse.SetPosition((int)Game.Window.ClientBounds.Center.X, (int)GestionInput.PositionSouris().Y);
+         }
       }
 
       private void BufferManagement()
       {
-          MouseBuffer.Enqueue(new Vector2((OriginalMouseState.X - GestionInput.PositionSouris().X),(OriginalMouseState.Y - GestionInput.PositionSouris().Y)));
-          if (MouseBuffer.Count > BufferSize)
-          {
-              while (MouseBuffer.Count > BufferSize)
-              {
-                  MouseBuffer.Dequeue();
-              }
-          }
+         MouseBuffer.Enqueue(new Vector2((OriginalMouseState.X - GestionInput.PositionSouris().X), (OriginalMouseState.Y - GestionInput.PositionSouris().Y)));
+         if (MouseBuffer.Count > BufferSize)
+         {
+            while (MouseBuffer.Count > BufferSize)
+            {
+               MouseBuffer.Dequeue();
+            }
+         }
       }
 
       private Vector2 BufferInterpolation()
       {
-          float yValue = 0f;
-          float xValue = 0f;
-          float weight = 1.0f;
-          for (int i = 0; i < MouseBuffer.Count; i++)
-          {
-              if (MouseBuffer.ElementAt(i) != Vector2.Zero)
-              {
-                  xValue += (MouseBuffer.ElementAt(i).X * weight);
-                  yValue += (MouseBuffer.ElementAt(i).Y * weight);
-                  weight *= InterpolationModifier;
-              }
-          }
-          return new Vector2(xValue, yValue);
+         float yValue = 0f;
+         float xValue = 0f;
+         float weight = 1.0f;
+         for (int i = 0; i < MouseBuffer.Count; i++)
+         {
+            if (MouseBuffer.ElementAt(i) != Vector2.Zero)
+            {
+               xValue += (MouseBuffer.ElementAt(i).X * weight);
+               yValue += (MouseBuffer.ElementAt(i).Y * weight);
+               weight *= InterpolationModifier;
+            }
+         }
+         return new Vector2(xValue, yValue);
       }
    }
 
