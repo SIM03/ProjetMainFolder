@@ -25,6 +25,8 @@ namespace TOOLS
       const int DEFAULT_BUFFER_SIZE = 10;
       const float DEFAULT_INTERPOLATION = 0.7f;
       const float FACTOR_GRAVITY = 1.02f;
+      const float STARTING_GRAVITY = -13; // Gravity resets itself at this value when character touches the ground
+      const float JUMPING_HEIGHT = 20;
 
       Vector3 Direction { get; set; }
       Vector3 Latéral { get; set; }
@@ -39,6 +41,8 @@ namespace TOOLS
       int BufferSize { get; set; }
       float InterpolationModifier { get; set; }
       float Gravity { get; set; }
+      float StartingHeight { get; set; }
+      bool IsJumping { get; set; }
 
       bool estEnZoom;
       bool EstEnZoom
@@ -66,6 +70,7 @@ namespace TOOLS
          CréerVolumeDeVisualisation(OUVERTURE_OBJECTIF, DISTANCE_PLAN_RAPPROCHÉ, DISTANCE_PLAN_ÉLOIGNÉ);
          CréerPointDeVue(positionCaméra, cible, OrientationVerticale);
          EstEnZoom = false;
+         StartingHeight = positionCaméra.Y;
       }
 
       public override void Initialize()
@@ -76,7 +81,7 @@ namespace TOOLS
          MouseBuffer = new Queue<Vector2>();
          VitesseRotation = VITESSE_INITIALE_ROTATION;
          VitesseTranslation = VITESSE_INITIALE_TRANSLATION;
-         Gravity = -2;
+         Gravity = STARTING_GRAVITY;
          TempsÉcouléDepuisMAJ = 0;
          base.Initialize();
          GestionInput = Game.Services.GetService(typeof(InputManager)) as InputManager;
@@ -109,6 +114,7 @@ namespace TOOLS
             GérerGravity();
             GérerAccélération();
             GérerDéplacement();
+            GérerSaut();
             GérerRotation();
             CréerPointDeVue();
 
@@ -122,13 +128,21 @@ namespace TOOLS
 
       private void GérerGravity()
       {
-         Position += new Vector3(0, Gravity, 0);
-         Gravity *= FACTOR_GRAVITY;
+         if (!IsGrounded())
+         {
+            Position += new Vector3(0, Gravity, 0);
+            Gravity *= FACTOR_GRAVITY;
+         }
+         else
+         {
+            if (Gravity < STARTING_GRAVITY)
+               Gravity = STARTING_GRAVITY;
+         }
       }
 
       private bool IsGrounded()
       {
-         return Position.Y == 0; //Collision.CollideWithFloor();
+         return Position.Y <= StartingHeight; //Collision.CollideWithFloor();
       }
 
       private int GérerTouche(Keys touche)
@@ -154,6 +168,26 @@ namespace TOOLS
             Position += new Vector3(Direction.X, 0, Direction.Z) * déplacementDirection;
          if (déplacementLatéral != 0)
             Position += Latéral * déplacementLatéral;
+      }
+
+      private void GérerSaut()
+      {
+         if (GérerTouche(Keys.Space) == 1 && IsGrounded())
+         {
+            IsJumping = true;
+            Position = new Vector3(Position.X, Position.Y + JUMPING_HEIGHT, Position.Z);
+         }
+         if (IsJumping)
+         {
+            if (IsGrounded())
+            {
+               IsJumping = false;
+            }
+            else
+            {
+               Position = new Vector3(Position.X, Position.Y + JUMPING_HEIGHT, Position.Z);
+            }
+         }
       }
 
       private void GérerRotation()
