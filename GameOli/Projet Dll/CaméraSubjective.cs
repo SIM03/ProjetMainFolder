@@ -111,10 +111,10 @@ namespace TOOLS
 
          if (TempsÉcouléDepuisMAJ >= INTERVALLE_MAJ_STANDARD)
          {
-            GérerGravity();
+            GravityHandler();
             GérerAccélération();
             GérerDéplacement();
-            GérerSaut();
+            JumpHandler();
             GérerRotation();
             CréerPointDeVue();
 
@@ -126,7 +126,7 @@ namespace TOOLS
          base.Update(gameTime);
       }
 
-      private void GérerGravity()
+      private void GravityHandler()
       {
          if (!IsGrounded())
          {
@@ -170,7 +170,7 @@ namespace TOOLS
             Position += Latéral * déplacementLatéral;
       }
 
-      private void GérerSaut()
+      private void JumpHandler()
       {
          if (GérerTouche(Keys.Space) == 1 && IsGrounded())
          {
