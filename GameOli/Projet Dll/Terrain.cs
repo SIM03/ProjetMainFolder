@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.IO;
 
 public class Terrain : PrimitiveDeBaseAnimée
 {
@@ -48,9 +49,9 @@ public class Terrain : PrimitiveDeBaseAnimée
 
    private void InitialiserTableaux()
    {
-      CarteHauteur = GestionnaireDeTextures.Find(NomCarteTerrain);
-      NbColonnes = CarteHauteur.Width;
-      NbRangées = CarteHauteur.Height;
+       CarteHauteur = GestionnaireDeTextures.Find(NomCarteTerrain);
+      NbColonnes = (int)Étendue.X;
+      NbRangées = (int)Étendue.Z;
       DataTexture = new Color[NbColonnes * NbRangées];
       CarteHauteur.GetData<Color>(DataTexture);
       Delta = new Vector2(Étendue.X / NbColonnes, Étendue.Z / NbRangées);
@@ -97,6 +98,7 @@ public class Terrain : PrimitiveDeBaseAnimée
 
    private float CalculerHauteur(int noColonne, int noRangée)
    {
+      
       return (float)DataTexture[noColonne + NbRangées * noRangée].R / (float)byte.MaxValue * Étendue.Y;
    }
 
