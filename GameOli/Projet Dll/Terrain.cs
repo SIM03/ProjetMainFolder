@@ -43,35 +43,31 @@ namespace Projet_Dll
    public override void Initialize()
    {
       GestionnaireDeTextures = Game.Services.GetService(typeof(RessourcesManager<Texture2D>)) as RessourcesManager<Texture2D>;
-      InitialiserTableaux();
-      GérerTexture();
+      FetchHeightmapData();
+      //GérerTexture();
       Origine = new Vector3(-Size.X / 2, 0, Size.Z / 2);
-      CréerTableaux();
+      CreateVerticesTable();
       InitialiserPtsSommets();
       base.Initialize();
    }
 
-   private void InitialiserTableaux()
+   private void FetchHeightmapData()
    {
        Heightmap = GestionnaireDeTextures.Find(NomCarteTerrain);
       DataTexture = new Color[Heightmap.Width * Heightmap.Height];
       Heightmap.GetData<Color>(DataTexture);
-      Delta = new Vector2(Size.X / NbColonnes, Size.Z / NbRangées);
-      NbTriangles = (NbColonnes - 1) * (NbRangées - 1) * 2;
-      NbSommets = NbTriangles * NB_SOMMETS_PAR_TRIANGLE;
    }
 
-   private void GérerTexture()
-   {
-      TextureTerrain = GestionnaireDeTextures.Find(NomTextureTerrain);
-      Tuile = new Vector2(TextureTerrain.Width, TextureTerrain.Height / Size.Y / NbNiveauxTexture);
-      DeltaTexture = 1f / NbNiveauxTexture;
-   }
+   //private void GérerTexture()
+   //{
+   //   Texture = GestionnaireDeTextures.Find(TextureName);
+   //   Tile = new Vector2(TextureTerrain.Width, TextureTerrain.Height / Size.Y / NbNiveauxTexture);
+   //}
 
-   private void CréerTableaux()
+   private void CreateVerticesTable()
    {
-      PtsSommets = new Vector3[NbColonnes + 1, NbRangées + 1];
-      Sommets = new VertexPositionTexture[NbSommets];
+      PtsSommets = new Vector3[Heightmap.Width,Heightmap.Height];
+      Vertices = new VertexPositionNormalTexture[NbVertex];
    }
 
    protected override void LoadContent()

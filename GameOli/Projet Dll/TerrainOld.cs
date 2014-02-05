@@ -27,11 +27,11 @@ public class Terrain : PrimitiveDeBaseAnimée
    public RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
    public float DeltaTexture { get; set; }
 
-   public Terrain(Game jeu, float homotéthieInitiale, Vector3 rotationInitiale, Vector3 positionInitiale, Vector3 étendue, string nomCarteTerrain, string nomTextureTerrain, int nbNiveauxTexture, float intervalleMAJ)
+   public Terrain(Game jeu, float homotéthieInitiale, Vector3 rotationInitiale, Vector3 positionInitiale, Vector3 size, string nomCarteTerrain, string nomTextureTerrain, int nbNiveauxTexture, float intervalleMAJ)
       : base(jeu, homotéthieInitiale, rotationInitiale, positionInitiale, intervalleMAJ)
    {
-      Étendue = étendue;
-      NomCarteTerrain = nomCarteTerrain;
+      Étendue = size;
+      HeightmapName = nomCarteTerrain;
       TextureMapName = nomTextureTerrain;
       NbNiveauxTexture = nbNiveauxTexture;
    }
@@ -49,12 +49,13 @@ public class Terrain : PrimitiveDeBaseAnimée
 
    private void InitialiserTableaux()
    {
-       CarteHauteur = GestionnaireDeTextures.Find(NomCarteTerrain);
-      NbColonnes = (int)Étendue.X;
-      NbRangées = (int)Étendue.Z;
+      CarteHauteur = GestionnaireDeTextures.Find(HeightmapName);
+      //NbColonnes = (int)Étendue.X;
+      //NbRangées = (int)Étendue.Z;
+      Étendue=
       DataTexture = new Color[NbColonnes * NbRangées];
       CarteHauteur.GetData<Color>(DataTexture);
-      Delta = new Vector2(Étendue.X / NbColonnes, Étendue.Z / NbRangées);
+      //Delta = new Vector2(Étendue.X / NbColonnes, Étendue.Z / NbRangées);
       NbTriangles = (NbColonnes - 1) * (NbRangées - 1) * 2;
       NbSommets = NbTriangles * NB_SOMMETS_PAR_TRIANGLE;
    }
