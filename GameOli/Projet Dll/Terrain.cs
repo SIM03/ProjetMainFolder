@@ -1,85 +1,87 @@
-ÔªøÔªøusing TOOLS;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.GamerServices;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+using TOOLS;
 
-public class Terrain : PrimitiveDeBaseAnim√©e
+
+namespace Projet_Dll
 {
-   private const int NB_SOMMETS_PAR_TRIANGLE = 3;
+  public class Terrain : PrimitiveDeBaseAnimÈe
+   {
+  private const int NB_SOMMETS_PAR_TRIANGLE = 3;
    private const int NB_POINTS_PAR_TUILE = 4;
 
    public string NomCarteTerrain { get; set; }
    public string NomTextureTerrain { get; set; }
-   public int NbNiveauxTexture { get; set; }
-   public int NbColonnes { get; set; }
-   public int NbRang√©es { get; set; }
-   public Vector2 Delta { get; set; }
-   public Vector2 Tuile { get; set; }
-   public Vector3 √âtendue { get; set; }
+   public Vector3 Size { get; set; }
    public Vector3 Origine { get; set; }
    public Vector3[,] PtsSommets { get; set; }
    public Color[] DataTexture { get; set; }
-   public Texture2D CarteHauteur { get; set; }
-   public Texture2D TextureTerrain { get; set; }
-   public VertexPositionTexture[] Sommets { get; set; }
+   public Texture2D Heightmap { get; set; }
+   public Texture2D Texture { get; set; }
+     public Texture2D UV_Map { get; set; }
+   public VertexPositionNormalTexture[] Vertices { get; set; }
    public BasicEffect EffetDeBase { get; set; }
    public RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
    public float DeltaTexture { get; set; }
 
-   public Terrain(Game jeu, float homot√©thieInitiale, Vector3 rotationInitiale, Vector3 positionInitiale, Vector3 √©tendue, string nomCarteTerrain, string nomTextureTerrain, int nbNiveauxTexture, float intervalleMAJ)
-      : base(jeu, homot√©thieInitiale, rotationInitiale, positionInitiale, intervalleMAJ)
+   public Terrain(Game jeu, float homotÈthieInitiale, Vector3 rotationInitiale, Vector3 positionInitiale, Vector3 size, string nomCarteTerrain, string nomTextureTerrain, int nbNiveauxTexture, float intervalleMAJ)
+      : base(jeu, homotÈthieInitiale, rotationInitiale, positionInitiale, intervalleMAJ)
    {
-      √âtendue = √©tendue;
+      Size = size;
       NomCarteTerrain = nomCarteTerrain;
       NomTextureTerrain = nomTextureTerrain;
-      NbNiveauxTexture = nbNiveauxTexture;
    }
 
    public override void Initialize()
    {
       GestionnaireDeTextures = Game.Services.GetService(typeof(RessourcesManager<Texture2D>)) as RessourcesManager<Texture2D>;
       InitialiserTableaux();
-      G√©rerTexture();
-      Origine = new Vector3(-√âtendue.X / 2, 0, √âtendue.Z / 2);
-      Cr√©erTableaux();
+      GÈrerTexture();
+      Origine = new Vector3(-Size.X / 2, 0, Size.Z / 2);
+      CrÈerTableaux();
       InitialiserPtsSommets();
       base.Initialize();
    }
 
    private void InitialiserTableaux()
    {
-       CarteHauteur = GestionnaireDeTextures.Find(NomCarteTerrain);
-      NbColonnes = (int)√âtendue.X;
-      NbRang√©es = (int)√âtendue.Z;
-      DataTexture = new Color[NbColonnes * NbRang√©es];
-      CarteHauteur.GetData<Color>(DataTexture);
-      Delta = new Vector2(√âtendue.X / NbColonnes, √âtendue.Z / NbRang√©es);
-      NbTriangles = (NbColonnes - 1) * (NbRang√©es - 1) * 2;
+       Heightmap = GestionnaireDeTextures.Find(NomCarteTerrain);
+      DataTexture = new Color[Heightmap.Width * Heightmap.Height];
+      Heightmap.GetData<Color>(DataTexture);
+      Delta = new Vector2(Size.X / NbColonnes, Size.Z / NbRangÈes);
+      NbTriangles = (NbColonnes - 1) * (NbRangÈes - 1) * 2;
       NbSommets = NbTriangles * NB_SOMMETS_PAR_TRIANGLE;
    }
 
-   private void G√©rerTexture()
+   private void GÈrerTexture()
    {
       TextureTerrain = GestionnaireDeTextures.Find(NomTextureTerrain);
-      Tuile = new Vector2(TextureTerrain.Width, TextureTerrain.Height / √âtendue.Y / NbNiveauxTexture);
+      Tuile = new Vector2(TextureTerrain.Width, TextureTerrain.Height / Size.Y / NbNiveauxTexture);
       DeltaTexture = 1f / NbNiveauxTexture;
    }
 
-   private void Cr√©erTableaux()
+   private void CrÈerTableaux()
    {
-      PtsSommets = new Vector3[NbColonnes + 1, NbRang√©es + 1];
+      PtsSommets = new Vector3[NbColonnes + 1, NbRangÈes + 1];
       Sommets = new VertexPositionTexture[NbSommets];
    }
 
    protected override void LoadContent()
    {
       EffetDeBase = new BasicEffect(GraphicsDevice);
-      G√©rerEffet();
+      GÈrerEffet();
       base.LoadContent();
    }
 
-   private void G√©rerEffet()
+   private void GÈrerEffet()
    {
       EffetDeBase.TextureEnabled = true;
       EffetDeBase.Texture = TextureTerrain;
@@ -89,34 +91,34 @@ public class Terrain : PrimitiveDeBaseAnim√©e
    {
       for (int noColonne = 0; noColonne < NbColonnes; ++noColonne)
       {
-         for (int noRang√©e = 0; noRang√©e < NbRang√©es; ++noRang√©e)
+         for (int noRangÈe = 0; noRangÈe < NbRangÈes; ++noRangÈe)
          {
-            PtsSommets[noColonne, noRang√©e] = new Vector3(Origine.X + noColonne * Delta.X, CalculerHauteur(noColonne, NbRang√©es - 1 - noRang√©e), Origine.Z - noRang√©e * Delta.Y);
+            PtsSommets[noColonne, noRangÈe] = new Vector3(Origine.X + noColonne * Delta.X, CalculerHauteur(noColonne, NbRangÈes - 1 - noRangÈe), Origine.Z - noRangÈe * Delta.Y);
          }
       }
    }
 
-   private float CalculerHauteur(int noColonne, int noRang√©e)
+   private float CalculerHauteur(int noColonne, int noRangÈe)
    {
       
-      return (float)DataTexture[noColonne + NbRang√©es * noRang√©e].R / (float)byte.MaxValue * √âtendue.Y;
+      return (float)DataTexture[noColonne + NbRangÈes * noRangÈe].R / (float)byte.MaxValue * Size.Y;
    }
 
    protected override void InitialiserSommets()
    {
-      float deltaAltitude = (float)((int)Math.Ceiling(√âtendue.Y / NbNiveauxTexture) + 1);
+      float deltaAltitude = (float)((int)Math.Ceiling(Size.Y / NbNiveauxTexture) + 1);
       int noSommet = 0;
-      for (int noRang√©e = 0; noRang√©e < NbRang√©es - 1; ++noRang√©e)
+      for (int noRangÈe = 0; noRangÈe < NbRangÈes - 1; ++noRangÈe)
       {
          for (int noColonne = 0; noColonne < NbColonnes - 1; ++noColonne)
          {
-            float y = (float)(int)((PtsSommets[noColonne, noRang√©e].Y + PtsSommets[noColonne + 1, noRang√©e].Y + PtsSommets[noColonne, noRang√©e + 1].Y + PtsSommets[noColonne + 1, noRang√©e + 1].Y) / NB_POINTS_PAR_TUILE / deltaAltitude) * DeltaTexture;
-            Sommets[noSommet] = new VertexPositionTexture(PtsSommets[noColonne, noRang√©e], new Vector2(0, y + DeltaTexture));
-            Sommets[noSommet + 1] = new VertexPositionTexture(PtsSommets[noColonne, noRang√©e + 1], new Vector2(0, y));
-            Sommets[noSommet + 2] = new VertexPositionTexture(PtsSommets[noColonne + 1, noRang√©e], new Vector2(1, y + DeltaTexture));
-            Sommets[noSommet + 3] = new VertexPositionTexture(PtsSommets[noColonne, noRang√©e + 1], new Vector2(0, y));
-            Sommets[noSommet + 4] = new VertexPositionTexture(PtsSommets[noColonne + 1, noRang√©e + 1], new Vector2(1, y));
-            Sommets[noSommet + 5] = new VertexPositionTexture(PtsSommets[noColonne + 1, noRang√©e], new Vector2(1, y + DeltaTexture));
+            float y = (float)(int)((PtsSommets[noColonne, noRangÈe].Y + PtsSommets[noColonne + 1, noRangÈe].Y + PtsSommets[noColonne, noRangÈe + 1].Y + PtsSommets[noColonne + 1, noRangÈe + 1].Y) / NB_POINTS_PAR_TUILE / deltaAltitude) * DeltaTexture;
+            Sommets[noSommet] = new VertexPositionTexture(PtsSommets[noColonne, noRangÈe], new Vector2(0, y + DeltaTexture));
+            Sommets[noSommet + 1] = new VertexPositionTexture(PtsSommets[noColonne, noRangÈe + 1], new Vector2(0, y));
+            Sommets[noSommet + 2] = new VertexPositionTexture(PtsSommets[noColonne + 1, noRangÈe], new Vector2(1, y + DeltaTexture));
+            Sommets[noSommet + 3] = new VertexPositionTexture(PtsSommets[noColonne, noRangÈe + 1], new Vector2(0, y));
+            Sommets[noSommet + 4] = new VertexPositionTexture(PtsSommets[noColonne + 1, noRangÈe + 1], new Vector2(1, y));
+            Sommets[noSommet + 5] = new VertexPositionTexture(PtsSommets[noColonne + 1, noRangÈe], new Vector2(1, y + DeltaTexture));
             noSommet = noSommet + 6;
          }
       }
@@ -125,8 +127,8 @@ public class Terrain : PrimitiveDeBaseAnim√©e
    public override void Draw(GameTime gameTime)
    {
       EffetDeBase.World = GetMonde();
-      EffetDeBase.View = Cam√©raJeu.Vue;
-      EffetDeBase.Projection = Cam√©raJeu.Projection;
+      EffetDeBase.View = CamÈraJeu.Vue;
+      EffetDeBase.Projection = CamÈraJeu.Projection;
       foreach (EffectPass effectPass in EffetDeBase.CurrentTechnique.Passes)
       {
          effectPass.Apply();
