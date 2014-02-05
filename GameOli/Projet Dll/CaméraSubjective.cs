@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace TOOLS
 {
-   public class CaméraSubjective : Caméra
+    public class CaméraSubjective : Caméra, iPhysicalObject
    {
       const float ACCÉLÉRATION = 0.001f;
       const float VITESSE_INITIALE_ROTATION = 20f;
@@ -37,6 +37,8 @@ namespace TOOLS
       Queue<Vector2> MouseBuffer { get; set; }
       int BufferSize { get; set; }
       float InterpolationModifier { get; set; }
+      
+      public BoundingBox Shell { get; set; }
 
       bool estEnZoom;
       bool EstEnZoom
@@ -213,7 +215,8 @@ namespace TOOLS
           }
           return new Vector2(xValue, yValue);
       }
-   }
+
+      
 
    //struct BufferTable<T>
    //{
@@ -241,5 +244,5 @@ namespace TOOLS
    //        Table[0] = ElementToAdd;
    //        ++index;
    //    }
-   //}
+   }
 }

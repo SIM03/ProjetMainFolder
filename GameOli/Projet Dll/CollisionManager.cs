@@ -25,10 +25,13 @@ namespace TOOLS
         int X_Tiles { get; set; }
         int Z_Tiles { get; set; }
 
+        List<ObjetDeBasePhysique> StaticObjectList { get; set; }
+        List<ObjetDeBasePhysique> MovingObjectList { get; set; }
+
         Vector2 XY_SubdivisionLevel { get; set; }
 
 
-        public CollisionManager(Game game, float depth, float width)
+         CollisionManager(Game game, float depth, float width,List<ObjetDeBasePhysique> staticObjectList,List<ObjetDeBasePhysique> movingObjectList)
             : base(game)
         {
             X_Tiles = (int)(Math.Floor(width/DELTAX_BASE));
@@ -36,6 +39,8 @@ namespace TOOLS
             DeltaX = width / Z_Tiles;
             DeltaZ = depth / X_Tiles;
             XY_SubdivisionLevel = new Vector2(DeltaX, DeltaZ);
+            StaticObjectList = staticObjectList;
+            MovingObjectList = movingObjectList;
         }
      
         public override void Update(GameTime gameTime)
@@ -51,15 +56,55 @@ namespace TOOLS
             return new Vector2 ((int)(Math.Ceiling(position2D.X / DeltaX)),(int)(Math.Ceiling(position2D.Y / DeltaZ))) ;
         }
 
-        public bool isObjectNear()
+        bool isObjectNear(iPhysicalObject objet)
         {
+            Vector2 ZoneObjet = objet.Zone;
+            Vector2[] RangeTiles = new Vector2[8];
+
+            RangeTiles[0] = new Vector2(ZoneObjet.X - 1, ZoneObjet.Y + 1);
+            RangeTiles[1] = new Vector2(ZoneObjet.X, ZoneObjet.Y + 1);
+            RangeTiles[2] = new Vector2(ZoneObjet.X + 1, ZoneObjet.Y + 1);
+            RangeTiles[3] = new Vector2(ZoneObjet.X + 1, ZoneObjet.Y);
+            RangeTiles[4] = new Vector2(ZoneObjet.X + 1, ZoneObjet.Y - 1);
+            RangeTiles[5] = new Vector2(ZoneObjet.X, ZoneObjet.Y - 1);
+            RangeTiles[6] = new Vector2(ZoneObjet.X - 1, ZoneObjet.Y - 1);
+            RangeTiles[7] = new Vector2(ZoneObjet.X - 1, ZoneObjet.Y);
+
+            foreach (iPhysicalObject obj in StaticObjectList)
+            {
+                for (int i = 0; i < RangeTiles.Length; i++)
+                {
+                    if (RangeTiles[i] = obj.Zone)
+                    {
+                        CheckCollison(objet, obj);
+                    }
+                }
+			
+
+            }
+
 
         }
 
 
-        public bool CollideWith()
+
+
+        bool CheckCollison(iPhysicalObject objet1, iPhysicalObject objet2)
         {
-            return true;
+            bool collision = false;
+            foreach (BoundingBox Box in objet1.ShellList)
+            {
+                foreach (BoundingBox Box2 in objet2.ShellList)
+                {
+                    collision = Box.Intersects(Box2);
+                }
+
+                if (collision)
+                {
+                    Game.Exit();
+                }
+            }
+            return collision;
         }
 
         public bool CollideWithFloor()
