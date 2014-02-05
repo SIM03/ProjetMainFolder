@@ -15,9 +15,9 @@ namespace GameOli
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class CameLevel : Microsoft.Xna.Framework.GameComponent
+    public class GameLevel : Microsoft.Xna.Framework.GameComponent
     {
-        public CameLevel(Game game)
+        public GameLevel(Game game)
             : base(game)
         {
             // TODO: Construct any child components here

@@ -51,10 +51,10 @@ namespace TOOLS
             return new Vector2 ((int)(Math.Ceiling(position2D.X / DeltaX)),(int)(Math.Ceiling(position2D.Y / DeltaZ))) ;
         }
 
-        public bool isObjectNear()
-        {
+        //public bool isObjectNear()
+        //{
 
-        }
+        //}
 
 
         public bool CollideWith()
