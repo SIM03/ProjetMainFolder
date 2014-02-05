@@ -28,13 +28,13 @@ namespace TOOLS
         Vector2 XY_SubdivisionLevel { get; set; }
 
 
-        public CollisionManager(Game game, float height, float width)
+        public CollisionManager(Game game, float depth, float width)
             : base(game)
         {
             X_Tiles = (int)(Math.Floor(width/DELTAX_BASE));
-            Z_Tiles = (int)(Math.Floor(height/DELTAY_BASE));
+            Z_Tiles = (int)(Math.Floor(depth/DELTAY_BASE));
             DeltaX = width / Z_Tiles;
-            DeltaZ = height / X_Tiles;
+            DeltaZ = depth / X_Tiles;
             XY_SubdivisionLevel = new Vector2(DeltaX, DeltaZ);
         }
      
@@ -45,10 +45,15 @@ namespace TOOLS
             base.Update(gameTime);
         }
 
-        public int GetZone(Vector3 position3D)
+        public Vector2 GetZone(Vector3 position3D)
         {
             Vector2 position2D = new Vector2(position3D.X, position3D.Z);
-            return (int)(Math.Ceiling(position2D.X / DeltaX));
+            return new Vector2 ((int)(Math.Ceiling(position2D.X / DeltaX)),(int)(Math.Ceiling(position2D.Y / DeltaZ))) ;
+        }
+
+        public bool isObjectNear()
+        {
+
         }
 
 
