@@ -94,6 +94,7 @@
   <ItemGroup>
     <Compile Include="Afficheur3D.cs" />
     <Compile Include="AfficheurFPS.cs" />
+    <Compile Include="BufferManager.cs" />
     <Compile Include="Caméra.cs" />
     <Compile Include="CaméraSubjective.cs" />
     <Compile Include="InputManager.cs" />
@@ -111,6 +112,7 @@
     <Compile Include="Tuile.cs" />
     <Compile Include="TuileColorée.cs" />
     <Compile Include="TuileTexturée.cs" />
+    <Compile Include="VertexCollection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
