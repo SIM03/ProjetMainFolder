@@ -7,7 +7,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Projet_Dll</RootNamespace>
+    <RootNamespace>EventInput</RootNamespace>
     <AssemblyName>Projet Dll</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -73,6 +73,7 @@
     <Reference Include="mscorlib">
       <Private>False</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
@@ -96,7 +97,10 @@
     <Compile Include="AfficheurFPS.cs" />
     <Compile Include="Caméra.cs" />
     <Compile Include="CaméraSubjective.cs" />
+    <Compile Include="ControlPanel.cs" />
+    <Compile Include="EventInput.cs" />
     <Compile Include="InputManager.cs" />
+    <Compile Include="KeyboardDispatcher.cs" />
     <Compile Include="ObjetDeBase.cs" />
     <Compile Include="ObjetDemo.cs" />
     <Compile Include="Plan.cs" />
@@ -107,6 +111,7 @@
     <Compile Include="RessourceDeBase.cs" />
     <Compile Include="RessourcesManager.cs" />
     <Compile Include="Terrain.cs" />
+    <Compile Include="TextBox.cs" />
     <Compile Include="Tuile.cs" />
     <Compile Include="TuileColorée.cs" />
     <Compile Include="TuileTexturée.cs" />

@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using TOOLS;
+using EventInput;
 
 namespace GAME
 {
@@ -41,7 +42,7 @@ namespace GAME
             PériphériqueGraphique.SynchronizeWithVerticalRetrace = false;
             IsFixedTimeStep = false;
             IsMouseVisible = false;
-            PériphériqueGraphique.ToggleFullScreen();
+            //PériphériqueGraphique.ToggleFullScreen();
         }
 
         
@@ -52,6 +53,9 @@ namespace GAME
             GestionnaireDeModèles = new RessourcesManager<Model>(this, "Models");
             GestionInput = new InputManager(this);
             Components.Add(new AfficheurFPS(this, "Arial20",INTERVALLE_MAJ_STANDARD));
+
+            EventInput.EventInput.Initialize(this.Window);
+            
 
             Components.Add(GestionInput);
 
@@ -101,7 +105,8 @@ namespace GAME
             //Porte
             Components.Add(new PlanTexturé(this, 1f, Vector3.Zero, new Vector3(1, DIMENSION_Y / 2, 3 * (-DIMENSION_Z / 4) + 1), étenduePlan2, charpentePlan, "BlackDoor", INTERVALLE_MAJ_STANDARD));
 
-            Components.Add(new AfficheurFPS(this, "Arial20", INTERVALLE_MAJ_STANDARD));
+            //Components.Add(new AfficheurFPS(this, "Arial20", INTERVALLE_MAJ_STANDARD));
+            Components.Add(new ControlPanel(this, "Arial20", "TextBoxGradient", "caret"));
             Services.AddService(typeof(RessourcesManager<SpriteFont>), GestionnaireDeFonts);
             Services.AddService(typeof(RessourcesManager<Texture2D>), GestionnaireDeTextures);
             Services.AddService(typeof(RessourcesManager<Model>), GestionnaireDeModèles);
