@@ -38,8 +38,8 @@ namespace GAME
         {
             PériphériqueGraphique = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            PériphériqueGraphique.SynchronizeWithVerticalRetrace = false;
-            IsFixedTimeStep = false;
+            PériphériqueGraphique.SynchronizeWithVerticalRetrace = true;
+            IsFixedTimeStep = true;
             IsMouseVisible = false;
             PériphériqueGraphique.ToggleFullScreen();
         }
