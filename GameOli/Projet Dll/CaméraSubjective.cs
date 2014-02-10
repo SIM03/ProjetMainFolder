@@ -26,9 +26,11 @@ namespace TOOLS
         const float SENSIVITY = 1.00f;
         const float DEFAULT_INTERPOLATION = 0.50f;
         const float MINIMUM_MOVEMENT_CONST = 1f;
-        const float GRAVITY_FACTOR = 100f;
-        const float STARTING_GRAVITY = -13; // Gravity resets itself at this value when character touches the ground
-        const float JUMPING_HEIGHT = 4;
+        const float GRAVITY_FACTOR = 2;
+        //const float STARTING_GRAVITY = -13; // Gravity resets itself at this value when character touches the ground
+        const float JUMPING_HEIGHT = 8;
+        const double WAIT_TIME = 1;
+        //const float ROTATION_ACCELERATION = 2;
 
         Vector3 Direction { get; set; }
         Vector3 Latéral { get; set; }
@@ -45,9 +47,13 @@ namespace TOOLS
         public float InterpolationModifier { get; private set; }
         public float MINIMUM_MOVEMENT { get; private set; } /* Future Const (testing parameter only)*/
         float Gravity { get; set; }
-        Vector3 Velocity { get; set; }
+        float Velocity { get; set; }
+        float AirTime { get; set; }
         float StartingHeight { get; set; }
+        double LastJump { get; set; }
         bool IsJumping { get; set; }
+        //float ForcedRotationY { get; set; }
+        //float RotationFactor { get; set; }
 
         bool estEnZoom;
         bool EstEnZoom
@@ -88,8 +94,12 @@ namespace TOOLS
             MouseBuffer = new Queue<Vector2>();
             VitesseRotation = VITESSE_INITIALE_ROTATION;
             VitesseTranslation = VITESSE_INITIALE_TRANSLATION;
-            Gravity = STARTING_GRAVITY;
-            Velocity = new Vector3(0, 0, 0);
+            //Gravity = STARTING_GRAVITY;
+            Velocity = 0;
+            AirTime = 0f;
+            LastJump = WAIT_TIME;
+            //ForcedRotationY = 0;
+            //RotationFactor = 10;
             TempsÉcouléDepuisMAJ = 0;
             base.Initialize();
             GestionInput = Game.Services.GetService(typeof(InputManager)) as InputManager;
@@ -120,9 +130,9 @@ namespace TOOLS
             if (TempsÉcouléDepuisMAJ >= INTERVALLE_MAJ_STANDARD)
             {
                 GravityHandler(gameTime);
-                GérerAccélération();
+                //GérerAccélération();
                 GérerDéplacement();
-                JumpHandler();
+
                 GérerRotation();
                 CréerPointDeVue();
                 GestionSouris(gameTime);
@@ -130,7 +140,7 @@ namespace TOOLS
                 TempsÉcouléDepuisMAJ = 0;
 
             }
-            
+
             OriginalMouseState = GestionInput.PositionSouris();
             base.Update(gameTime);
         }
@@ -139,19 +149,23 @@ namespace TOOLS
         {
             if (!IsOnFloor())
             {
-                Velocity += new Vector3(0, (float)(-GRAVITY_FACTOR * gameTime.ElapsedGameTime.TotalSeconds), 0);
+                AirTime += 0.005f;
+                Velocity -= (GRAVITY_FACTOR * AirTime);
             }
             else
             {
-                if (Velocity.Y < 0)
-                    Velocity = new Vector3(0, 0, 0);
+                if (Velocity != 0)
+                    Velocity = 0;
+                AirTime = 0;
             }
-            Position = new Vector3(Position.X, Position.Y + Velocity.Y, Position.Z);
+
+            Velocity += JumpHandler(gameTime);
+            Position = new Vector3(Position.X, Position.Y + Velocity, Position.Z);
         }
 
         private bool IsOnFloor()
         {
-            return Position.Y <= 100; //Collision.CollideWithFloor();
+            return (Position.Y < 100); //Collision.CollideWithFloor();
         }
 
         private int GérerTouche(Keys touche)
@@ -159,15 +173,15 @@ namespace TOOLS
             return GestionInput.EstEnfoncée(touche) ? 1 : 0;
         }
 
-        private void GérerAccélération()
-        {
-            int valAccélération = (GérerTouche(Keys.Subtract) + GérerTouche(Keys.OemMinus)) - (GérerTouche(Keys.Add) + GérerTouche(Keys.OemPlus));
-            if (valAccélération != 0)
-            {
-                IntervalleMAJ += ACCÉLÉRATION * valAccélération;
-                IntervalleMAJ = MathHelper.Max(INTERVALLE_MAJ_STANDARD, IntervalleMAJ);
-            }
-        }
+        //private void GérerAccélération()
+        //{
+        //    int valAccélération = (GérerTouche(Keys.Subtract) + GérerTouche(Keys.OemMinus)) - (GérerTouche(Keys.Add) + GérerTouche(Keys.OemPlus));
+        //    if (valAccélération != 0)
+        //    {
+        //        IntervalleMAJ += ACCÉLÉRATION * valAccélération;
+        //        IntervalleMAJ = MathHelper.Max(INTERVALLE_MAJ_STANDARD, IntervalleMAJ);
+        //    }
+        //}
 
         private void GérerDéplacement()
         {
@@ -179,12 +193,14 @@ namespace TOOLS
                 Position += Latéral * déplacementLatéral;
         }
 
-        private void JumpHandler()
+        private float JumpHandler(GameTime gametime)
         {
-            if (GérerTouche(Keys.Space) == 1 && IsOnFloor())
+            float Vertical = 0;
+            if (GestionInput.EstEnfoncée(Keys.Space) && IsOnFloor() && (LastJump >= WAIT_TIME) && !IsJumping)
             {
                 IsJumping = true;
-                Position = new Vector3(Position.X, Position.Y + JUMPING_HEIGHT, Position.Z);
+                Vertical = JUMPING_HEIGHT;
+                LastJump = 0;
             }
             if (IsJumping)
             {
@@ -192,16 +208,46 @@ namespace TOOLS
                 {
                     IsJumping = false;
                 }
+
                 else
-                {
-                    Position = new Vector3(Position.X, Position.Y + JUMPING_HEIGHT, Position.Z);
-                }
+                    Vertical = JUMPING_HEIGHT;
             }
+
+            if (!IsJumping)
+            {
+               LastJump = (LastJump + gametime.ElapsedGameTime.TotalSeconds);
+            }
+
+            //if (LastJump < 1.4f * WAIT_TIME)
+            //{
+            //    LandCam();
+            //}
+            //else
+            //{
+            //    ForcedRotationY = 0;
+            //}
+
+            return Vertical;
         }
+
+        //private void LandCam()
+        //{
+        //    if (ForcedRotationY <= 0)
+        //    {
+        //        ForcedRotationY -= RotationFactor;
+        //        RotationFactor *= ROTATION_ACCELERATION;
+        //    }
+        //    if (ForcedRotationY >= 5000)
+        //    {
+        //        ForcedRotationY += RotationFactor;
+        //        RotationFactor /= ROTATION_ACCELERATION;
+        //    }
+        //}
 
         private void GérerRotation()
         {
             Vector2 RotationXY = BufferInterpolation();
+            //RotationXY.Y += ForcedRotationY * DELTA_TANGAGE;
             GérerLacet(MathHelper.WrapAngle(RotationXY.X * DELTA_LACET));
             GérerTangage(MathHelper.WrapAngle(RotationXY.Y * DELTA_TANGAGE));
         }
@@ -210,14 +256,14 @@ namespace TOOLS
         {
             float rotationLacet = RotationX;
             if (rotationLacet != 0)
-                Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Vector3.Up,rotationLacet));
+                Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Vector3.Up, rotationLacet));
         }
         private void GérerTangage(float RotationY)
         {
             float rotationTangage = RotationY;
             if (rotationTangage != 0)
             {
-                Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Latéral,rotationTangage));
+                Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Latéral, rotationTangage));
                 Latéral = Vector3.Normalize(Vector3.Cross(Direction, Vector3.Up));
             }
         }

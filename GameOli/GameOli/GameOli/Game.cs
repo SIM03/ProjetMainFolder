@@ -125,8 +125,21 @@ namespace GAME
                 GraphicManager.ToggleFullScreen();
             if (GestionInput.EstNouvelleTouche(Keys.F1))
             {
-                GraphicManager.PreferredBackBufferHeight = int.Parse(Console.ReadLine());
-                GraphicManager.PreferredBackBufferWidth = int.Parse(Console.ReadLine());
+                GraphicManager.PreferredBackBufferHeight = 1080;
+                GraphicManager.PreferredBackBufferWidth = 1920;
+                GraphicManager.ApplyChanges();
+            }
+            if (GestionInput.EstNouvelleTouche(Keys.F2))
+            {
+                GraphicManager.PreferredBackBufferHeight = 768;
+                GraphicManager.PreferredBackBufferWidth = 1280;
+                GraphicManager.ApplyChanges();
+            }
+            if (GestionInput.EstNouvelleTouche(Keys.F3))
+            {
+                GraphicManager.PreferredBackBufferHeight = 768;
+                GraphicManager.PreferredBackBufferWidth = 1366;
+                GraphicManager.ApplyChanges();
             }
 
             base.Update(gameTime);
