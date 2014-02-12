@@ -283,11 +283,11 @@ namespace TOOLS
             {
                 Sensivity -= 0.05f;
             }
-            if (GestionInput.EstNouvelleTouche(Keys.NumPad8))
+            if (GestionInput.EstNouvelleTouche(Keys.NumPad8)||(GestionInput.EstNouvelleTouche(Keys.D2)))
             {
                 InterpolationModifier += 0.05f;
             }
-            if (GestionInput.EstNouvelleTouche(Keys.NumPad5))
+            if (GestionInput.EstNouvelleTouche(Keys.NumPad5) || (GestionInput.EstNouvelleTouche(Keys.D1)))
             {
                 InterpolationModifier -= 0.05f;
             }
