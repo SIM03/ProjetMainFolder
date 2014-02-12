@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace TOOLS
 {
-    public class PlanTexturé : Plan
+    public class PlanTexturé : Plan, IPhysicalObject
     {
         RessourcesManager<Texture2D> GestionnaireDeTextures;
         Texture2D TexturePlan;
@@ -14,10 +14,19 @@ namespace TOOLS
         string NomTexturePlan { get; set; }
         BlendState GestionAlpha { get; set; }
 
+        Vector3 Position3D { get; set; }
+        //CollisionManager CollisionManagerTest { get; set; }
+        public List<BoundingBox> ShellList { get; set; }
+        public Vector2 Zone { get; set; }
+
         public PlanTexturé(Game jeu, float homothétieInitiale, Vector3 rotationInitiale, Vector3 positionInitiale, Vector2 étendue, Vector2 charpente, string nomTexturePlan, float intervalleMAJ)
             : base(jeu, homothétieInitiale, rotationInitiale, positionInitiale, étendue, charpente, intervalleMAJ)
         {
             NomTexturePlan = nomTexturePlan;
+
+            Position3D = positionInitiale;
+            ShellList = new List<BoundingBox>();
+            ShellList.Add(new BoundingBox(new Vector3(étendue.X, étendue.Y, 0), new Vector3(charpente.X, charpente.Y, 0)));
         }
 
         protected override void LoadContent()
@@ -39,6 +48,7 @@ namespace TOOLS
             EffetDeBase.TextureEnabled = true;
             EffetDeBase.Texture = TexturePlan;
             GestionAlpha = BlendState.AlphaBlend;
+            
         }
 
         private void CréerTableauPointsTexture()
@@ -74,6 +84,7 @@ namespace TOOLS
 
         public override void Draw(GameTime gameTime)
         {
+            Zone = new Vector2(3, 3);
             BlendState blendState = GraphicsDevice.BlendState;
             GraphicsDevice.BlendState = GestionAlpha;
             base.Draw(gameTime);

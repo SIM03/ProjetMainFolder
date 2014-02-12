@@ -8,6 +8,7 @@ namespace TOOLS
 {
    public class ObjetDeBase : Microsoft.Xna.Framework.DrawableGameComponent
    {
+      int Zone { get; set; }
       string NomModèle { get; set; }
       RessourcesManager<Model> GestionnaireDeModèles { get; set; }
       Caméra CaméraJeu { get; set; }
