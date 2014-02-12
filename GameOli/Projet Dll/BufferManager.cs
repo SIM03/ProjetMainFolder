@@ -5,16 +5,20 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Projet_Dll
+namespace TOOLS
 {
     class BufferManager
     {
         int Active = 0;
-        VertexBuffer VertexBuffer;
+        internal VertexBuffer VertexBuffer;
         IndexBuffer[] IndexBuffers;
         GraphicsDevice Device;
+        internal IndexBuffer IndexBuffer
+        {
+            get { return IndexBuffers[Active]; }
+        }
 
-        BufferManager(VertexPositionNormalTexture[] vertices, GraphicsDevice device)
+        public BufferManager(VertexPositionNormalTexture[] vertices, GraphicsDevice device)
         {
             Device = device;
 
@@ -28,5 +32,17 @@ namespace Projet_Dll
                 };
         }
 
+        internal void UpdateIndexBuffer(int[] indices, int indexCount)
+        {
+            int inactive = Active == 0 ? 1 : 0;
+
+            IndexBuffers[inactive].SetData(indices, 0, indexCount);
+
+        }
+
+        internal void SwapBuffer()
+        {
+            Active = Active == 0 ? 1 : 0; ;
+        }
     }
 }

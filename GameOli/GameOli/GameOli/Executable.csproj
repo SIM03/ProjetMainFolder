@@ -116,9 +116,9 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Projet Dll\Projet Dll.csproj">
+    <ProjectReference Include="..\..\Projet Dll\TOOLS.csproj">
       <Project>{DEEDB99F-6A6C-4CFA-BCE8-FC3358A05164}</Project>
-      <Name>Projet Dll</Name>
+      <Name>TOOLS</Name>
     </ProjectReference>
     <ProjectReference Include="..\GameOliContent\CONTENT_PIPELINE.contentproj">
       <Name>CONTENT_PIPELINE %28Content%29</Name>

@@ -31,6 +31,9 @@ namespace GAME
         RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
         RessourcesManager<Model> GestionnaireDeModèles { get; set; }
         Caméra CaméraJeu { get; set; }
+        QuadTree Island { get; set; }
+
+        Texture2D IslandHeightMap { get; set; }
 
         public InputManager GestionInput { get; private set; }
 
@@ -60,8 +63,11 @@ namespace GAME
             //CaméraJeu = new CaméraFixe(this, positionCaméra, positionTuileDragon, Vector3.Up);
             Components.Add(CaméraJeu);
             Components.Add(new ObjetDeDemo(this, "Floor", 1f, new Vector3(0, 0, 0), new Vector3(0, 0, 0), INTERVALLE_MAJ_STANDARD));
-
+            IslandHeightMap = GestionnaireDeTextures.Find("IHM");
             //Components.Add(new Terrain(this, 1f, new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(512, 50, 1024), "Canyon", "DétailsTerrain", 5, INTERVALLE_MAJ_STANDARD));
+            Island = new QuadTree(this, Vector3.Zero, IslandHeightMap, CaméraJeu.Vue, CaméraJeu.Projection, GraphicsDevice, 1);
+            Island.Effect.Texture = GestionnaireDeTextures.Find("DétailsTerrain");
+            Components.Add(Island);
             Components.Add(new AfficheurFPS(this,"Arial20",INTERVALLE_MAJ_STANDARD));
 
             ////Murs Gauche
@@ -99,7 +105,7 @@ namespace GAME
             //Components.Add(new PlanTexturé(this, 1f, new Vector3(-MathHelper.PiOver2, 0, 0), new Vector3(0,0, 0), étenduePlan1, charpentePlan, "Floor", INTERVALLE_MAJ_STANDARD));
 
             // Test Terrain
-            Components.Add(new Terrain(this,3f,new Vector3(0,0,0),new Vector3(0,-50,0),new Vector3(513,100,513),"output","DétailsTerrain",5,INTERVALLE_MAJ_STANDARD));
+            //Components.Add(new Terrain(this,3f,new Vector3(0,0,0),new Vector3(0,-50,0),new Vector3(513,100,513),"output","DétailsTerrain",5,INTERVALLE_MAJ_STANDARD));
 
             //Porte
             Components.Add(new PlanTexturé(this, 1f, Vector3.Zero, new Vector3(1, DIMENSION_Y / 2, 3 * (-DIMENSION_Z / 4) + 1), étenduePlan2, charpentePlan, "BlackDoor", INTERVALLE_MAJ_STANDARD));
