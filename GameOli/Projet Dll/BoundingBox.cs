@@ -19,7 +19,7 @@ namespace TOOLS
         BasicEffect EffetDeBase { get; set; }
 
 
-         BoîteDeCollision(Game jeu, ObjetDeBasePhysique objetPhysique, BoundingBox boîte, Color couleur, float intervalleMAJ)
+         public BoîteDeCollision(Game jeu, ObjetDeBasePhysique objetPhysique, BoundingBox boîte, Color couleur, float intervalleMAJ)
             : base(jeu, 1f, Vector3.Zero, objetPhysique.Position, intervalleMAJ)
         {
             Boîte = boîte;

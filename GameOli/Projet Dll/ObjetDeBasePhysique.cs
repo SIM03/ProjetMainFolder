@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace TOOLS
 {
-    public class ObjetDeBasePhysique : Microsoft.Xna.Framework.DrawableGameComponent, iPhysicalObject
+    public class ObjetDeBasePhysique : Microsoft.Xna.Framework.DrawableGameComponent, IPhysicalObject
     {
         const float VITESSE_INITIALE_ROTATION = 0.01f;
         string NomModèle { get; set; }
@@ -22,7 +22,7 @@ namespace TOOLS
         InputManager GestionInput { get; set; }
         RessourcesManager<Model> GestionnaireDeModèles { get; set; }
         Caméra CaméraJeu { get; set; }
-        List<BoundingBox> ShellList { get; set; }
+        public List<BoundingBox> ShellList { get; set; }
         bool Pause { get; set; }
 
         public BoundingBox Shell { get; set; }
@@ -63,6 +63,7 @@ namespace TOOLS
                     Matrix.CreateScale(Échelle) *
                     Matrix.CreateFromYawPitchRoll(Rotation.Y, Rotation.X, Rotation.Z) *
                     Matrix.CreateTranslation(Position);
+                    
             CréerListeDesBôites();
             //VisualiserSphèreDeCollision();
             base.Initialize();
@@ -96,6 +97,7 @@ namespace TOOLS
 
         public override void Draw(GameTime gameTime)
         {
+            
             foreach (ModelMesh maille in Modèle.Meshes)
             {
                 Matrix mondeLocal = TransformationsModèle[maille.ParentBone.Index] * GetMonde();
@@ -131,7 +133,7 @@ namespace TOOLS
             return Monde;
         }
 
-        public bool EstEnCollision(BoundingSphere sphèreCollision)
+        public bool CheckCollison(BoundingSphere sphèreCollision)
         {
             bool collision = false;
             for (int i = 0; i < Modèle.Meshes.Count; ++i)
@@ -146,7 +148,7 @@ namespace TOOLS
             return collision;
         }
 
-        public bool EstEnCollision(BoundingBox boîteCollision)
+        public bool CheckCollison(BoundingBox boîteCollision)
         {
             bool collision = false;
             for (int i = 0; i < ShellList.Count; ++i)

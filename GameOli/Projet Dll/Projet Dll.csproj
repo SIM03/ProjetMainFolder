@@ -97,12 +97,13 @@
     <Compile Include="BoundingBox.cs" />
     <Compile Include="Caméra.cs" />
     <Compile Include="CaméraSubjective.cs" />
+    <Compile Include="CaméraSubjectivePhysique.cs" />
     <Compile Include="CollisionManager.cs" />
     <Compile Include="InputManager.cs" />
     <Compile Include="ObjetDeBase.cs" />
     <Compile Include="ObjetDeBasePhysique.cs" />
     <Compile Include="ObjetDemo.cs" />
-    <Compile Include="iPhysicalObject.cs" />
+    <Compile Include="IPhysicalObject.cs" />
     <Compile Include="Plan.cs" />
     <Compile Include="PlanTexturé.cs" />
     <Compile Include="PrimitiveDeBase.cs" />

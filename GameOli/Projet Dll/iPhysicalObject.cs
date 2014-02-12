@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace TOOLS
 {
-    interface iPhysicalObject
+    public interface IPhysicalObject
     {
         List<BoundingBox> ShellList { get; set; }
     }

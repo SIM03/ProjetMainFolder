@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace TOOLS
 {
-    public class CaméraSubjective : Caméra, iPhysicalObject
+    public class CaméraSubjective : Caméra, IPhysicalObject
    {
       const float ACCÉLÉRATION = 0.001f;
       const float VITESSE_INITIALE_ROTATION = 20f;
@@ -33,12 +33,12 @@ namespace TOOLS
       float IntervalleMAJ { get; set; }
       float TempsÉcouléDepuisMAJ { get; set; }
       Vector2 OriginalMouseState { get; set; }
-      InputManager GestionInput { get; set; }
+      protected InputManager GestionInput { get; set; }
       Queue<Vector2> MouseBuffer { get; set; }
       int BufferSize { get; set; }
       float InterpolationModifier { get; set; }
       
-      public BoundingBox Shell { get; set; }
+      public List<BoundingBox> ShellList { get; set; }
 
       bool estEnZoom;
       bool EstEnZoom
@@ -133,7 +133,7 @@ namespace TOOLS
          }
       }
 
-      private void GérerDéplacement()
+      protected virtual void GérerDéplacement()
       {
          float déplacementDirection = (GérerTouche(Keys.W) - GérerTouche(Keys.S)) * VitesseTranslation;
          float déplacementLatéral = (GérerTouche(Keys.D) - GérerTouche(Keys.A)) * VitesseTranslation;
@@ -166,7 +166,7 @@ namespace TOOLS
           }
       }
 
-      private void GestionClavier()
+      protected virtual void GestionClavier()
       {
          if (GestionInput.EstNouvelleTouche(Keys.Z))
          {
