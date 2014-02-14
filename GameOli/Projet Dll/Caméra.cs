@@ -13,7 +13,7 @@ namespace TOOLS
         public BoundingFrustum Frustum { get; protected set; }
 
         // Propriétés relatives au "Point de vue"
-        public Vector3 Position { get; protected set; }
+        static public Vector3 Position { get; protected set; }
         public Vector3 Cible { get; protected set; }
         public Vector3 OrientationVerticale { get; protected set; }
 

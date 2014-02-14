@@ -64,7 +64,7 @@ namespace TOOLS
 
       void GestionClavier()
       {
-         if (GestionInput.EstNouvelleTouche(Keys.F))
+         if (GestionInput.EstNouvelleTouche(Keys.F) && GestionInput.EstNouvelleTouche(Keys.LeftShift))
          {
             EstAffichéEnWireframe = !EstAffichéEnWireframe;
          }

@@ -28,7 +28,7 @@ namespace TOOLS
         const float MINIMUM_MOVEMENT_CONST = 1f;
         const float GRAVITY_FACTOR = 2;
         //const float STARTING_GRAVITY = -13; // Gravity resets itself at this value when character touches the ground
-        const float JUMPING_HEIGHT = 8;
+        const float JUMPING_HEIGHT = 15;
         const double WAIT_TIME = 1;
         //const float ROTATION_ACCELERATION = 2;
 
@@ -40,7 +40,7 @@ namespace TOOLS
         float IntervalleMAJ { get; set; }
         float TempsÉcouléDepuisMAJ { get; set; }
         Vector2 OriginalMouseState { get; set; }
-        InputManager GestionInput { get; set; }
+        protected InputManager GestionInput { get; set; }
         Queue<Vector2> MouseBuffer { get; set; }
         public int BufferSize { get; private set; } /* For testing purpose public get are requiered*/
         public float Sensivity { get; private set; }
@@ -48,7 +48,7 @@ namespace TOOLS
         public float MINIMUM_MOVEMENT { get; private set; } /* Future Const (testing parameter only)*/
         float Gravity { get; set; }
         float Velocity { get; set; }
-        float AirTime { get; set; }
+        protected float AirTime { get; set; }
         float StartingHeight { get; set; }
         double LastJump { get; set; }
         bool IsJumping { get; set; }
@@ -73,6 +73,14 @@ namespace TOOLS
                 }
             }
         }
+        bool isOnFloor;
+        protected bool IsOnFloor
+        {
+            get { return isOnFloor; }  
+            set { isOnFloor = value; }
+        }
+
+
 
         public CaméraSubjective(Game jeu, Vector3 positionCaméra, Vector3 cible, float intervalleMAJ)
             : base(jeu)
@@ -145,9 +153,9 @@ namespace TOOLS
             base.Update(gameTime);
         }
 
-        private void GravityHandler(GameTime gameTime)
+        protected virtual void GravityHandler(GameTime gameTime)
         {
-            if (!IsOnFloor())
+            if (!IsOnFloor)
             {
                 AirTime += 0.005f;
                 Velocity -= (GRAVITY_FACTOR * AirTime);
@@ -163,10 +171,6 @@ namespace TOOLS
             Position = new Vector3(Position.X, Position.Y + Velocity, Position.Z);
         }
 
-        private bool IsOnFloor()
-        {
-            return (Position.Y < 100); //Collision.CollideWithFloor();
-        }
 
         private int GérerTouche(Keys touche)
         {
@@ -183,7 +187,7 @@ namespace TOOLS
         //    }
         //}
 
-        private void GérerDéplacement()
+        protected virtual void GérerDéplacement()
         {
             float déplacementDirection = (GérerTouche(Keys.W) - GérerTouche(Keys.S)) * VitesseTranslation;
             float déplacementLatéral = (GérerTouche(Keys.D) - GérerTouche(Keys.A)) * VitesseTranslation;
@@ -193,10 +197,10 @@ namespace TOOLS
                 Position += Latéral * déplacementLatéral;
         }
 
-        private float JumpHandler(GameTime gametime)
+        protected float JumpHandler(GameTime gametime)
         {
             float Vertical = 0;
-            if (GestionInput.EstEnfoncée(Keys.Space) && IsOnFloor() && (LastJump >= WAIT_TIME) && !IsJumping)
+            if (GestionInput.EstEnfoncée(Keys.Space) && IsOnFloor)// && (LastJump >= WAIT_TIME) && !IsJumping)
             {
                 IsJumping = true;
                 Vertical = JUMPING_HEIGHT;
@@ -204,7 +208,7 @@ namespace TOOLS
             }
             if (IsJumping)
             {
-                if (IsOnFloor())
+                if (IsOnFloor)
                 {
                     IsJumping = false;
                 }
@@ -268,7 +272,7 @@ namespace TOOLS
             }
         }
 
-        private void GestionClavier()
+        protected virtual void GestionClavier()
         {
             if (GestionInput.EstNouvelleTouche(Keys.Z))
             {

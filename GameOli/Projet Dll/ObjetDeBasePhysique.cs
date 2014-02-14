@@ -16,7 +16,7 @@ namespace TOOLS
         protected Model ModËle { get; private set; }
         protected Matrix[] TransformationsModËle { get; private set; }
         protected Matrix Monde;
-        public Vector3 Position { get; protected set; }
+        public Vector3 Position { get; set; }
         public float …chelle { get; protected set; }
         public Vector3 Rotation { get; protected set; }
         InputManager GestionInput { get; set; }
@@ -76,12 +76,12 @@ namespace TOOLS
             GÈrerClavier();
             if (Temps…coulÈDepuisMAJ > IntervalleMAJ)
             {
-                if (!Pause)
-                {
-                    Monde = Matrix.Identity * Matrix.CreateScale(…chelle);
-                    Monde *= Matrix.CreateFromYawPitchRoll(Angle, Rotation.X, Rotation.Z);
-                    Monde *= Matrix.CreateTranslation(Position);
-                }
+                //if (!Pause)
+                //{
+                //    Monde = Matrix.Identity * Matrix.CreateScale(…chelle);
+                //    Monde *= Matrix.CreateFromYawPitchRoll(Angle, Rotation.X, Rotation.Z);
+                //    Monde *= Matrix.CreateTranslation(Position);
+                //}
                 Temps…coulÈDepuisMAJ = 0;
             }
             base.Update(gameTime);

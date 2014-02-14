@@ -14,12 +14,12 @@ namespace TOOLS
         Vector3 Min { get; set; }
         Vector3 Max { get; set; }
         BoundingBox Boîte { get; set; }
-        ObjetDeBasePhysique ObjetPhysique { get; set; }
+        IPhysicalObject ObjetPhysique { get; set; }
         RasterizerState GestionWireframe { get; set; }
         BasicEffect EffetDeBase { get; set; }
 
 
-         public BoîteDeCollision(Game jeu, ObjetDeBasePhysique objetPhysique, BoundingBox boîte, Color couleur, float intervalleMAJ)
+         public BoîteDeCollision(Game jeu, IPhysicalObject objetPhysique, BoundingBox boîte, Color couleur, float intervalleMAJ)
             : base(jeu, 1f, Vector3.Zero, objetPhysique.Position, intervalleMAJ)
         {
             Boîte = boîte;

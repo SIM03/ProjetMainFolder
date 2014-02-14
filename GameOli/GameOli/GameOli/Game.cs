@@ -33,6 +33,17 @@ namespace GAME
         RessourcesManager<Model> GestionnaireDeModèles { get; set; }
         Caméra CaméraJeu { get; set; }
 
+        ObjetDeBasePhysique Cube { get; set; } 
+        ObjetDeBasePhysique Cube1 { get; set; }
+        ObjetDeBasePhysique Cube2 { get; set; }
+        ObjetDeBasePhysique Cube3 { get; set; }
+        ObjetDeBasePhysique Cube4 { get; set; }
+
+        PlanTexturé Floor { get; set; }
+
+        public List<IPhysicalObject> StaticObjectList { get; set; }
+
+
         public InputManager GestionInput { get; private set; }
 
         public Game()
@@ -42,7 +53,7 @@ namespace GAME
             GraphicManager.SynchronizeWithVerticalRetrace = true;
             IsFixedTimeStep = true;
             IsMouseVisible = false;
-            GraphicManager.ToggleFullScreen();
+            //GraphicManager.ToggleFullScreen();
         }
 
         
@@ -52,19 +63,19 @@ namespace GAME
             GestionnaireDeTextures = new RessourcesManager<Texture2D>(this, "Textures");
             GestionnaireDeModèles = new RessourcesManager<Model>(this, "Models");
             GestionInput = new InputManager(this);
-
             Components.Add(GestionInput);
-
-            Vector3 positionCaméra = new Vector3(0, 100, 10);
-            CaméraJeu = new CaméraSubjective(this, positionCaméra, new Vector3(0, 0, 0), INTERVALLE_MAJ_STANDARD);
+            
+            Components.Add(new Afficheur3D(this));
+            //Vector3 positionCaméra = new Vector3(0, 100, 10);
+            //CaméraJeu = new CaméraSubjective(this, positionCaméra, new Vector3(0, 0, 0), INTERVALLE_MAJ_STANDARD);
             //Components.Add(new ScreenMessage(this, CaméraJeu, "BufferSize", "Arial20", 0, INTERVALLE_MAJ_STANDARD));
             //Components.Add(new ScreenMessage(this, CaméraJeu, "InterpolationModifier", "Arial20", 2 * OFFSET, INTERVALLE_MAJ_STANDARD));
             //Components.Add(new ScreenMessage(this, CaméraJeu, "Sensitivity", "Arial20", 3 * OFFSET, INTERVALLE_MAJ_STANDARD));
-            Components.Add(CaméraJeu);
-            Components.Add(new ObjetDeDemo(this, "Floor", 1f, new Vector3(0, 0, 0), new Vector3(0, 0, 0), INTERVALLE_MAJ_STANDARD));
+            //Components.Add(CaméraJeu);
+            //Components.Add(new ObjetDeDemo(this, "Floor", 1f, new Vector3(0, 0, 0), new Vector3(0, 0, 0), INTERVALLE_MAJ_STANDARD));
 
             //Components.Add(new Terrain(this, 1f, new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(512, 50, 1024), "Canyon", "DétailsTerrain", 5, INTERVALLE_MAJ_STANDARD));
-            //Components.Add(new AfficheurFPS(this,"Arial20",INTERVALLE_MAJ_STANDARD));
+            
 
             //Murs Gauche
             Components.Add(new PlanTexturé(this, 1f, new Vector3(0, MathHelper.PiOver2, 0), new Vector3(-DIMENSION_X / 2, DIMENSION_Y / 2, 0), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
@@ -98,15 +109,44 @@ namespace GAME
             Components.Add(new PlanTexturé(this, 1f, new Vector3(MathHelper.PiOver2, 0, 0), new Vector3(0, 2* DIMENSION_Y, 0), étenduePlan1, charpentePlan, "Roof", INTERVALLE_MAJ_STANDARD));
 
             //Plancher
-            Components.Add(new PlanTexturé(this, 1f, new Vector3(-MathHelper.PiOver2, 0, 0), new Vector3(0,0, 0), étenduePlan1, charpentePlan, "Floor", INTERVALLE_MAJ_STANDARD));
+            Components.Add(Floor = new PlanTexturé(this, 1f, new Vector3(-MathHelper.PiOver2, 0, 0), new Vector3(0,0, 0), étenduePlan1, charpentePlan, "Floor", INTERVALLE_MAJ_STANDARD));
+            
+            //Ajout des cube
+            Cube = new ObjetDeBasePhysique(this, "Barrier", 200, new Vector3(0, (float)(Math.PI / 2), 0), new Vector3(-200, 0, 400), INTERVALLE_MAJ_STANDARD);
+            Cube1 = new ObjetDeBasePhysique(this, "Column", 100, new Vector3(0, 0, 0), new Vector3(-150, -50, -400), INTERVALLE_MAJ_STANDARD);
+            Cube2 = new ObjetDeBasePhysique(this, "AlanTree", 0.5f, new Vector3(0, 0, 0), new Vector3(800, -200, -500), INTERVALLE_MAJ_STANDARD);
+            Cube3 = new ObjetDeBasePhysique(this, "Rock1", 50, new Vector3((float)(Math.PI), 0, 0), new Vector3(0, 0, -3000), INTERVALLE_MAJ_STANDARD);
+            Cube4 = new ObjetDeBasePhysique(this, "fence", 2f, new Vector3(0, 0, 0), new Vector3(1100, 50, -1000), INTERVALLE_MAJ_STANDARD);
+            Components.Add(Cube);
+            Components.Add(Cube1);
+            Components.Add(Cube2);
+            Components.Add(Cube3);
+            Components.Add(Cube4);
 
+
+            StaticObjectList = new List<IPhysicalObject>();
+            StaticObjectList.Add(Cube);
+            StaticObjectList.Add(Cube1);
+            StaticObjectList.Add(Cube2);
+           // StaticObjectList.Add(Cube3);
+            StaticObjectList.Add(Cube4);
+            StaticObjectList.Add(Floor);
+
+            // ajout de la caméra physique
+            Vector3 positionCaméra = new Vector3(0, 500, 10);
+            CaméraJeu = new TOOLS.CaméraSubjectivePhysique(this, positionCaméra, new Vector3(0, 0, 0), StaticObjectList, INTERVALLE_MAJ_STANDARD);
+            Components.Add(CaméraJeu);
+            Components.Add(new Ability(this));
+           
+             
+           
             //Porte
+            
             Components.Add(new PlanTexturé(this, 1f, Vector3.Zero, new Vector3(1, DIMENSION_Y / 2, 3 * (-DIMENSION_Z / 4) + 1), étenduePlan2, charpentePlan, "BlackDoor", INTERVALLE_MAJ_STANDARD));
-            Components.Add(new ScreenMessage(this, CaméraJeu, "BufferSize", "Arial20", 0,0, INTERVALLE_MAJ_STANDARD));
+           // Components.Add(new ScreenMessage(this, CaméraJeu, "BufferSize", "Arial20", 0,0, INTERVALLE_MAJ_STANDARD));
             Components.Add(new ScreenMessage(this, CaméraJeu, "InterpolationModifier", "Arial20",0 ,OFFSETY, INTERVALLE_MAJ_STANDARD));
             Components.Add(new ScreenMessage(this, CaméraJeu, "Sensitivity", "Arial20",0, 2 * OFFSETY, INTERVALLE_MAJ_STANDARD));
             Components.Add(new ScreenMessage(this, CaméraJeu, "MINIMUM_MOVEMENT", "Arial20",0, 3 * OFFSETY, INTERVALLE_MAJ_STANDARD));
-
             Services.AddService(typeof(RessourcesManager<SpriteFont>), GestionnaireDeFonts);
             Services.AddService(typeof(RessourcesManager<Texture2D>), GestionnaireDeTextures);
             Services.AddService(typeof(RessourcesManager<Model>), GestionnaireDeModèles);
@@ -114,9 +154,14 @@ namespace GAME
             Services.AddService(typeof(Caméra), CaméraJeu);
             GestionSprites = new SpriteBatch(GraphicsDevice);
             Services.AddService(typeof(SpriteBatch), GestionSprites);
+
+
+            Components.Add(new AfficheurFPS(this, "Arial20", INTERVALLE_MAJ_STANDARD));
+
             base.Initialize();
         }
 
+        
         protected override void Update(GameTime gameTime)
         {
             if (GestionInput.EstNouvelleTouche(Keys.Escape))

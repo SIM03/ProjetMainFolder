@@ -14,7 +14,7 @@
 
 //namespace TOOLS
 //{
-   
+
 //    public class CollisionManager : Microsoft.Xna.Framework.GameComponent
 //    {
 //        const float DELTAY_BASE = 10f;
@@ -34,18 +34,18 @@
 //        public CollisionManager(Game game, float depth, float width, List<PlanTexturé> staticObjectList, List<PlanTexturé> movingObjectList)
 //            : base(game)
 //        {
-//            X_Tiles = (int)(Math.Floor(width/DELTAX_BASE));
-//            Z_Tiles = (int)(Math.Floor(depth/DELTAY_BASE));
+//            X_Tiles = (int)(Math.Floor(width / DELTAX_BASE));
+//            Z_Tiles = (int)(Math.Floor(depth / DELTAY_BASE));
 //            DeltaX = width / Z_Tiles;
 //            DeltaZ = depth / X_Tiles;
 //            XY_SubdivisionLevel = new Vector2(DeltaX, DeltaZ);
 //            StaticObjectList = staticObjectList;
 //            MovingObjectList = movingObjectList;
 //        }
-     
+
 //        public override void Update(GameTime gameTime)
 //        {
-           
+
 
 //            base.Update(gameTime);
 //        }
@@ -53,7 +53,7 @@
 //        public Vector2 GetZone(Vector3 position3D)
 //        {
 //            Vector2 position2D = new Vector2(position3D.X, position3D.Z);
-//            return new Vector2 ((int)(Math.Ceiling(position2D.X / DeltaX)),(int)(Math.Ceiling(position2D.Y / DeltaZ))) ;
+//            return new Vector2((int)(Math.Ceiling(position2D.X / DeltaX)), (int)(Math.Ceiling(position2D.Y / DeltaZ)));
 //        }
 
 //        public void IsObjectNear(ObjetDeBasePhysique objet)

@@ -13,8 +13,8 @@ namespace TOOLS
         Vector2[,] PtsTexture { get; set; }
         string NomTexturePlan { get; set; }
         BlendState GestionAlpha { get; set; }
-
-        Vector3 Position3D { get; set; }
+        Vector2 Étendue { get; set; }
+        public Vector3 Position { get; set; }
         //CollisionManager CollisionManagerTest { get; set; }
         public List<BoundingBox> ShellList { get; set; }
         public Vector2 Zone { get; set; }
@@ -23,10 +23,8 @@ namespace TOOLS
             : base(jeu, homothétieInitiale, rotationInitiale, positionInitiale, étendue, charpente, intervalleMAJ)
         {
             NomTexturePlan = nomTexturePlan;
-
-            Position3D = positionInitiale;
-            ShellList = new List<BoundingBox>();
-            ShellList.Add(new BoundingBox(new Vector3(étendue.X, étendue.Y, 0), new Vector3(charpente.X, charpente.Y, 0)));
+            Étendue = étendue;
+            Position = positionInitiale;
         }
 
         protected override void LoadContent()
@@ -95,5 +93,30 @@ namespace TOOLS
         {
             GraphicsDevice.DrawUserPrimitives<VertexPositionTexture>(PrimitiveType.TriangleStrip, Sommets, (NbTrianglesParStrip + 2) * noStrip, NbTrianglesParStrip);
         }
+
+
+
+        public bool CheckCollison(BoundingBox boîteCollision)
+        {
+            ShellList = new List<BoundingBox>();
+            //ShellList.Add(new BoundingBox(new Vector3(-500f, -500f,0), new Vector3(500f, 500, 100f)));
+            ShellList.Add(new BoundingBox(new Vector3(Position.X + Étendue.X / 2, Position.Y + Étendue.Y/2, Position.Z), new Vector3(Position.X - Étendue.X / 2, Position.Y - Étendue.Y/2, Position.Z + 1)));
+            bool collision = false;
+            foreach (BoundingBox shell in ShellList)
+            {
+                BoundingBox collisionBox = shell;
+                Vector3[] listeDesCoins = collisionBox.GetCorners();
+                Matrix mondeLocal = GetMonde();
+                Vector3.Transform(listeDesCoins, ref mondeLocal, listeDesCoins);
+                collisionBox = BoundingBox.CreateFromPoints(listeDesCoins);
+                if (collisionBox.Intersects(boîteCollision))
+                {
+                    collision = true;
+                    break;
+                }
+            }
+            return collision;
+        }
+
     }
 }

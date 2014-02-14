@@ -388,8 +388,8 @@ Objects:  {
 			Property: "AccessMode", "enum", "",0
 		}
 		UseMipMap: 0
-		Filename: "Barrier_Normal.tga"
-		RelativeFilename: "C:\Users\Olivier\Documents\ProjetMainFolder\GameOli\GameOli\GameOliContent\Models\Wall\Barrier_Normal.tga"
+		Filename: "T_ConcreteBarrier.tga"
+		RelativeFilename: "Wall\T_ConcreteBarrier.tga"
 	}
 	Texture: "Texture::T_ConcreteBarrier_tga", "TextureVideoClip" {
 		Type: "TextureVideoClip"
@@ -414,7 +414,7 @@ Objects:  {
 		}
 		Media: "Video::T_ConcreteBarrier_tga"
 		FileName: "T_ConcreteBarrier.tga"
-		RelativeFilename: "D:\Projects\Blender\Models\Misc\Concrete Barrier\Publish\T_ConcreteBarrier.tga"
+		RelativeFilename: "Wall\T_ConcreteBarrier.tga"
 		ModelUVTranslation: 0,0
 		ModelUVScaling: 1,1
 		Texture_Alpha_Source: "None"

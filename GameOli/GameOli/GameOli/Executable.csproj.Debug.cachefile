@@ -1,7 +1,3 @@
-Content\Models\airplane_blue.xnb
-Content\Models\Phare.xnb
-Content\Models\airplane_blue_tex.xnb
-Content\Models\TorusSurface_Color.xnb
 Content\Textures\Carte.xnb
 Content\Textures\CielArrière.xnb
 Content\Textures\CielAvant.xnb
@@ -15,7 +11,6 @@ Content\Textures\Carte2.xnb
 Content\Textures\Carte3.xnb
 Content\Textures\land.xnb
 Content\Textures\Canyon.xnb
-Content\Models\ShipDiffuse.xnb
 Content\Textures\BrickRound0108_5_S.xnb
 Content\Textures\BrickBUMP.xnb
 Content\Textures\BrickRound0108_5_S_SPEC.xnb
@@ -25,23 +20,22 @@ Content\Textures\Roof.xnb
 Content\Textures\Floor.xnb
 Content\Textures\BlackDoor.xnb
 Content\Fonts\Arial20.xnb
-Content\Models\Flat.xnb
-Content\Models\Floor.xnb
-Content\Models\airplane_blue_tex_0.xnb
-Content\Models\TorusSurface_Color_0.xnb
-Content\Models\ShipDiffuse_0.xnb
-Content\Models\ModelTextures\BrickRound0108_5_S_0.xnb
-Content\Models\Box 20x.xnb
-Content\Models\Box 05x.xnb
-Content\Models\Box 2x.xnb
-Content\Models\Chair.xnb
-Content\Models\leather_bump.xnb
-Content\Models\Macassar.xnb
-Content\Models\NCBS.xnb
+Content\Models\AlanTree.xnb
+Content\Models\BroadleafBark_0.xnb
+Content\Models\SampleLeaves_2_0.xnb
+Content\Textures\crosshair.xnb
 Content\Models\Barrier.xnb
 Content\Models\Column.xnb
 Content\Models\Barrier_Normal.xnb
-Content\Models\Column_Normal.xnb
-Content\Models\Wall\Barrier_Normal_0.xnb
 Content\Models\Column_Diffuse.xnb
+Content\Models\Column_Normal.xnb
+Content\Models\Wall\T_ConcreteBarrier_0.xnb
 Content\Models\Column_Diffuse_0.xnb
+Content\Models\Rock1.xnb
+Content\Textures\Rock-Texture-Surface.xnb
+Content\Models\Rock-Texture-Surface.xnb
+Content\Models\Render1.xnb
+Content\Models\Render2.xnb
+Content\Models\fence.xnb
+Content\FBX\B2942515\fence.fbm\fence_alpha_0.xnb
+Content\FBX\B2942515\fence.fbm\fence_composite01_0.xnb

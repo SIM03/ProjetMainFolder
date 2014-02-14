@@ -42,35 +42,41 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\airplane_blue.x">
-      <Name>airplane_blue</Name>
-      <Importer>XImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-    <Compile Include="Models\Box 20x.FBX">
-      <Name>Box 20x</Name>
+    <Compile Include="Models\Barrier.fbx">
+      <Name>Barrier</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
-    <Compile Include="Models\Phare.x">
-      <Name>Phare</Name>
-      <Importer>XImporter</Importer>
+    <Compile Include="Models\Barrier_Normal.tga">
+      <Name>Barrier_Normal</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Column.fbx">
+      <Name>Column</Name>
+      <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\airplane_blue_tex.bmp">
-      <Name>airplane_blue_tex</Name>
+    <Compile Include="Models\Column_Diffuse.tga">
+      <Name>Column_Diffuse</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Models\TorusSurface_Color.jpg">
-      <Name>TorusSurface_Color</Name>
+    <Compile Include="Models\Column_Normal.tga">
+      <Name>Column_Normal</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="Models\Rock-Texture-Surface.jpg">
+      <Name>Rock-Texture-Surface</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Rock1.fbx">
+      <Name>Rock1</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
     <Compile Include="Textures\Carte.bmp">
       <Name>Carte</Name>
       <Importer>TextureImporter</Importer>
@@ -153,25 +159,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Flat.fbx">
-      <Name>Flat</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-    <Compile Include="Models\ShipDiffuse.tga">
-      <Name>ShipDiffuse</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\Floor.fbx">
-      <Name>Floor</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Textures\BrickRound0108_5_S.jpg">
       <Name>BrickRound0108_5_S</Name>
       <Importer>TextureImporter</Importer>
@@ -224,72 +211,43 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Box 05x.FBX">
-      <Name>Box 05x</Name>
+    <Compile Include="Models\AlanTree.fbx">
+      <Name>AlanTree</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Box 2x.FBX">
-      <Name>Box 2x</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\Chair.fbx">
-      <Name>Chair</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\leather_bump.jpg">
-      <Name>leather_bump</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Models\Macassar.jpg">
-      <Name>Macassar</Name>
+    <Compile Include="Textures\crosshair.png">
+      <Name>crosshair</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\NCBS.fbx">
-      <Name>NCBS</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\Barrier.fbx">
-      <Name>Barrier</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-    <Compile Include="Models\Barrier_Normal.tga">
-      <Name>Barrier_Normal</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Models\Column.fbx">
-      <Name>Column</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-    <Compile Include="Models\Column_Normal.tga">
-      <Name>Column_Normal</Name>
+    <Compile Include="Textures\Rock-Texture-Surface.jpg">
+      <Name>Rock-Texture-Surface</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Column_Diffuse.tga">
-      <Name>Column_Diffuse</Name>
+    <Compile Include="Models\Render1.png">
+      <Name>Render1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Render2.png">
+      <Name>Render2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\fence.fbx">
+      <Name>fence</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

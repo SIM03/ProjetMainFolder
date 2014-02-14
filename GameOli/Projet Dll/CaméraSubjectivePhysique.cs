@@ -8,7 +8,7 @@ namespace TOOLS
     {
         const float RAYON_COLLISION = 1f;
 
-        List<ObjetDeBasePhysique> ListeObstacles { get; set; }
+        List<IPhysicalObject> StaticObjectList { get; set; }
 
         bool CollisionParSphère_;
         bool CollisionParSphère
@@ -28,11 +28,11 @@ namespace TOOLS
             }
         }
 
-        public CaméraSubjectivePhysique(Game jeu, Vector3 positionCaméra, Vector3 cible, List<ObjetDeBasePhysique> listeObstacles, float intervalleMAJ)
+        public CaméraSubjectivePhysique(Game jeu, Vector3 positionCaméra, Vector3 cible, List<IPhysicalObject> staticObjectList, float intervalleMAJ)
             : base(jeu, positionCaméra, cible, intervalleMAJ)
         {
-            ListeObstacles = listeObstacles;
-            CollisionParSphère = true;
+            StaticObjectList = staticObjectList;
+            CollisionParSphère = false;
         }
 
 
@@ -43,6 +43,20 @@ namespace TOOLS
             if (CollisionAppréhendée(Position))
             {
                 Position = anciennePosition;
+            }
+        }
+
+        protected override void GravityHandler(GameTime gametime)
+        {
+            float anciennepositionvertical = Position.Y;
+            IsOnFloor = false;
+            base.GravityHandler(gametime);
+            if (CollisionAppréhendée(Position))
+            {
+                Position = new Vector3(Position.X, anciennepositionvertical, Position.Z);
+                IsOnFloor = true;
+                base.GravityHandler(gametime);
+                
             }
         }
 
@@ -76,16 +90,14 @@ namespace TOOLS
         {
             bool CollisionEnVue;
 
-            BoundingBox boîteCollision = new BoundingBox(nouvellePosition, nouvellePosition);
+            BoundingBox boîteCollision = new BoundingBox(new Vector3(nouvellePosition.X + 1, nouvellePosition.Y - 30, nouvellePosition.Z + 1), new Vector3(nouvellePosition.X - 1, nouvellePosition.Y + 20, nouvellePosition.Z - 1));
 
             CollisionEnVue = false;
-            foreach (ObjetDeBasePhysique obstacle in ListeObstacles)
+            foreach (IPhysicalObject StaticObject in StaticObjectList)
             {
-                if (obstacle.CheckCollison(boîteCollision))
-                {
-                    CollisionEnVue = true;
+                CollisionEnVue = StaticObject.CheckCollison(boîteCollision);
+                if (CollisionEnVue)
                     break;
-                }
             }
             return CollisionEnVue;
         }
@@ -97,7 +109,7 @@ namespace TOOLS
             BoundingSphere sphèreCollision = new BoundingSphere(nouvellePosition, RAYON_COLLISION);
 
             CollisionEnVue = false;
-            foreach (ObjetDeBasePhysique obstacle in ListeObstacles)
+            foreach (ObjetDeBasePhysique obstacle in StaticObjectList)
             {
                 if (obstacle.CheckCollison(sphèreCollision))
                 {
