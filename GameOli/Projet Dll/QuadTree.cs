@@ -25,7 +25,9 @@ namespace TOOLS
 
         internal int TopNodeSize { get; set; }
         QuadNode RootNode { get; set; }
+        QuadNode ActiveNode { get; set; }
         internal VertexCollection Vertices { get; set; }
+        public int MinimumDepth { get; set; }
 
         BoundingFrustum ViewFrustrum { get; set; }
 
@@ -49,6 +51,7 @@ namespace TOOLS
             ViewFrustrum = new BoundingFrustum(viewMatrix * projectionMatrix);
 
             Indices = new int[((heightmap.Width + 1) * (heightmap.Height + 1))];
+            MinimumDepth = 0; //// Tutorial said so... ////
 
             // Drawing Parameters Initialisation
             Effect = new BasicEffect(graphic);
@@ -72,7 +75,7 @@ namespace TOOLS
 
         public override void Update(GameTime gameTime)
         {
-            if (CameraPosition == LastCameraPosition)
+            if (CameraPosition == LastCameraPosition && /* Buggy Update Hot fix Possibly*/ (gameTime.TotalGameTime.TotalSeconds >= 60.0))
                 return;
 
             Effect.View = View;
@@ -80,6 +83,13 @@ namespace TOOLS
 
             LastCameraPosition = CameraPosition;
             IndexCount = 0;
+
+            RootNode.ForceMinimumDepth();
+
+            ActiveNode = RootNode.FindCameraNode(CameraPosition);
+
+            if (ActiveNode != null)
+                ActiveNode.Split();
 
             RootNode.SetActiveVertices();
 
@@ -119,9 +129,12 @@ namespace TOOLS
         int PositionIndex { get; set; }
 
         int NodeDepth { get; set; }
-        int NodeSize {get; set;}
+        int NodeSize { get; set; }
 
         bool HasChildren { get; set; }
+        bool IsActive { get; set; }
+        bool IsSplit { get; set; }
+        bool CanSplit { get { return (NodeSize >= 2); } }
 
         #region VERTICES
         QuadNodeVertex VertexTopLeft;
@@ -153,6 +166,9 @@ namespace TOOLS
 
         NodeType Nodetype { get; set; }
 
+        /// <summary>
+        /// Constructor for the QuadNode struct
+        /// </summary>
         public QuadNode(NodeType nodeType, int nodeSize, int nodeDepth, QuadNode parent, QuadTree parentTree, int positionIndex)
         {
             Nodetype = nodeType;
@@ -167,8 +183,10 @@ namespace TOOLS
 
             Bounds = new BoundingBox(ParentTree.Vertices[VertexTopLeft.Index].Position,
                 ParentTree.Vertices[VertexBottomRight.Index].Position);
-            Bounds.Min.Y = -950f;
-            Bounds.Max.Y = 950f;
+            /**/
+            Bounds.Min.Y = -950f; //// WATCH OUT!!! HEIGHT OF THESE BOUNDING BOX MAY NEED TO BE REDEFINED ALONG THE WAY AS OUR HEIGTMAP MAY REACH HIGHER THAN 950F UNIT OR LOWER THAN -950 UNIT ////
+            /**/
+            Bounds.Max.Y = 950f; //// WATCH OUT!!! HEIGHT OF THESE BOUNDING BOX MAY NEED TO BE REDEFINED ALONG THE WAY AS OUR HEIGTMAP MAY REACH HIGHER THAN 950F UNIT OR LOWER THAN -950 UNIT ////
 
             if (NodeSize >= 4)
                 AddChildren();
@@ -185,6 +203,7 @@ namespace TOOLS
             }
         }
 
+        // Draw tomorrow for precisions
         private void AddNeighbors()
         {
             switch (Nodetype)
@@ -216,7 +235,7 @@ namespace TOOLS
 
                     break;
                 case NodeType.BottomLeft:
-                    
+
                     NeighborTop = Parent.ChildTopLeft;
 
                     NeighborRight = Parent.ChildBottomRight;
@@ -253,7 +272,9 @@ namespace TOOLS
             }
         }
 
-      
+        /// <summary>
+        /// Sets Vertices using Node Type to identify which parent's vertices to reuse
+        /// </summary>
         private void AddVertices()
         {
             // Copy Vertices From The Parent Using NodeType to affect the child vertices to the existing parent vertices
@@ -290,13 +311,13 @@ namespace TOOLS
                     VertexBottomRight = new QuadNodeVertex { Activated = true, Index = VertexBottomLeft.Index + NodeSize };
                     break;
             }
-            
+
             // Adding All Secondary Vertex Of Child
 
-            VertexTop = new QuadNodeVertex 
-            { 
+            VertexTop = new QuadNodeVertex
+            {
                 Activated = false,
-                Index = VertexTopLeft.Index + (NodeSize / 2) 
+                Index = VertexTopLeft.Index + (NodeSize / 2)
             };
 
             VertexLeft = new QuadNodeVertex
@@ -310,7 +331,7 @@ namespace TOOLS
                 Activated = false,
                 Index = VertexLeft.Index + (NodeSize / 2)
             };
-            
+
             VertexRight = new QuadNodeVertex
             {
                 Activated = false,
@@ -325,6 +346,9 @@ namespace TOOLS
 
         }
 
+        /// <summary>
+        /// Adds Children to current Node
+        /// </summary>
         private void AddChildren()
         {
             // Adds All Four Quadrants Child from top left to bot right
@@ -340,8 +364,20 @@ namespace TOOLS
 
         }
 
+        /// <summary>
+        /// Activates main Vertices for the Node in the Quad Tree through UpdateBuffer method
+        /// </summary>
         internal void SetActiveVertices()
         {
+            if (IsSplit && this.HasChildren)
+            {
+                ChildTopLeft.SetActiveVertices();
+                ChildTopRight.SetActiveVertices();
+                ChildBottomLeft.SetActiveVertices();
+                ChildBottomRight.SetActiveVertices();
+                return;
+            }
+
             // Top Triangles
             ParentTree.UpdateBuffer(VertexCenter.Index);
             ParentTree.UpdateBuffer(VertexTopLeft.Index);
@@ -393,6 +429,149 @@ namespace TOOLS
                 ParentTree.UpdateBuffer(VertexLeft.Index);
             }
             ParentTree.UpdateBuffer(VertexTopLeft.Index);
+        }
+
+        /// <summary>
+        /// Activates Main 5 Vertices for a Node
+        /// </summary>
+        internal void Activate()
+        {
+            VertexTopLeft.Activated = true;
+            VertexTopRight.Activated = true;
+            VertexCenter.Activated = true;
+            VertexBottomLeft = true;
+            VertexBottomRight = true;
+        }
+
+        /// <summary>
+        /// Force Node to activate until QuadTree's minimum depth as been reached (Depth 6 = 5 Children to Top Node)
+        /// </summary>
+        public void ForceMinimumDepth()
+        {
+            if (true)
+	        {
+                if (this.HasChildren)
+	            {
+                    IsActive = false;
+                    IsSplit = true;
+
+                    ChildTopLeft.ForceMinimumDepth();
+                    ChildTopRight.ForceMinimumDepth();
+                    ChildBottomLeft.ForceMinimumDepth();
+                    ChildBottomRight.ForceMinimumDepth();
+	            }
+                else
+	            {
+                    this.Activate();
+                    IsSplit = false;
+	            }
+
+                return;
+            }
+
+            if (NodeDepth == ParentTree.MinimumDepth || (NodeDepth < ParentTree.MinimumDepth && !this.HasChildren)
+	        {
+		        this.Activate();
+                IsSplit = false;
+	        }
+        }
+
+        /// <summary>
+        /// Returns wether the 3d position is in this Node's bounding box
+        /// </summary>
+        public bool Contains(Vector3 position)
+        {
+            return Bounds.Contains(position) == ContainmentType.Contains;
+        }
+
+        /// <summary>
+        ///  Finds which Node contains our camera
+        /// </summary>
+        public QuadNode FindCameraNode(Vector3 position)
+        {
+            // Not Found
+            if (!Contains(position))
+                return null;
+
+            // Check Children
+            if (HasChildren)
+            {
+                if (ChildTopLeft.Contains(position))
+                    return ChildTopLeft.FindCameraNode(position);
+                if (ChildTopRight.Contains(position))
+                    return ChildTopRight.FindCameraNode(position);
+                if (ChildBottomLeft.Contains(position))
+                    return ChildBottomLeft.FindCameraNode(position);
+                // Must be last child Since it is contain in parent Node
+                return ChildBottomRight.FindCameraNode(position);
+            }
+
+            // No child && Contains = this Node
+            return this;
+        }
+        
+        /// <summary>
+        /// Performs various check for splitting (neighbors and parent and size) and splits Node if able
+        /// </summary>
+        public void Split()
+        {
+            if (!Parent.IsSplit && (Parent != null))
+                Parent.Split();
+            if (CanSplit)
+            {
+
+                if (HasChildren)
+                {
+                    ChildTopLeft.Activate();
+                    ChildTopRight.Activate();
+                    ChildBottomLeft.Activate();
+                    ChildBottomRight.Activate();
+
+                    IsActive = false;
+
+                }
+                else
+                {
+                    IsActive = true;
+                }
+
+                IsSplit = true;
+
+                // Set Extra Active Vertex
+                VertexTop.Activated = true;
+                VertexLeft.Activated = true;
+                VertexRight.Activated = true;
+                VertexBottom.Activated = true;
+            }
+
+            // Unsure I understand yet ?
+            CheckNeighborParentSplit(NeighborTop);
+            CheckNeighborParentSplit(NeighborLeft);
+            CheckNeighborParentSplit(NeighborRight);
+            CheckNeighborParentSplit(NeighborBottom);
+
+            // Activated Neighbor's vertices to match this Splitted Node vertices
+            if (NeighborTop != null)
+                NeighborTop.VertexBottom.Activated = true;
+
+            if (NeighborLeft != null)
+                NeighborLeft.VertexRight.Activated = true;
+
+            if (NeighborRight != null)
+                NeighborRight.VertexLeft.Activated = true;
+
+            if (NeighborBottom != null)
+                NeighborBottom.VertexTop.Activated = true;
+
+        }
+
+        private static void CheckNeighborParentSplit(QuadNode neighbor)
+        {
+            if (neighbor != null && neighbor.Parent != null)
+            {
+                if (!neighbor.Parent.IsSplit)
+                    neighbor.Parent.Split();
+            }
         }
     }
 
