@@ -7,36 +7,37 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TOOLS
 {
-    public class QuadTree : Microsoft.Xna.Framework.DrawableGameComponent
+    public class QuadTree
     {
         QuadNode rootNode { get; set; }
         BufferManager Buffer { get; set; }
         Vector3 Position { get; set; }
 
-        Vector3 CameraPosition { get; set; }
+        public Vector3 CameraPosition { get; set; }
         Vector3 LastCameraPosition { get; set; }
 
         int[] Indices { get; set; }
 
-        Matrix View { get; set; }
-        Matrix Projection { get; set; }
+        public Matrix View { get; set; }
+        public Matrix Projection { get; set; }
 
         GraphicsDevice Graphic { get; set; }
 
         internal int TopNodeSize { get; set; }
         QuadNode RootNode { get; set; }
         QuadNode ActiveNode { get; set; }
+        QuadNode LastActiveNode { get; set; }
         internal VertexCollection Vertices { get; set; }
         public int MinimumDepth { get; set; }
 
-        BoundingFrustum ViewFrustrum { get; set; }
+        public BoundingFrustum ViewFrustrum { get; private set; }
 
         // Drawing Parameters
         public BasicEffect Effect { get; private set; }
-        int IndexCount { get; set; }
+        public int IndexCount { get; private set; }
+        public bool Cull { get; set; }
 
         public QuadTree(Game game,Vector3 position, Texture2D heightmap, Matrix viewMatrix, Matrix projectionMatrix, GraphicsDevice graphic, int scale)
-            :base(game)
         {
             Graphic = graphic;
             Position = position;
@@ -73,11 +74,12 @@ namespace TOOLS
             IndexCount++;
         }
 
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             if (CameraPosition == LastCameraPosition && /* Buggy Update Hot fix Possibly*/ (gameTime.TotalGameTime.TotalSeconds >= 60.0))
                 return;
 
+            ViewFrustrum.Matrix = View * Projection;
             Effect.View = View;
             Effect.Projection = Projection;
 
@@ -86,7 +88,11 @@ namespace TOOLS
 
             RootNode.ForceMinimumDepth();
 
+            LastActiveNode = ActiveNode;
             ActiveNode = RootNode.FindCameraNode(CameraPosition);
+
+            if (ActiveNode != LastActiveNode)
+                RootNode.Merge();
 
             if (ActiveNode != null)
                 ActiveNode.Split();
@@ -95,10 +101,9 @@ namespace TOOLS
 
             Buffer.UpdateIndexBuffer(Indices, IndexCount);
             Buffer.SwapBuffer();
-            base.Update(gameTime);
         }
 
-        public override void Draw(GameTime gameTime)
+        public void Draw(GameTime gameTime)
         {
             Graphic.SetVertexBuffer(Buffer.VertexBuffer);
             Graphic.Indices = Buffer.IndexBuffer;
@@ -108,8 +113,6 @@ namespace TOOLS
                 pass.Apply();
                 Graphic.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, Vertices.Vertices.Length, 0, IndexCount / 3);
             }
-
-            base.Draw(gameTime);
         }
     }
 
@@ -135,6 +138,10 @@ namespace TOOLS
         bool IsActive { get; set; }
         bool IsSplit { get; set; }
         bool CanSplit { get { return (NodeSize >= 2); } }
+        public bool IsInView
+        {
+            get { return Contains(ParentTree.ViewFrustrum); }
+        }
 
         #region VERTICES
         QuadNodeVertex VertexTopLeft;
@@ -369,6 +376,9 @@ namespace TOOLS
         /// </summary>
         internal void SetActiveVertices()
         {
+            if (ParentTree.Cull && !IsInView)
+                return;
+
             if (IsSplit && this.HasChildren)
             {
                 ChildTopLeft.SetActiveVertices();
@@ -439,8 +449,8 @@ namespace TOOLS
             VertexTopLeft.Activated = true;
             VertexTopRight.Activated = true;
             VertexCenter.Activated = true;
-            VertexBottomLeft = true;
-            VertexBottomRight = true;
+            VertexBottomLeft.Activated = true;
+            VertexBottomRight.Activated = true;
         }
 
         /// <summary>
@@ -448,7 +458,7 @@ namespace TOOLS
         /// </summary>
         public void ForceMinimumDepth()
         {
-            if (true)
+            if (NodeDepth < ParentTree.MinimumDepth)
 	        {
                 if (this.HasChildren)
 	            {
@@ -469,7 +479,7 @@ namespace TOOLS
                 return;
             }
 
-            if (NodeDepth == ParentTree.MinimumDepth || (NodeDepth < ParentTree.MinimumDepth && !this.HasChildren)
+            if (NodeDepth == ParentTree.MinimumDepth || (NodeDepth < ParentTree.MinimumDepth && !this.HasChildren))
 	        {
 		        this.Activate();
                 IsSplit = false;
@@ -482,6 +492,11 @@ namespace TOOLS
         public bool Contains(Vector3 position)
         {
             return Bounds.Contains(position) == ContainmentType.Contains;
+        }
+
+        public bool Contains(BoundingFrustum boundingFrustrum)
+        {
+            return Bounds.Intersects(boundingFrustrum);
         }
 
         /// <summary>
@@ -515,7 +530,10 @@ namespace TOOLS
         /// </summary>
         public void Split()
         {
-            if (!Parent.IsSplit && (Parent != null))
+            if (ParentTree.Cull && !IsInView)
+                return;
+
+            if ( (Parent != null) && !Parent.IsSplit)
                 Parent.Split();
             if (CanSplit)
             {
@@ -571,6 +589,77 @@ namespace TOOLS
             {
                 if (!neighbor.Parent.IsSplit)
                     neighbor.Parent.Split();
+            }
+        }
+
+        public void Merge()
+        {
+            VertexTop.Activated = false;
+            VertexLeft.Activated = false;
+            VertexRight.Activated = false;
+            VertexBottom.Activated = false;
+
+            if (Nodetype != NodeType.FullNode)
+            {
+                VertexTopLeft.Activated = false;
+                VertexTopRight.Activated = false;
+                VertexBottomLeft.Activated = false;
+                VertexBottomRight.Activated = false;
+            }
+            IsActive = true;
+            IsSplit = false;
+
+            if (HasChildren)
+            {
+
+                if (ChildTopLeft.IsSplit)
+                {
+                    ChildTopLeft.Merge();
+                    ChildTopLeft.IsActive = false;
+                }
+                else
+                {
+                    ChildTopLeft.VertexTop.Activated = false;
+                    ChildTopLeft.VertexLeft.Activated = false;
+                    ChildTopLeft.VertexRight.Activated = false;
+                    ChildTopLeft.VertexBottom.Activated = false;
+                }
+                if (ChildTopRight.IsSplit)
+                {
+                    ChildTopRight.Merge();
+                    ChildTopRight.IsActive = false;
+                }
+                else
+                {
+                    ChildTopRight.VertexTop.Activated = false;
+                    ChildTopRight.VertexLeft.Activated = false;
+                    ChildTopRight.VertexRight.Activated = false;
+                    ChildTopRight.VertexBottom.Activated = false;
+                }
+                if (ChildBottomLeft.IsSplit)
+                {
+                    ChildBottomLeft.Merge();
+                    ChildBottomLeft.IsActive = false;
+                }
+                else
+                {
+                    ChildBottomLeft.VertexTop.Activated = false;
+                    ChildBottomLeft.VertexLeft.Activated = false;
+                    ChildBottomLeft.VertexRight.Activated = false;
+                    ChildBottomLeft.VertexBottom.Activated = false;
+                }
+                if (ChildBottomRight.IsSplit)
+                {
+                    ChildBottomRight.Merge();
+                    ChildBottomRight.IsActive = false;
+                }
+                else
+                {
+                    ChildBottomRight.VertexTop.Activated = false;
+                    ChildBottomRight.VertexLeft.Activated = false;
+                    ChildBottomRight.VertexRight.Activated = false;
+                    ChildBottomRight.VertexBottom.Activated = false;
+                }
             }
         }
     }
