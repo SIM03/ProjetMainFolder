@@ -12,7 +12,7 @@ using TOOLS;
 
 namespace GAME
 {
-    class Game : Microsoft.Xna.Framework.Game
+    public class Game : Microsoft.Xna.Framework.Game
     {
         const float DIMENSION_X = 512;
         const float DIMENSION_Y = 200;
@@ -32,6 +32,9 @@ namespace GAME
         RessourcesManager<Model> GestionnaireDeModèles { get; set; }
         Caméra CaméraJeu { get; set; }
 
+
+        float TempsÉcouléDepuisMAJ { get; set; }
+
         public InputManager GestionInput { get; private set; }
 
         public Game()
@@ -41,12 +44,18 @@ namespace GAME
             PériphériqueGraphique.SynchronizeWithVerticalRetrace = true;
             IsFixedTimeStep = true;
             IsMouseVisible = false;
-            PériphériqueGraphique.ToggleFullScreen();
+            //PériphériqueGraphique.ToggleFullScreen();
         }
 
         
         protected override void Initialize()
         {
+            LevelManager.RemovePhysicalComponents(this);
+            CaméraJeu = LevelManager.AddCamera(this, 0);
+
+            Components.Add(CaméraJeu);
+            Services.AddService(typeof(Caméra), CaméraJeu);
+
             GestionnaireDeFonts = new RessourcesManager<SpriteFont>(this, "Fonts");
             GestionnaireDeTextures = new RessourcesManager<Texture2D>(this, "Textures");
             GestionnaireDeModèles = new RessourcesManager<Model>(this, "Models");
@@ -54,11 +63,6 @@ namespace GAME
             Components.Add(new AfficheurFPS(this, "Arial20",INTERVALLE_MAJ_STANDARD));
 
             Components.Add(GestionInput);
-
-            Vector3 positionCaméra = new Vector3(0, 100, 10);
-            CaméraJeu = new CaméraSubjective(this, positionCaméra, new Vector3(0, 0, 0), INTERVALLE_MAJ_STANDARD);
-            //CaméraJeu = new CaméraFixe(this, positionCaméra, positionTuileDragon, Vector3.Up);
-            Components.Add(CaméraJeu);
             Components.Add(new ObjetDeDemo(this, "Floor", 1f, new Vector3(0, 0, 0), new Vector3(0, 0, 0), INTERVALLE_MAJ_STANDARD));
 
             //Components.Add(new Terrain(this, 1f, new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(512, 50, 1024), "Canyon", "DétailsTerrain", 5, INTERVALLE_MAJ_STANDARD));
@@ -106,8 +110,8 @@ namespace GAME
             Services.AddService(typeof(RessourcesManager<Texture2D>), GestionnaireDeTextures);
             Services.AddService(typeof(RessourcesManager<Model>), GestionnaireDeModèles);
             Services.AddService(typeof(InputManager), GestionInput);
-            Services.AddService(typeof(Caméra), CaméraJeu);
             GestionSprites = new SpriteBatch(GraphicsDevice);
+            
             Services.AddService(typeof(SpriteBatch), GestionSprites);
             base.Initialize();
         }
@@ -116,7 +120,21 @@ namespace GAME
         {
             if (GestionInput.EstNouvelleTouche(Keys.Escape))
             {
+                ExcelApp.Quit();
                 Exit();
+            }
+
+            if (GestionInput.EstNouvelleTouche(Keys.F6))
+            {
+                ExcelApp.SetCell<int>(2, 4, 1, (int)CaméraJeu.Position.X);
+                ExcelApp.SetCell<int>(3, 4, 1, (int)CaméraJeu.Position.Y);
+                ExcelApp.SetCell<int>(4, 4, 1, (int)CaméraJeu.Position.Z);
+
+                ExcelApp.SetCell<int>(2, 5, 1, (int)CaméraJeu.Cible.X);
+                ExcelApp.SetCell<int>(3, 5, 1, (int)CaméraJeu.Cible.Y);
+                ExcelApp.SetCell<int>(4, 5, 1, (int)CaméraJeu.Cible.Z);
+
+                ExcelApp.Save();
             }
             base.Update(gameTime);
         }

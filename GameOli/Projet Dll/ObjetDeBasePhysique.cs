@@ -22,7 +22,7 @@ namespace TOOLS
         InputManager GestionInput { get; set; }
         RessourcesManager<Model> GestionnaireDeModèles { get; set; }
         Caméra CaméraJeu { get; set; }
-        List<BoundingBox> ShellList { get; set; }
+        public List<BoundingBox> ShellList { get; set; }
         bool Pause { get; set; }
 
         public BoundingBox Shell { get; set; }
@@ -186,8 +186,8 @@ namespace TOOLS
                 BoundingBox boîteCollision = CalculerBoundingBox(maillage, sommetsDuModèles, tailleSommetEnFloat, ref début);
                 ShellList.Add(boîteCollision);
                 //On crée la primitive (un cube) qui servira à visualiser la boîte de collision et on l'ajoute à la liste des components
-                BoîteDeCollision boîte = new BoîteDeCollision(Game, this, boîteCollision, Color.Blue, 0.01f);
-                Game.Components.Insert(Game.Components.Count - 2, boîte); // j'utilise "insert" pour insérer les composants avant l'affichage 2D terminal
+                //BoîteDeCollision boîte = new BoîteDeCollision(Game, this, boîteCollision, Color.Blue, 0.01f);
+                //Game.Components.Insert(Game.Components.Count - 2, boîte); // j'utilise "insert" pour insérer les composants avant l'affichage 2D terminal
             }
         }
 

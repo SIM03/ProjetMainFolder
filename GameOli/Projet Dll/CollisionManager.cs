@@ -56,35 +56,35 @@ namespace TOOLS
             return new Vector2 ((int)(Math.Ceiling(position2D.X / DeltaX)),(int)(Math.Ceiling(position2D.Y / DeltaZ))) ;
         }
 
-        bool isObjectNear(iPhysicalObject objet)
-        {
-            Vector2 ZoneObjet = objet.Zone;
-            Vector2[] RangeTiles = new Vector2[8];
+        //bool isObjectNear(iPhysicalObject objet)
+        //{
+        //    Vector2 ZoneObjet = objet.Zone;
+        //    Vector2[] RangeTiles = new Vector2[8];
 
-            RangeTiles[0] = new Vector2(ZoneObjet.X - 1, ZoneObjet.Y + 1);
-            RangeTiles[1] = new Vector2(ZoneObjet.X, ZoneObjet.Y + 1);
-            RangeTiles[2] = new Vector2(ZoneObjet.X + 1, ZoneObjet.Y + 1);
-            RangeTiles[3] = new Vector2(ZoneObjet.X + 1, ZoneObjet.Y);
-            RangeTiles[4] = new Vector2(ZoneObjet.X + 1, ZoneObjet.Y - 1);
-            RangeTiles[5] = new Vector2(ZoneObjet.X, ZoneObjet.Y - 1);
-            RangeTiles[6] = new Vector2(ZoneObjet.X - 1, ZoneObjet.Y - 1);
-            RangeTiles[7] = new Vector2(ZoneObjet.X - 1, ZoneObjet.Y);
+        //    RangeTiles[0] = new Vector2(ZoneObjet.X - 1, ZoneObjet.Y + 1);
+        //    RangeTiles[1] = new Vector2(ZoneObjet.X, ZoneObjet.Y + 1);
+        //    RangeTiles[2] = new Vector2(ZoneObjet.X + 1, ZoneObjet.Y + 1);
+        //    RangeTiles[3] = new Vector2(ZoneObjet.X + 1, ZoneObjet.Y);
+        //    RangeTiles[4] = new Vector2(ZoneObjet.X + 1, ZoneObjet.Y - 1);
+        //    RangeTiles[5] = new Vector2(ZoneObjet.X, ZoneObjet.Y - 1);
+        //    RangeTiles[6] = new Vector2(ZoneObjet.X - 1, ZoneObjet.Y - 1);
+        //    RangeTiles[7] = new Vector2(ZoneObjet.X - 1, ZoneObjet.Y);
 
-            foreach (iPhysicalObject obj in StaticObjectList)
-            {
-                for (int i = 0; i < RangeTiles.Length; i++)
-                {
-                    if (RangeTiles[i] = obj.Zone)
-                    {
-                        CheckCollison(objet, obj);
-                    }
-                }
+        //    foreach (iPhysicalObject obj in StaticObjectList)
+        //    {
+        //        for (int i = 0; i < RangeTiles.Length; i++)
+        //        {
+        //            if (RangeTiles[i] = obj.Zone)
+        //            {
+        //                CheckCollison(objet, obj);
+        //            }
+        //        }
 			
 
-            }
+        //    }
 
 
-        }
+        //}
 
 
 
