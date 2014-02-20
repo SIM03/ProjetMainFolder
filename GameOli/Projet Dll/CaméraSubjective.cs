@@ -32,7 +32,7 @@ namespace TOOLS
         const double WAIT_TIME = 1;
         //const float ROTATION_ACCELERATION = 2;
 
-        Vector3 Direction { get; set; }
+        public Vector3 Direction { get; set; }
         Vector3 Latéral { get; set; }
         float VitesseTranslation { get; set; }
         float VitesseRotation { get; set; }
@@ -46,12 +46,15 @@ namespace TOOLS
         public float Sensivity { get; private set; }
         public float InterpolationModifier { get; private set; }
         public float MINIMUM_MOVEMENT { get; private set; } /* Future Const (testing parameter only)*/
-        float Gravity { get; set; }
-        float Velocity { get; set; }
-        protected float AirTime { get; set; }
+
+        public float Velocity { get; set; }
+        public float AirTime { get; set; }
+        public bool IsJumping { get; set; }
+        public bool IsOnFloor { get; set; }
+
         float StartingHeight { get; set; }
         double LastJump { get; set; }
-        bool IsJumping { get; set; }
+        float Gravity { get; set; }
         //float ForcedRotationY { get; set; }
         //float RotationFactor { get; set; }
 
@@ -73,14 +76,6 @@ namespace TOOLS
                 }
             }
         }
-        bool isOnFloor;
-        protected bool IsOnFloor
-        {
-            get { return isOnFloor; }  
-            set { isOnFloor = value; }
-        }
-
-
 
         public CaméraSubjective(Game jeu, Vector3 positionCaméra, Vector3 cible, float intervalleMAJ)
             : base(jeu)
@@ -197,30 +192,38 @@ namespace TOOLS
                 Position += Latéral * déplacementLatéral;
         }
 
+        public void ManageTeleportation(Vector3 newCameraPosition, Vector3 newCameraTarget)
+        {
+            Position = newCameraPosition;
+            Direction = newCameraTarget;
+        }
+
         protected float JumpHandler(GameTime gametime)
         {
             float Vertical = 0;
+
             if (GestionInput.EstEnfoncée(Keys.Space) && IsOnFloor)// && (LastJump >= WAIT_TIME) && !IsJumping)
             {
-                IsJumping = true;
+                //IsJumping = true;
                 Vertical = JUMPING_HEIGHT;
                 LastJump = 0;
             }
-            if (IsJumping)
-            {
-                if (IsOnFloor)
-                {
-                    IsJumping = false;
-                }
 
-                else
-                    Vertical = JUMPING_HEIGHT;
-            }
+            //if (IsJumping)
+            //{
+            //    if (IsOnFloor)
+            //    {
+            //        IsJumping = false;
+            //    }
 
-            if (!IsJumping)
-            {
+            //    else
+            //        Vertical = JUMPING_HEIGHT;
+            //}
+
+            //if (!IsJumping)
+            //{
                LastJump = (LastJump + gametime.ElapsedGameTime.TotalSeconds);
-            }
+            //}
 
             //if (LastJump < 1.4f * WAIT_TIME)
             //{
@@ -378,6 +381,24 @@ namespace TOOLS
                     break;
                 case "MINIMUM_MOVEMENT":
                     Stat = this.MINIMUM_MOVEMENT;
+                    break;
+                case "Position":
+                    Stat = this.Position;
+                    break;
+                case "Direction":
+                    Stat = this.Direction;
+                    break;
+                case "Velocity":
+                    Stat = this.Velocity;
+                    break;
+                case "AirTime":
+                    Stat = this.AirTime;
+                    break;
+                case "IsOnFloor":
+                    Stat = this.IsOnFloor;
+                    break;
+                case "IsJumping":
+                    Stat = this.IsJumping;
                     break;
                 default:
                     Stat = 333;

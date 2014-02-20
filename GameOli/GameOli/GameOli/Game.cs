@@ -8,30 +8,34 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using TOOLS;
 
-namespace GAME
+namespace TOOLS
 {
-    class Game : Microsoft.Xna.Framework.Game
+    public class Jeu : Microsoft.Xna.Framework.Game
     {
         const float DIMENSION_X = 512;
         const float DIMENSION_Y = 200;
         const float DIMENSION_Z = 1024;
-        const float OFFSETY = 150;
+        const float OFFSET_Y = 30;
         Vector2 étenduePlan = new Vector2(DIMENSION_X,DIMENSION_Y);
         Vector2 étenduePlan1 = new Vector2(DIMENSION_X, DIMENSION_X + DIMENSION_Z);
         Vector2 étenduePlan2 = new Vector2(DIMENSION_X / 4, DIMENSION_Y);
         Vector2 charpentePlan = new Vector2(4,3);
 
+        int ActualLevel { get; set; }
+
+        public ScreenMessage SavingMessage { get; set; }
+        public ScreenMessage LoadingMessage { get; set; }
+
         const float INTERVALLE_CALCUL_FPS = 1f;
-        const float INTERVALLE_MAJ_STANDARD = 1f / 60f;
+        public const float INTERVALLE_MAJ_STANDARD = 1f / 60f;
         GraphicsDeviceManager GraphicManager { get; set; }
         SpriteBatch GestionSprites { get; set; }
-
+        ExcelDataManager DataManager { get; set; }
         RessourcesManager<SpriteFont> GestionnaireDeFonts { get; set; }
         RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
         RessourcesManager<Model> GestionnaireDeModèles { get; set; }
-        Caméra CaméraJeu { get; set; }
+        CaméraSubjectivePhysique CaméraJeu { get; set; }
 
         ObjetDeBasePhysique Cube { get; set; } 
         ObjetDeBasePhysique Cube1 { get; set; }
@@ -41,12 +45,12 @@ namespace GAME
 
         PlanTexturé Floor { get; set; }
 
-        public List<IPhysicalObject> StaticObjectList { get; set; }
+        List<IPhysicalObject> StaticObjectList { get; set; }
 
 
         public InputManager GestionInput { get; private set; }
 
-        public Game()
+        public Jeu()
         {
             GraphicManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -56,15 +60,16 @@ namespace GAME
             //GraphicManager.ToggleFullScreen();
         }
 
-        
         protected override void Initialize()
         {
+            ActualLevel = 0;
+            DataManager = new ExcelDataManager(this);
             GestionnaireDeFonts = new RessourcesManager<SpriteFont>(this, "Fonts");
             GestionnaireDeTextures = new RessourcesManager<Texture2D>(this, "Textures");
             GestionnaireDeModèles = new RessourcesManager<Model>(this, "Models");
             GestionInput = new InputManager(this);
             Components.Add(GestionInput);
-            
+
             Components.Add(new Afficheur3D(this));
             //Vector3 positionCaméra = new Vector3(0, 100, 10);
             //CaméraJeu = new CaméraSubjective(this, positionCaméra, new Vector3(0, 0, 0), INTERVALLE_MAJ_STANDARD);
@@ -132,21 +137,38 @@ namespace GAME
             StaticObjectList.Add(Cube4);
             StaticObjectList.Add(Floor);
 
-            // ajout de la caméra physique
-            Vector3 positionCaméra = new Vector3(0, 500, 10);
-            CaméraJeu = new TOOLS.CaméraSubjectivePhysique(this, positionCaméra, new Vector3(0, 0, 0), StaticObjectList, INTERVALLE_MAJ_STANDARD);
+            // ajout de la caméra physique avec excel
+            CaméraJeu = new CaméraSubjectivePhysique(this, DataManager.ResetCameraPosition(ActualLevel), DataManager.ResetCameraTarget(ActualLevel), StaticObjectList, INTERVALLE_MAJ_STANDARD);
             Components.Add(CaméraJeu);
-            Components.Add(new Ability(this));
+
+            //Components.Add(new Ability(this));
            
              
            
             //Porte
-            
-            Components.Add(new PlanTexturé(this, 1f, Vector3.Zero, new Vector3(1, DIMENSION_Y / 2, 3 * (-DIMENSION_Z / 4) + 1), étenduePlan2, charpentePlan, "BlackDoor", INTERVALLE_MAJ_STANDARD));
+            Components.Add(new PlanTexturé(this, 1f, Vector3.Zero, new Vector3(1, DIMENSION_Y / 2, 3 * (-DIMENSION_Z / 4) + 10), étenduePlan2, charpentePlan, "BlackDoor", INTERVALLE_MAJ_STANDARD));
+
            // Components.Add(new ScreenMessage(this, CaméraJeu, "BufferSize", "Arial20", 0,0, INTERVALLE_MAJ_STANDARD));
-            Components.Add(new ScreenMessage(this, CaméraJeu, "InterpolationModifier", "Arial20",0 ,OFFSETY, INTERVALLE_MAJ_STANDARD));
-            Components.Add(new ScreenMessage(this, CaméraJeu, "Sensitivity", "Arial20",0, 2 * OFFSETY, INTERVALLE_MAJ_STANDARD));
-            Components.Add(new ScreenMessage(this, CaméraJeu, "MINIMUM_MOVEMENT", "Arial20",0, 3 * OFFSETY, INTERVALLE_MAJ_STANDARD));
+            Components.Add(new ScreenMessage(this, CaméraJeu, "InterpolationModifier", "InterpolationModifier", "Arial20", 0, 0 * OFFSET_Y, INTERVALLE_MAJ_STANDARD));
+            Components.Add(new ScreenMessage(this, CaméraJeu, "Sensitivity", "Sensitivity", "Arial20", 0, 1 * OFFSET_Y, INTERVALLE_MAJ_STANDARD));
+            Components.Add(new ScreenMessage(this, CaméraJeu, "MINIMUM_MOVEMENT", "MINIMUM_MOVEMENT", "Arial20", 0, 2 * OFFSET_Y, INTERVALLE_MAJ_STANDARD));
+            Components.Add(new ScreenMessage(this, CaméraJeu, "Position", "Position", "Arial20", 0, 3 * OFFSET_Y, INTERVALLE_MAJ_STANDARD));
+            Components.Add(new ScreenMessage(this, CaméraJeu, "Direction", "Direction", "Arial20", 0, 4 * OFFSET_Y, INTERVALLE_MAJ_STANDARD));
+            Components.Add(new ScreenMessage(this, CaméraJeu, "Velocity", "Velocity", "Arial20", 0, 5 * OFFSET_Y, INTERVALLE_MAJ_STANDARD));
+            Components.Add(new ScreenMessage(this, CaméraJeu, "AirTime", "AirTime", "Arial20", 0, 6 * OFFSET_Y, INTERVALLE_MAJ_STANDARD));
+            Components.Add(new ScreenMessage(this, CaméraJeu, "IsOnFloor", "IsOnFloor", "Arial20", 0, 7 * OFFSET_Y, INTERVALLE_MAJ_STANDARD));
+            //Components.Add(new ScreenMessage(this, CaméraJeu, "IsJumping", "IsJumping", "Arial20", 0, 8 * OFFSET_Y, INTERVALLE_MAJ_STANDARD));
+
+            SavingMessage = new ScreenMessage(this, CaméraJeu, "Saving...", null, "Arial20", 0, Window.ClientBounds.Height * 0.90f, INTERVALLE_MAJ_STANDARD);
+            SavingMessage.Visible = false;
+            Components.Add(SavingMessage);
+
+            LoadingMessage = new ScreenMessage(this, CaméraJeu, "Loading...", null, "Arial20", 0, Window.ClientBounds.Height * 0.95f, INTERVALLE_MAJ_STANDARD);
+            LoadingMessage.Visible = false;
+            Components.Add(LoadingMessage);
+
+            //Services.AddService(typeof(Caméra), CaméraJeu);
+            Services.AddService(typeof(ExcelDataManager), DataManager);
             Services.AddService(typeof(RessourcesManager<SpriteFont>), GestionnaireDeFonts);
             Services.AddService(typeof(RessourcesManager<Texture2D>), GestionnaireDeTextures);
             Services.AddService(typeof(RessourcesManager<Model>), GestionnaireDeModèles);
@@ -164,22 +186,35 @@ namespace GAME
         
         protected override void Update(GameTime gameTime)
         {
+            ManageKeyboard();
+            base.Update(gameTime);
+        }
+
+        private void ManageKeyboard()
+        {
             if (GestionInput.EstNouvelleTouche(Keys.Escape))
+            {
+                ExcelApp.Quit();
                 Exit();
+            }
+
             if (GestionInput.EstNouvelleTouche(Keys.F))
                 GraphicManager.ToggleFullScreen();
+
             if (GestionInput.EstNouvelleTouche(Keys.F1))
             {
                 GraphicManager.PreferredBackBufferHeight = 1080;
                 GraphicManager.PreferredBackBufferWidth = 1920;
                 GraphicManager.ApplyChanges();
             }
+
             if (GestionInput.EstNouvelleTouche(Keys.F2))
             {
                 GraphicManager.PreferredBackBufferHeight = 768;
                 GraphicManager.PreferredBackBufferWidth = 1280;
                 GraphicManager.ApplyChanges();
             }
+
             if (GestionInput.EstNouvelleTouche(Keys.F3))
             {
                 GraphicManager.PreferredBackBufferHeight = 768;
@@ -187,7 +222,51 @@ namespace GAME
                 GraphicManager.ApplyChanges();
             }
 
-            base.Update(gameTime);
+            if (GestionInput.EstNouvelleTouche(Keys.F6))
+                QuickSave();
+
+            if (GestionInput.EstNouvelleTouche(Keys.F7))
+                QuickLoad();
+
+            if (GestionInput.EstNouvelleTouche(Keys.R))
+                ResetLevel();
+        }
+
+        private void QuickSave()
+        {
+            SavingMessage.Visible = true;
+            DataManager.SaveCamera(CaméraJeu);
+            //SavingMessage.Visible = false;
+        }
+
+        private void QuickLoad()
+        {
+            LoadingMessage.Visible = true;
+            CaméraJeu.Position = DataManager.LoadCameraPosition(ActualLevel);
+            CaméraJeu.Direction = DataManager.LoadCameraTarget(ActualLevel);
+            CaméraJeu.IsOnFloor = DataManager.LoadIsOnFloor(ActualLevel);
+            CaméraJeu.IsJumping = DataManager.LoadIsJumping(ActualLevel);
+            CaméraJeu.Velocity = DataManager.LoadVelocity(ActualLevel);
+            CaméraJeu.AirTime = DataManager.LoadAirTime(ActualLevel);
+            //LoadingMessage.Visible = false;
+        }
+
+        private void ResetLevel()
+        {
+            LoadingMessage.Visible = true;
+            CaméraJeu.Position = DataManager.ResetCameraPosition(ActualLevel);
+            CaméraJeu.Direction = Vector3.Normalize(DataManager.ResetCameraTarget(ActualLevel));
+            CaméraJeu.IsOnFloor = DataManager.ResetIsOnFloor(ActualLevel);
+            CaméraJeu.IsJumping = DataManager.ResetIsJumping(ActualLevel);
+            CaméraJeu.Velocity = DataManager.ResetVelocity(ActualLevel);
+            CaméraJeu.AirTime = DataManager.ResetAirTime(ActualLevel);
+        }
+
+        public void CreateCamera(Game jeu, Vector3 CameraPosition, Vector3 CameraTarget)
+        {
+            CaméraJeu = new CaméraSubjectivePhysique(jeu, CameraPosition, CameraTarget, StaticObjectList, INTERVALLE_MAJ_STANDARD);
+            Components.Add(CaméraJeu);
+            Services.AddService(typeof(Caméra), CaméraJeu);
         }
     }
 }
