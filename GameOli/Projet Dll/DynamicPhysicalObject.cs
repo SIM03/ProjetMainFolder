@@ -22,8 +22,27 @@ namespace TOOLS
         protected List<IPhysicalObject> StaticObjectList { get; set; }
         float AirTime { get; set; }
         InputManager InputManager { get; set; }
+<<<<<<< HEAD
         
  
+=======
+        CaméraSubjective PlayerCamera { get; set; }
+
+
+        public bool Selected
+        {
+            get;
+            set
+            {
+                if (value)
+                {
+                    PlayerCamera = Game.Services.GetService(typeof(CaméraSubjective)) as CaméraSubjective;
+                }
+                Selected = value;
+            }
+        }
+        
+>>>>>>> origin/Ray_Tracing_(Rate_Racing)
 
         public DynamicPhysicalObject(Game jeu, String nomModèle, float échelleInitiale, Vector3 rotationInitiale, Vector3 positionInitiale, float intervalleMAJ, List<IPhysicalObject> staticObjectList)
             : base(jeu, nomModèle, échelleInitiale, rotationInitiale, positionInitiale, intervalleMAJ)
@@ -43,18 +62,49 @@ namespace TOOLS
 
         public override void Update(GameTime gameTime)
         {
+<<<<<<< HEAD
             GererDeplacement();
+=======
+            //GererDeplacement();
+>>>>>>> origin/Ray_Tracing_(Rate_Racing)
             float tempsÉcoulé = (float)gameTime.ElapsedGameTime.TotalSeconds;
             TempsÉcouléDepuisMAJ += tempsÉcoulé;
             if (TempsÉcouléDepuisMAJ > IntervalleMAJ)
             {
+<<<<<<< HEAD
                 GravityHandler(gameTime);
                 MouvementHandler();
                 TempsÉcouléDepuisMAJ = 0;
+=======
+                if (!Selected)
+                {
+                    GravityHandler(gameTime);
+                    MouvementHandler();
+                    TempsÉcouléDepuisMAJ = 0;
+                }
+                else
+                {
+                    FollowCamera();
+                }
+>>>>>>> origin/Ray_Tracing_(Rate_Racing)
             }
             base.Update(gameTime);
         }
 
+<<<<<<< HEAD
+=======
+        private void FollowCamera()
+        {
+            Monde *= Matrix.CreateTranslation(-Position);
+            Monde *= Matrix.CreateScale(Échelle);
+            Monde *= Matrix.CreateFromAxisAngle(Vector3.Up, PlayerCamera.RotationLacet);
+            Monde *= Matrix.CreateFromAxisAngle(PlayerCamera.Latéral, PlayerCamera.RotationTangage);
+            Monde *= Matrix.CreateTranslation((new Vector3(PlayerCamera.Direction.X, 0, PlayerCamera.Direction.Z * PlayerCamera.DéplacementDirection)) + (PlayerCamera.Latéral * PlayerCamera.DéplacementLatéral));
+            Monde *= Matrix.CreateTranslation(Position);
+
+        }
+
+>>>>>>> origin/Ray_Tracing_(Rate_Racing)
         private void GererDeplacement()
         {
             Velocity_X = 0;

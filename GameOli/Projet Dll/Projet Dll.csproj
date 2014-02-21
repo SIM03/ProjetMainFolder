@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ability.cs" />
+    <Compile Include="Afficheur2D.cs" />
     <Compile Include="Afficheur3D.cs" />
     <Compile Include="AfficheurFPS.cs" />
     <Compile Include="BoundingBox.cs" />
@@ -102,6 +103,8 @@
     <Compile Include="CollisionManager.cs" />
     <Compile Include="DynamicPhysicalObject.cs" />
     <Compile Include="InputManager.cs" />
+    <Compile Include="PhysicalObject.cs" />
+    <Compile Include="RayTracer.cs" />
     <Compile Include="ObjetDeBase.cs" />
     <Compile Include="PhysicalObject.cs" />
     <Compile Include="ObjetDemo.cs" />
