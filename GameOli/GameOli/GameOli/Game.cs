@@ -136,7 +136,7 @@ namespace GAME
             Vector3 positionCaméra = new Vector3(0, 500, 10);
             CaméraJeu = new TOOLS.CaméraSubjectivePhysique(this, positionCaméra, new Vector3(0, 0, 0), StaticObjectList, INTERVALLE_MAJ_STANDARD);
             Components.Add(CaméraJeu);
-            Components.Add(new Ability(this));
+            //Components.Add(new Ability(this));
            
              
            
@@ -151,7 +151,7 @@ namespace GAME
             Services.AddService(typeof(RessourcesManager<Texture2D>), GestionnaireDeTextures);
             Services.AddService(typeof(RessourcesManager<Model>), GestionnaireDeModèles);
             Services.AddService(typeof(InputManager), GestionInput);
-            Services.AddService(typeof(Caméra), CaméraJeu);
+            Services.AddService(typeof(CaméraSubjective), CaméraJeu);
             GestionSprites = new SpriteBatch(GraphicsDevice);
             Services.AddService(typeof(SpriteBatch), GestionSprites);
 

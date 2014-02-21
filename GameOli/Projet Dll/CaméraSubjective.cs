@@ -32,8 +32,8 @@ namespace TOOLS
         const double WAIT_TIME = 1;
         //const float ROTATION_ACCELERATION = 2;
 
-        Vector3 Direction { get; set; }
-        Vector3 Latéral { get; set; }
+        public Vector3 Direction { get; private set; }
+        public Vector3 Latéral { get; private set; }
         float VitesseTranslation { get; set; }
         float VitesseRotation { get; set; }
 
@@ -54,6 +54,13 @@ namespace TOOLS
         bool IsJumping { get; set; }
         //float ForcedRotationY { get; set; }
         //float RotationFactor { get; set; }
+
+        //Angle de rotation
+        public float RotationTangage { get; private set; }
+        public float RotationLacet { get; private set; }
+
+        public float DéplacementDirection { get; private set; }
+        public float DéplacementLatéral { get; private set; }
 
         bool estEnZoom;
         bool EstEnZoom
@@ -108,6 +115,8 @@ namespace TOOLS
             LastJump = WAIT_TIME;
             //ForcedRotationY = 0;
             //RotationFactor = 10;
+            RotationLacet = 0f;
+            RotationTangage = 0f;
             TempsÉcouléDepuisMAJ = 0;
             base.Initialize();
             GestionInput = Game.Services.GetService(typeof(InputManager)) as InputManager;
@@ -189,12 +198,12 @@ namespace TOOLS
 
         protected virtual void GérerDéplacement()
         {
-            float déplacementDirection = (GérerTouche(Keys.W) - GérerTouche(Keys.S)) * VitesseTranslation;
-            float déplacementLatéral = (GérerTouche(Keys.D) - GérerTouche(Keys.A)) * VitesseTranslation;
-            if (déplacementDirection != 0)
-                Position += new Vector3(Direction.X, 0, Direction.Z) * déplacementDirection;
-            if (déplacementLatéral != 0)
-                Position += Latéral * déplacementLatéral;
+            float DéplacementDirection = (GérerTouche(Keys.W) - GérerTouche(Keys.S)) * VitesseTranslation;
+            float DéplacementLatéral = (GérerTouche(Keys.D) - GérerTouche(Keys.A)) * VitesseTranslation;
+            if (DéplacementDirection != 0)
+                Position += new Vector3(Direction.X, 0, Direction.Z) * DéplacementDirection;
+            if (DéplacementLatéral != 0)
+                Position += Latéral * DéplacementLatéral;
         }
 
         protected float JumpHandler(GameTime gametime)
@@ -258,16 +267,16 @@ namespace TOOLS
 
         private void GérerLacet(float RotationX)
         {
-            float rotationLacet = RotationX;
-            if (rotationLacet != 0)
-                Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Vector3.Up, rotationLacet));
+            RotationLacet = RotationX;
+            if (RotationLacet != 0)
+                Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Vector3.Up, RotationLacet));
         }
         private void GérerTangage(float RotationY)
         {
-            float rotationTangage = RotationY;
-            if (rotationTangage != 0)
+            float RotationTangage = RotationY;
+            if (RotationTangage != 0)
             {
-                Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Latéral, rotationTangage));
+                Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Latéral, RotationTangage));
                 Latéral = Vector3.Normalize(Vector3.Cross(Direction, Vector3.Up));
             }
         }
