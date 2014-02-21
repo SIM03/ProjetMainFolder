@@ -7,12 +7,12 @@ using System.Collections.Generic;
 
 namespace TOOLS
 {
-    public class ObjetDeBasePhysique : Microsoft.Xna.Framework.DrawableGameComponent, IPhysicalObject
+    public class PhysicalObject : Microsoft.Xna.Framework.DrawableGameComponent, IPhysicalObject
     {
         const float VITESSE_INITIALE_ROTATION = 0.01f;
         string NomModèle { get; set; }
-        float IntervalleMAJ { get; set; }
-        float TempsÉcouléDepuisMAJ { get; set; }
+        protected float IntervalleMAJ { get; set; }
+        protected float TempsÉcouléDepuisMAJ { get; set; }
         protected Model Modèle { get; private set; }
         protected Matrix[] TransformationsModèle { get; private set; }
         protected Matrix Monde;
@@ -26,6 +26,8 @@ namespace TOOLS
         bool Pause { get; set; }
 
         public BoundingBox Shell { get; set; }
+        public Vector2 Zone { get; set; }
+        CollisionManager CollisionManagerTest { get; set; }
 
         float angle;
         public float Angle
@@ -38,7 +40,7 @@ namespace TOOLS
             set { angle = value; }
         }
 
-        public ObjetDeBasePhysique(Game jeu, String nomModèle, float échelleInitiale, Vector3 rotationInitiale, Vector3 positionInitiale, float intervalleMAJ)
+        public PhysicalObject(Game jeu, String nomModèle, float échelleInitiale, Vector3 rotationInitiale, Vector3 positionInitiale, float intervalleMAJ)
             : base(jeu)
         {
             NomModèle = nomModèle;
@@ -66,6 +68,7 @@ namespace TOOLS
                     
             CréerListeDesBôites();
             //VisualiserSphèreDeCollision();
+            CollisionManagerTest = Game.Services.GetService(typeof(CollisionManager)) as CollisionManager;
             base.Initialize();
         }
 
@@ -82,6 +85,7 @@ namespace TOOLS
                 //    Monde *= Matrix.CreateFromYawPitchRoll(Angle, Rotation.X, Rotation.Z);
                 //    Monde *= Matrix.CreateTranslation(Position);
                 //}
+                Zone = CollisionManagerTest.GetZone(Position);
                 TempsÉcouléDepuisMAJ = 0;
             }
             base.Update(gameTime);
@@ -168,7 +172,7 @@ namespace TOOLS
         }
 
 
-        private void CréerListeDesBôites()
+        protected void CréerListeDesBôites()
         {
             ShellList = new List<BoundingBox>();
             // on créé un tableau contenant la liste des sommets du modèles

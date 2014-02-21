@@ -10,8 +10,10 @@ namespace TOOLS
     {
         List<BoundingBox> ShellList { get; set; }
         Vector3 Position { get; set; }
+        Vector2 Zone { get; set; }
         bool CheckCollison(BoundingBox boîteCollision);
         Matrix GetMonde();
+        
 
     }
 }

@@ -32,17 +32,22 @@ namespace GAME
         RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
         RessourcesManager<Model> GestionnaireDeModèles { get; set; }
         Caméra CaméraJeu { get; set; }
+        CollisionManager CollisionManagerTest { get; set; }
 
-        ObjetDeBasePhysique Cube { get; set; } 
-        ObjetDeBasePhysique Cube1 { get; set; }
-        ObjetDeBasePhysique Cube2 { get; set; }
-        ObjetDeBasePhysique Cube3 { get; set; }
-        ObjetDeBasePhysique Cube4 { get; set; }
+        PhysicalObject Cube { get; set; } 
+        PhysicalObject Cube1 { get; set; }
+        PhysicalObject Cube2 { get; set; }
+        PhysicalObject Cube3 { get; set; }
+        PhysicalObject Cube4 { get; set; }
+
+        DynamicPhysicalObject Tree { get; set; }
+        DynamicPhysicalObject Column { get; set; }
+
 
         PlanTexturé Floor { get; set; }
 
         public List<IPhysicalObject> StaticObjectList { get; set; }
-
+        public List<DynamicPhysicalObject> DynamicObjectList { get; set; }
 
         public InputManager GestionInput { get; private set; }
 
@@ -50,9 +55,10 @@ namespace GAME
         {
             GraphicManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            GraphicManager.SynchronizeWithVerticalRetrace = true;
-            IsFixedTimeStep = true;
+            GraphicManager.SynchronizeWithVerticalRetrace = false;
+            IsFixedTimeStep = false;
             IsMouseVisible = false;
+            
             //GraphicManager.ToggleFullScreen();
         }
 
@@ -78,45 +84,49 @@ namespace GAME
             
 
             //Murs Gauche
-            Components.Add(new PlanTexturé(this, 1f, new Vector3(0, MathHelper.PiOver2, 0), new Vector3(-DIMENSION_X / 2, DIMENSION_Y / 2, 0), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
-            Components.Add(new PlanTexturé(this, 1f, new Vector3(0, MathHelper.PiOver2, 0), new Vector3(-DIMENSION_X / 2, DIMENSION_Y / 2, DIMENSION_Z / 2), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
-            Components.Add(new PlanTexturé(this, 1f, new Vector3(0, MathHelper.PiOver2, 0), new Vector3(-DIMENSION_X / 2, DIMENSION_Y / 2, -DIMENSION_Z / 2), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
+            //Components.Add(new PlanTexturé(this, 1f, new Vector3(0, MathHelper.PiOver2, 0), new Vector3(-DIMENSION_X / 2, DIMENSION_Y / 2, 0), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
+            //Components.Add(new PlanTexturé(this, 1f, new Vector3(0, MathHelper.PiOver2, 0), new Vector3(-DIMENSION_X / 2, DIMENSION_Y / 2, DIMENSION_Z / 2), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
+            //Components.Add(new PlanTexturé(this, 1f, new Vector3(0, MathHelper.PiOver2, 0), new Vector3(-DIMENSION_X / 2, DIMENSION_Y / 2, -DIMENSION_Z / 2), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
 
             //Murs Haut Gauche
-            Components.Add(new PlanTexturé(this, 1f, new Vector3(0, MathHelper.PiOver2, 0), new Vector3(-DIMENSION_X / 2, (float)1.5 * DIMENSION_Y, -DIMENSION_Z / 2), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
-            Components.Add(new PlanTexturé(this, 1f, new Vector3(0, MathHelper.PiOver2, 0), new Vector3(-DIMENSION_X / 2, (float)1.5 * DIMENSION_Y, DIMENSION_Z / 2), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
-            Components.Add(new PlanTexturé(this, 1f, new Vector3(0, MathHelper.PiOver2, 0), new Vector3(-DIMENSION_X / 2, (float)1.5 * DIMENSION_Y, 0), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
+            //Components.Add(new PlanTexturé(this, 1f, new Vector3(0, MathHelper.PiOver2, 0), new Vector3(-DIMENSION_X / 2, (float)1.5 * DIMENSION_Y, -DIMENSION_Z / 2), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
+            //Components.Add(new PlanTexturé(this, 1f, new Vector3(0, MathHelper.PiOver2, 0), new Vector3(-DIMENSION_X / 2, (float)1.5 * DIMENSION_Y, DIMENSION_Z / 2), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
+            //Components.Add(new PlanTexturé(this, 1f, new Vector3(0, MathHelper.PiOver2, 0), new Vector3(-DIMENSION_X / 2, (float)1.5 * DIMENSION_Y, 0), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
 
             //Murs Droites
-            Components.Add(new PlanTexturé(this, 1f, new Vector3(0, -MathHelper.PiOver2, 0), new Vector3(DIMENSION_X / 2, DIMENSION_Y / 2, 0), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
-            Components.Add(new PlanTexturé(this, 1f, new Vector3(0, -MathHelper.PiOver2, 0), new Vector3(DIMENSION_X / 2, DIMENSION_Y / 2, DIMENSION_Z / 2), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
-            Components.Add(new PlanTexturé(this, 1f, new Vector3(0, -MathHelper.PiOver2, 0), new Vector3(DIMENSION_X / 2, DIMENSION_Y / 2, -DIMENSION_Z / 2), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
+            //Components.Add(new PlanTexturé(this, 1f, new Vector3(0, -MathHelper.PiOver2, 0), new Vector3(DIMENSION_X / 2, DIMENSION_Y / 2, 0), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
+            //Components.Add(new PlanTexturé(this, 1f, new Vector3(0, -MathHelper.PiOver2, 0), new Vector3(DIMENSION_X / 2, DIMENSION_Y / 2, DIMENSION_Z / 2), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
+            //Components.Add(new PlanTexturé(this, 1f, new Vector3(0, -MathHelper.PiOver2, 0), new Vector3(DIMENSION_X / 2, DIMENSION_Y / 2, -DIMENSION_Z / 2), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
 
             //Murs Haut Droites
-            Components.Add(new PlanTexturé(this, 1f, new Vector3(0, -MathHelper.PiOver2, 0), new Vector3(DIMENSION_X / 2, (float)1.5 * DIMENSION_Y, -DIMENSION_Z / 2), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
-            Components.Add(new PlanTexturé(this, 1f, new Vector3(0, -MathHelper.PiOver2, 0), new Vector3(DIMENSION_X / 2, (float)1.5 * DIMENSION_Y, DIMENSION_Z / 2), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
-            Components.Add(new PlanTexturé(this, 1f, new Vector3(0, -MathHelper.PiOver2, 0), new Vector3(DIMENSION_X / 2, (float)1.5 * DIMENSION_Y,0), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
+            //Components.Add(new PlanTexturé(this, 1f, new Vector3(0, -MathHelper.PiOver2, 0), new Vector3(DIMENSION_X / 2, (float)1.5 * DIMENSION_Y, -DIMENSION_Z / 2), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
+            //Components.Add(new PlanTexturé(this, 1f, new Vector3(0, -MathHelper.PiOver2, 0), new Vector3(DIMENSION_X / 2, (float)1.5 * DIMENSION_Y, DIMENSION_Z / 2), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
+            //Components.Add(new PlanTexturé(this, 1f, new Vector3(0, -MathHelper.PiOver2, 0), new Vector3(DIMENSION_X / 2, (float)1.5 * DIMENSION_Y,0), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
 
             //Murs des fonds Bas
-            Components.Add(new PlanTexturé(this, 1f, Vector3.Zero, new Vector3(0, DIMENSION_Y / 2, 3 * -DIMENSION_Z / 4), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
-            Components.Add(new PlanTexturé(this, 1f, new Vector3(0, -MathHelper.Pi, 0), new Vector3(0, DIMENSION_Y / 2,3 * DIMENSION_Z / 4), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
+            //Components.Add(new PlanTexturé(this, 1f, Vector3.Zero, new Vector3(0, DIMENSION_Y / 2, 3 * -DIMENSION_Z / 4), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
+            //Components.Add(new PlanTexturé(this, 1f, new Vector3(0, -MathHelper.Pi, 0), new Vector3(0, DIMENSION_Y / 2,3 * DIMENSION_Z / 4), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
 
             //Murs des fonds Haut
-            Components.Add(new PlanTexturé(this, 1f, Vector3.Zero, new Vector3(0, (float)1.5 * DIMENSION_Y, 3 * -DIMENSION_Z / 4), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
-            Components.Add(new PlanTexturé(this, 1f, new Vector3(0, -MathHelper.Pi, 0), new Vector3(0, (float)1.5 * DIMENSION_Y, 3 * DIMENSION_Z / 4), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
+            //Components.Add(new PlanTexturé(this, 1f, Vector3.Zero, new Vector3(0, (float)1.5 * DIMENSION_Y, 3 * -DIMENSION_Z / 4), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
+            //Components.Add(new PlanTexturé(this, 1f, new Vector3(0, -MathHelper.Pi, 0), new Vector3(0, (float)1.5 * DIMENSION_Y, 3 * DIMENSION_Z / 4), étenduePlan, charpentePlan, "Wall", INTERVALLE_MAJ_STANDARD));
 
             //Plafond
-            Components.Add(new PlanTexturé(this, 1f, new Vector3(MathHelper.PiOver2, 0, 0), new Vector3(0, 2* DIMENSION_Y, 0), étenduePlan1, charpentePlan, "Roof", INTERVALLE_MAJ_STANDARD));
+            //Components.Add(new PlanTexturé(this, 1f, new Vector3(MathHelper.PiOver2, 0, 0), new Vector3(0, 2* DIMENSION_Y, 0), étenduePlan1, charpentePlan, "Roof", INTERVALLE_MAJ_STANDARD));
 
+            CollisionManagerTest = new CollisionManager(this);
+            Services.AddService(typeof(CollisionManager), CollisionManagerTest);
+            
+            
             //Plancher
             Components.Add(Floor = new PlanTexturé(this, 1f, new Vector3(-MathHelper.PiOver2, 0, 0), new Vector3(0,0, 0), étenduePlan1, charpentePlan, "Floor", INTERVALLE_MAJ_STANDARD));
             
-            //Ajout des cube
-            Cube = new ObjetDeBasePhysique(this, "Barrier", 200, new Vector3(0, (float)(Math.PI / 2), 0), new Vector3(-200, 0, 400), INTERVALLE_MAJ_STANDARD);
-            Cube1 = new ObjetDeBasePhysique(this, "Column", 100, new Vector3(0, 0, 0), new Vector3(-150, -50, -400), INTERVALLE_MAJ_STANDARD);
-            Cube2 = new ObjetDeBasePhysique(this, "AlanTree", 0.5f, new Vector3(0, 0, 0), new Vector3(800, -200, -500), INTERVALLE_MAJ_STANDARD);
-            Cube3 = new ObjetDeBasePhysique(this, "Rock1", 50, new Vector3((float)(Math.PI), 0, 0), new Vector3(0, 0, -3000), INTERVALLE_MAJ_STANDARD);
-            Cube4 = new ObjetDeBasePhysique(this, "fence", 2f, new Vector3(0, 0, 0), new Vector3(1100, 50, -1000), INTERVALLE_MAJ_STANDARD);
+            //Ajout des objets physique
+            Cube = new PhysicalObject(this, "AlanTree", 0.2f, new Vector3(0, 0, 0), new Vector3(1000, 1500, -400), INTERVALLE_MAJ_STANDARD);
+            Cube1 = new PhysicalObject(this, "Column", 100, new Vector3(0, 0, 0), new Vector3(-150, -50, -400), INTERVALLE_MAJ_STANDARD);
+            Cube2 = new PhysicalObject(this, "Column", 320f, new Vector3(0, 0, 0), new Vector3(800, -100, -400), INTERVALLE_MAJ_STANDARD);
+            Cube3 = new PhysicalObject(this, "Rock1", 50, new Vector3((float)(Math.PI), 0, 0), new Vector3(0, 0, -3000), INTERVALLE_MAJ_STANDARD);
+            Cube4 = new PhysicalObject(this, "fence", 2f, new Vector3(0, 0, 0), new Vector3(1100, 50, -1000), INTERVALLE_MAJ_STANDARD);
             Components.Add(Cube);
             Components.Add(Cube1);
             Components.Add(Cube2);
@@ -132,17 +142,23 @@ namespace GAME
             StaticObjectList.Add(Cube4);
             StaticObjectList.Add(Floor);
 
+            //Ajout des objets physique dynamique
+            Column = new DynamicPhysicalObject(this, "Column", 250f, new Vector3(0, 0, 0), new Vector3(-100, 1000, -400), INTERVALLE_MAJ_STANDARD, StaticObjectList);
+            Components.Add(Column);
+
+            DynamicObjectList = new List<DynamicPhysicalObject>();
+            DynamicObjectList.Add(Column);
             // ajout de la caméra physique
             Vector3 positionCaméra = new Vector3(0, 500, 10);
-            CaméraJeu = new TOOLS.CaméraSubjectivePhysique(this, positionCaméra, new Vector3(0, 0, 0), StaticObjectList, INTERVALLE_MAJ_STANDARD);
+            CaméraJeu = new TOOLS.CaméraSubjectivePhysique(this, positionCaméra, new Vector3(0, 500, 0), StaticObjectList, DynamicObjectList, INTERVALLE_MAJ_STANDARD);
             Components.Add(CaméraJeu);
-            Components.Add(new Ability(this));
+            Components.Add(new Ability(this, StaticObjectList));
            
              
            
             //Porte
             
-            Components.Add(new PlanTexturé(this, 1f, Vector3.Zero, new Vector3(1, DIMENSION_Y / 2, 3 * (-DIMENSION_Z / 4) + 1), étenduePlan2, charpentePlan, "BlackDoor", INTERVALLE_MAJ_STANDARD));
+            Components.Add(new PlanTexturé(this, 1f, Vector3.Zero, new Vector3(1, DIMENSION_Y / 2, 3 * (-DIMENSION_Z / 4) + 5), étenduePlan2, charpentePlan, "BlackDoor", INTERVALLE_MAJ_STANDARD));
            // Components.Add(new ScreenMessage(this, CaméraJeu, "BufferSize", "Arial20", 0,0, INTERVALLE_MAJ_STANDARD));
             Components.Add(new ScreenMessage(this, CaméraJeu, "InterpolationModifier", "Arial20",0 ,OFFSETY, INTERVALLE_MAJ_STANDARD));
             Components.Add(new ScreenMessage(this, CaméraJeu, "Sensitivity", "Arial20",0, 2 * OFFSETY, INTERVALLE_MAJ_STANDARD));
@@ -186,7 +202,7 @@ namespace GAME
                 GraphicManager.PreferredBackBufferWidth = 1366;
                 GraphicManager.ApplyChanges();
             }
-
+            GraphicsDevice.Clear(Color.CornflowerBlue);
             base.Update(gameTime);
         }
     }

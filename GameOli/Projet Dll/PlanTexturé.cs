@@ -99,7 +99,6 @@ namespace TOOLS
         public bool CheckCollison(BoundingBox boîteCollision)
         {
             ShellList = new List<BoundingBox>();
-            //ShellList.Add(new BoundingBox(new Vector3(-500f, -500f,0), new Vector3(500f, 500, 100f)));
             ShellList.Add(new BoundingBox(new Vector3(Position.X + Étendue.X / 2, Position.Y + Étendue.Y/2, Position.Z), new Vector3(Position.X - Étendue.X / 2, Position.Y - Étendue.Y/2, Position.Z + 1)));
             bool collision = false;
             foreach (BoundingBox shell in ShellList)

@@ -9,6 +9,13 @@ namespace TOOLS
         const float RAYON_COLLISION = 1f;
 
         List<IPhysicalObject> StaticObjectList { get; set; }
+        List<DynamicPhysicalObject> DynamicObjectList { get; set; }
+
+        CollisionManager CollisionManagerTest { get; set; }
+        public Vector2 Zone { get; set; }
+        public BoundingBox BoîteCollision { get; set; }
+        bool ActiveGrid { get; set; }
+
 
         bool CollisionParSphère_;
         bool CollisionParSphère
@@ -28,19 +35,38 @@ namespace TOOLS
             }
         }
 
-        public CaméraSubjectivePhysique(Game jeu, Vector3 positionCaméra, Vector3 cible, List<IPhysicalObject> staticObjectList, float intervalleMAJ)
+        public CaméraSubjectivePhysique(Game jeu, Vector3 positionCaméra, Vector3 cible, List<IPhysicalObject> staticObjectList, List<DynamicPhysicalObject> dynamicObjectList, float intervalleMAJ)
             : base(jeu, positionCaméra, cible, intervalleMAJ)
         {
             StaticObjectList = staticObjectList;
+            DynamicObjectList = dynamicObjectList;
             CollisionParSphère = false;
         }
 
+        public override void Initialize()
+        {
+            CollisionManagerTest = Game.Services.GetService(typeof(CollisionManager)) as CollisionManager;
+            base.Initialize();
+        }
 
+        public override void Update(GameTime gameTime)
+        {
+            if (ActiveGrid)
+            {
+                Zone = CollisionManagerTest.GetZone(Position);
+                GérerDéplacement();
+            }
+            
+            base.Update(gameTime);
+        }
+            
         protected override void GérerDéplacement()
         {
             Vector3 anciennePosition = Position;
             base.GérerDéplacement();
-            if (CollisionAppréhendée(Position))
+            BoîteCollision = new BoundingBox(new Vector3(Position.X + 1, Position.Y - 100, Position.Z + 1), new Vector3(Position.X - 1, Position.Y, Position.Z - 1));
+            //if (CollisionAppréhendée(Position))
+            if(CollisionManagerTest.IsObjectNear(this, StaticObjectList))
             {
                 Position = anciennePosition;
             }
@@ -63,6 +89,18 @@ namespace TOOLS
         protected override void GestionClavier()
         {
             base.GestionClavier();
+            if (GestionInput.EstNouvelleTouche(Keys.G))
+            {
+                if (ActiveGrid)
+                {
+                    ActiveGrid = false;
+                }
+                else
+                {
+                    ActiveGrid = true;
+                }
+                
+            }
             if (GestionInput.EstNouvelleTouche(Keys.B) &&
               (GestionInput.EstEnfoncée(Keys.LeftAlt) || GestionInput.EstEnfoncée(Keys.RightAlt)))
             {
@@ -88,18 +126,28 @@ namespace TOOLS
 
         private bool VérifierBoîteDeCollision(Vector3 nouvellePosition)
         {
-            bool CollisionEnVue;
+            bool collisionStaticEnVue;
+            bool collisionDynamicEnVue;
 
-            BoundingBox boîteCollision = new BoundingBox(new Vector3(nouvellePosition.X + 1, nouvellePosition.Y - 30, nouvellePosition.Z + 1), new Vector3(nouvellePosition.X - 1, nouvellePosition.Y + 20, nouvellePosition.Z - 1));
+            BoîteCollision = new BoundingBox(new Vector3(nouvellePosition.X + 1, nouvellePosition.Y - 100, nouvellePosition.Z + 1), new Vector3(nouvellePosition.X - 1, nouvellePosition.Y, nouvellePosition.Z - 1));
 
-            CollisionEnVue = false;
-            foreach (IPhysicalObject StaticObject in StaticObjectList)
+            collisionStaticEnVue = false;
+            collisionDynamicEnVue = false;
+            foreach (IPhysicalObject staticObject in StaticObjectList)
             {
-                CollisionEnVue = StaticObject.CheckCollison(boîteCollision);
-                if (CollisionEnVue)
+                collisionStaticEnVue = staticObject.CheckCollison(BoîteCollision);
+                if (collisionStaticEnVue)
                     break;
             }
-            return CollisionEnVue;
+
+            foreach (DynamicPhysicalObject dynamicObject in DynamicObjectList)
+            {
+                collisionDynamicEnVue = dynamicObject.CheckCollison(BoîteCollision);
+                if (collisionDynamicEnVue)
+                    break;
+            }
+
+            return collisionStaticEnVue || collisionDynamicEnVue;
         }
 
         private bool VérifierSphèreDeCollision(Vector3 nouvellePosition)
@@ -109,7 +157,7 @@ namespace TOOLS
             BoundingSphere sphèreCollision = new BoundingSphere(nouvellePosition, RAYON_COLLISION);
 
             CollisionEnVue = false;
-            foreach (ObjetDeBasePhysique obstacle in StaticObjectList)
+            foreach (PhysicalObject obstacle in StaticObjectList)
             {
                 if (obstacle.CheckCollison(sphèreCollision))
                 {

@@ -100,9 +100,10 @@
     <Compile Include="CaméraSubjective.cs" />
     <Compile Include="CaméraSubjectivePhysique.cs" />
     <Compile Include="CollisionManager.cs" />
+    <Compile Include="DynamicPhysicalObject.cs" />
     <Compile Include="InputManager.cs" />
     <Compile Include="ObjetDeBase.cs" />
-    <Compile Include="ObjetDeBasePhysique.cs" />
+    <Compile Include="PhysicalObject.cs" />
     <Compile Include="ObjetDemo.cs" />
     <Compile Include="IPhysicalObject.cs" />
     <Compile Include="Plan.cs" />

@@ -16,7 +16,7 @@ namespace TOOLS
     {
         const float ACCÉLÉRATION = 0.001f;
         const float VITESSE_INITIALE_ROTATION = 20f;
-        const float VITESSE_INITIALE_TRANSLATION = 10f;
+        const float VITESSE_INITIALE_TRANSLATION = 1f;
         const float DELTA_LACET = MathHelper.Pi / 10000; // 1 degré à la fois
         const float DELTA_TANGAGE = MathHelper.Pi / 10000; // 1 degré à la fois
 
@@ -52,6 +52,7 @@ namespace TOOLS
         float StartingHeight { get; set; }
         double LastJump { get; set; }
         bool IsJumping { get; set; }
+        
         //float ForcedRotationY { get; set; }
         //float RotationFactor { get; set; }
 
@@ -73,12 +74,9 @@ namespace TOOLS
                 }
             }
         }
-        bool isOnFloor;
-        protected bool IsOnFloor
-        {
-            get { return isOnFloor; }  
-            set { isOnFloor = value; }
-        }
+
+        protected bool IsOnFloor { get; set; }
+        
 
 
 
@@ -139,12 +137,11 @@ namespace TOOLS
             {
                 GravityHandler(gameTime);
                 //GérerAccélération();
-                GérerDéplacement();
+               // GérerDéplacement();
 
                 GérerRotation();
                 CréerPointDeVue();
                 GestionSouris(gameTime);
-
                 TempsÉcouléDepuisMAJ = 0;
 
             }
@@ -274,6 +271,8 @@ namespace TOOLS
 
         protected virtual void GestionClavier()
         {
+
+      
             if (GestionInput.EstNouvelleTouche(Keys.Z))
             {
                 EstEnZoom = !EstEnZoom;
@@ -315,7 +314,7 @@ namespace TOOLS
 
         private void GestionSouris(GameTime gametime)
         {
-            BufferManagement(gametime);
+           // BufferManagement(gametime);
             if (!(GestionInput.PositionSouris().Y <= Game.Window.ClientBounds.Top || GestionInput.PositionSouris().Y >= Game.Window.ClientBounds.Bottom))
             {
                 Mouse.SetPosition((int)GestionInput.PositionSouris().X, (int)Game.Window.ClientBounds.Center.Y);
@@ -340,25 +339,26 @@ namespace TOOLS
 
         private Vector2 BufferInterpolation()
         {
-            float yValue = 0f;
-            float xValue = 0f;
-            float weight = 1.0f;
-            for (int i = 0; i < MouseBuffer.Count; i++)
-            {
-                if (MouseBuffer.ElementAt(i) != Vector2.Zero && (Math.Abs(MouseBuffer.ElementAt(i).Y) > MINIMUM_MOVEMENT || Math.Abs(MouseBuffer.ElementAt(i).X) > MINIMUM_MOVEMENT))
-                {
-                    xValue += (MouseBuffer.ElementAt(i).X * weight) * Sensivity;
-                    yValue += (MouseBuffer.ElementAt(i).Y * weight) * Sensivity;
-                    weight *= InterpolationModifier;
-                }
-            }
-            if (Math.Abs(xValue) < MINIMUM_MOVEMENT)
-                xValue = 0;
+            //float yValue = 0f;
+            //float xValue = 0f;
+            //float weight = 1.0f;
+            //for (int i = 0; i < MouseBuffer.Count; i++)
+            //{
+            //    if (MouseBuffer.ElementAt(i) != Vector2.Zero && (Math.Abs(MouseBuffer.ElementAt(i).Y) > MINIMUM_MOVEMENT || Math.Abs(MouseBuffer.ElementAt(i).X) > MINIMUM_MOVEMENT))
+            //    {
+            //        xValue += (MouseBuffer.ElementAt(i).X * weight) * Sensivity;
+            //        yValue += (MouseBuffer.ElementAt(i).Y * weight) * Sensivity;
+            //        weight *= InterpolationModifier;
+            //    }
+            //}
+            //if (Math.Abs(xValue) < MINIMUM_MOVEMENT)
+            //    xValue = 0;
 
-            if (Math.Abs(yValue) < MINIMUM_MOVEMENT)
-                yValue = 0;
-
-            Vector2 Transformation = new Vector2(xValue, yValue);
+            //if (Math.Abs(yValue) < MINIMUM_MOVEMENT)
+            //    yValue = 0;
+            
+            //Vector2 Transformation = new Vector2(xValue, yValue);
+            Vector2 Transformation = new Vector2((OriginalMouseState.X - GestionInput.PositionSouris().X), (OriginalMouseState.Y - GestionInput.PositionSouris().Y));
             return Transformation;
         }
 
