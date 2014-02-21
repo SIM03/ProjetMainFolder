@@ -52,7 +52,7 @@ namespace TOOLS
             ViewFrustrum = new BoundingFrustum(viewMatrix * projectionMatrix);
 
             Indices = new int[((heightmap.Width + 1) * (heightmap.Height + 1))];
-            MinimumDepth = 0; //// Tutorial said so... ////
+            MinimumDepth = 6;
 
             // Drawing Parameters Initialisation
             Effect = new BasicEffect(graphic);
@@ -62,7 +62,7 @@ namespace TOOLS
             Effect.FogEnd = 1000f;
             Effect.FogColor = Color.Black.ToVector3();
             Effect.TextureEnabled = true;
-            Effect.Texture = new Texture2D(graphic, 100, 100);
+            Effect.Texture = new Texture2D(Graphic,heightmap.Width, heightmap.Height);
             Effect.Projection = projectionMatrix;
             Effect.View = viewMatrix;
             Effect.World = Matrix.Identity;
@@ -76,7 +76,7 @@ namespace TOOLS
 
         public void Update(GameTime gameTime)
         {
-            if (CameraPosition == LastCameraPosition && /* Buggy Update Hot fix Possibly*/ (gameTime.TotalGameTime.TotalSeconds >= 60.0))
+            if ((CameraPosition.Length() + 500) == LastCameraPosition.Length() && (gameTime.TotalGameTime.TotalSeconds >= 40.0)) // Loading Timer
                 return;
 
             ViewFrustrum.Matrix = View * Projection;
@@ -86,7 +86,7 @@ namespace TOOLS
             LastCameraPosition = CameraPosition;
             IndexCount = 0;
 
-            RootNode.ForceMinimumDepth();
+            //RootNode.ForceMinimumDepth();
 
             LastActiveNode = ActiveNode;
             ActiveNode = RootNode.FindCameraNode(CameraPosition);
@@ -95,7 +95,11 @@ namespace TOOLS
                 RootNode.Merge();
 
             if (ActiveNode != null)
+            {
                 ActiveNode.Split();
+                //ActiveNode.SplitNeighbor();
+                //ActiveNode.SplitNeighbor();
+            }
 
             RootNode.SetActiveVertices();
 
@@ -191,9 +195,9 @@ namespace TOOLS
             Bounds = new BoundingBox(ParentTree.Vertices[VertexTopLeft.Index].Position,
                 ParentTree.Vertices[VertexBottomRight.Index].Position);
             /**/
-            Bounds.Min.Y = -950f; //// WATCH OUT!!! HEIGHT OF THESE BOUNDING BOX MAY NEED TO BE REDEFINED ALONG THE WAY AS OUR HEIGTMAP MAY REACH HIGHER THAN 950F UNIT OR LOWER THAN -950 UNIT ////
+            Bounds.Min.Y = -900f; //// WATCH OUT!!! HEIGHT OF THESE BOUNDING BOX MAY NEED TO BE REDEFINED ALONG THE WAY AS OUR HEIGTMAP MAY REACH HIGHER THAN 950F UNIT OR LOWER THAN -950 UNIT ////
             /**/
-            Bounds.Max.Y = 950f; //// WATCH OUT!!! HEIGHT OF THESE BOUNDING BOX MAY NEED TO BE REDEFINED ALONG THE WAY AS OUR HEIGTMAP MAY REACH HIGHER THAN 950F UNIT OR LOWER THAN -950 UNIT ////
+            Bounds.Max.Y = 900f; //// WATCH OUT!!! HEIGHT OF THESE BOUNDING BOX MAY NEED TO BE REDEFINED ALONG THE WAY AS OUR HEIGTMAP MAY REACH HIGHER THAN 950F UNIT OR LOWER THAN -950 UNIT ////
 
             if (NodeSize >= 4)
                 AddChildren();
@@ -581,6 +585,21 @@ namespace TOOLS
             if (NeighborBottom != null)
                 NeighborBottom.VertexTop.Activated = true;
 
+        }
+
+        public void SplitNeighbor()
+        {
+            if (NeighborTop != null)
+                NeighborTop.Split();
+
+            if (NeighborLeft != null)
+                NeighborLeft.Split();
+
+            if (NeighborRight != null)
+                NeighborBottom.Split();
+
+            if (NeighborBottom != null)
+                NeighborRight.Split();
         }
 
         private static void CheckNeighborParentSplit(QuadNode neighbor)

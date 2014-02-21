@@ -57,7 +57,9 @@ namespace GAME
             Components.Add(new AfficheurFPS(this, "Arial20",INTERVALLE_MAJ_STANDARD));
 
             Components.Add(GestionInput);
-
+            
+            Afficheur3D Depth = new Afficheur3D(this);
+            Components.Add(Depth);
             Vector3 positionCaméra = new Vector3(0, 60, 10);
             CaméraJeu = new CaméraSubjective(this, positionCaméra, new Vector3(0, 0, 0), INTERVALLE_MAJ_STANDARD);
             //CaméraJeu = new CaméraFixe(this, positionCaméra, positionTuileDragon, Vector3.Up);
@@ -65,8 +67,9 @@ namespace GAME
             //Components.Add(new ObjetDeDemo(this, "Floor", 1f, new Vector3(0, 0, 0), new Vector3(0, 0, 0), INTERVALLE_MAJ_STANDARD));
             IslandHeightMap = GestionnaireDeTextures.Find("IHM");
             //Components.Add(new Terrain(this, 1f, new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(512, 50, 1024), "Canyon", "DétailsTerrain", 5, INTERVALLE_MAJ_STANDARD));
-            Island = new Terrain(this, Vector3.Zero, "IHM","DétailsTerrain",CaméraJeu.Vue, CaméraJeu.Projection, GraphicsDevice, Components.IndexOf(CaméraJeu));
+            Island = new Terrain(this, Vector3.Zero, "HMF2x2High","TextureHMF",CaméraJeu.Vue, CaméraJeu.Projection, GraphicsDevice, Components.IndexOf(CaméraJeu));
             Components.Add(Island);
+            
             Components.Add(new AfficheurFPS(this,"Arial20",INTERVALLE_MAJ_STANDARD));
 
             ////Murs Gauche

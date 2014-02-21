@@ -75,7 +75,7 @@ namespace TOOLS
             ChaîneFPS = ValFPS.ToString("0");
             Dimension = fpsSpriteFont.MeasureString(ChaîneFPS);
             PositionChaîne = PositionDroiteBas - Dimension;
-            Game.Window.Title = ChaîneFPS;
+            //Game.Window.Title = ChaîneFPS;
          }
          CptFrames = 0;
       }

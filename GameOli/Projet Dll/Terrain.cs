@@ -53,7 +53,7 @@ namespace TOOLS
             TextureManager = Game.Services.GetService(typeof(RessourcesManager<Texture2D>)) as RessourcesManager<Texture2D>;
             KeyboardManager = Game.Services.GetService(typeof(InputManager)) as InputManager;
             HeightTexture = TextureManager.Find(HeightMapName);
-            Terrain3d = new QuadTree(Game, Position, HeightTexture, ViewMatrix, ProjectionMatrix, Graphic, 2);
+            Terrain3d = new QuadTree(Game, Position, HeightTexture, ViewMatrix, ProjectionMatrix, Graphic,2);
             Terrain3d.Effect.Texture = TextureManager.Find(TextureTerrainName);
             // Initialization of both RS for default and wireframe draw mode
             RS_Default = new RasterizerState();
