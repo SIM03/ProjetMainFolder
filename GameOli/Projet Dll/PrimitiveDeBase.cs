@@ -31,7 +31,7 @@ namespace TOOLS
 
       protected override void LoadContent()
       {
-         CaméraJeu = Game.Services.GetService(typeof(Caméra)) as Caméra;
+         CaméraJeu = Game.Services.GetService(typeof(CaméraSubjective)) as Caméra;
          base.LoadContent();
       }
 

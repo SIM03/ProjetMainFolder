@@ -55,11 +55,11 @@ namespace GAME
         {
             GraphicManager = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            GraphicManager.SynchronizeWithVerticalRetrace = false;
-            IsFixedTimeStep = false;
+            GraphicManager.SynchronizeWithVerticalRetrace = true;
+            IsFixedTimeStep = true;
             IsMouseVisible = false;
             
-            //GraphicManager.ToggleFullScreen();
+            GraphicManager.ToggleFullScreen();
         }
 
         
@@ -70,6 +70,8 @@ namespace GAME
             GestionnaireDeModèles = new RessourcesManager<Model>(this, "Models");
             GestionInput = new InputManager(this);
             Components.Add(GestionInput);
+
+            
             
             Components.Add(new Afficheur3D(this));
             //Vector3 positionCaméra = new Vector3(0, 100, 10);
@@ -148,18 +150,17 @@ namespace GAME
 
             DynamicObjectList = new List<DynamicPhysicalObject>();
             DynamicObjectList.Add(Column);
+
             // ajout de la caméra physique
             Vector3 positionCaméra = new Vector3(0, 500, 10);
-            CaméraJeu = new TOOLS.CaméraSubjectivePhysique(this, positionCaméra, new Vector3(0, 500, 0), StaticObjectList, DynamicObjectList, INTERVALLE_MAJ_STANDARD);
+            CaméraJeu = new CaméraSubjectivePhysique(this, positionCaméra, new Vector3(0, 500, 0), StaticObjectList, DynamicObjectList, INTERVALLE_MAJ_STANDARD);
             Components.Add(CaméraJeu);
-<<<<<<< HEAD
-            Components.Add(new Ability(this, StaticObjectList));
-=======
+            //Components.Add(new Ability(this, StaticObjectList));
+            Components.Add(new RayTracer(this,CaméraJeu.Vue,CaméraJeu.Projection,GraphicsDevice,DynamicObjectList));
             //Components.Add(new Ability(this));
->>>>>>> origin/Ray_Tracing_(Rate_Racing)
-           
-             
-           
+
+
+            Components.Add(new Afficheur2D(this, 1, "CrossHair1", new Vector2(Window.ClientBounds.Width / 2, Window.ClientBounds.Height / 2)));
             //Porte
             
             Components.Add(new PlanTexturé(this, 1f, Vector3.Zero, new Vector3(1, DIMENSION_Y / 2, 3 * (-DIMENSION_Z / 4) + 5), étenduePlan2, charpentePlan, "BlackDoor", INTERVALLE_MAJ_STANDARD));

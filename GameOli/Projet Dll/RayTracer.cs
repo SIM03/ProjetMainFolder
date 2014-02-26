@@ -8,13 +8,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TOOLS
 {
-    class RayTracer : Microsoft.Xna.Framework.GameComponent
+    public class RayTracer : Microsoft.Xna.Framework.GameComponent
     {
         Matrix View { get; set; }
         Matrix Projection { get; set; }
 
         GraphicsDevice Graphics { get; set; }
         List<DynamicPhysicalObject> Models { get; set; }
+
+        InputManager MouseManager { get; set; }
 
         public RayTracer(Game game, Matrix view, Matrix projection, GraphicsDevice graphics, List<DynamicPhysicalObject> models)
             : base(game)
@@ -25,10 +27,20 @@ namespace TOOLS
             Models = models;
         }
 
+        public override void Initialize()
+        {
+            MouseManager = Game.Services.GetService(typeof(InputManager)) as InputManager;
+            base.Initialize();
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            CheckMouse();
+            base.Update(gameTime);
+        }
+
         Ray GetPickRay()
         {
-
-            MouseState mouseState = Mouse.GetState();
 
             float mouseX = Game.Window.ClientBounds.Width / 2;
             float mouseY = Game.Window.ClientBounds.Height / 2;
@@ -52,9 +64,7 @@ namespace TOOLS
 
         public void CheckMouse()
         {
-            MouseState mouseState = Mouse.GetState();
-
-            if (mouseState.LeftButton == ButtonState.Pressed)
+            if (MouseManager.EstNouveauClicGauche())
             {
                 Ray ray = GetPickRay();
                 //Distance de sélection
@@ -77,10 +87,5 @@ namespace TOOLS
 
             }
         }
-        private void DisableGravity()
-        {
-
-        }
-
     }
 }

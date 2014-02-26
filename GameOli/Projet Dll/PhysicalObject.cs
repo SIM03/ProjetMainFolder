@@ -53,7 +53,7 @@ namespace TOOLS
         public override void Initialize()
         {
             TempsÉcouléDepuisMAJ = 0;
-            CaméraJeu = Game.Services.GetService(typeof(Caméra)) as Caméra;
+            CaméraJeu = Game.Services.GetService(typeof(CaméraSubjective)) as Caméra;
             GestionInput = Game.Services.GetService(typeof(InputManager)) as InputManager;
             GestionnaireDeModèles = Game.Services.GetService(typeof(RessourcesManager<Model>)) as RessourcesManager<Model>;
             Modèle = GestionnaireDeModèles.Find(NomModèle);

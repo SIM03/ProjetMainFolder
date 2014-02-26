@@ -103,7 +103,6 @@
     <Compile Include="CollisionManager.cs" />
     <Compile Include="DynamicPhysicalObject.cs" />
     <Compile Include="InputManager.cs" />
-    <Compile Include="PhysicalObject.cs" />
     <Compile Include="RayTracer.cs" />
     <Compile Include="ObjetDeBase.cs" />
     <Compile Include="PhysicalObject.cs" />

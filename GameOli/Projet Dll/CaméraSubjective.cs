@@ -146,7 +146,7 @@ namespace TOOLS
             {
                 GravityHandler(gameTime);
                 //GérerAccélération();
-               // GérerDéplacement();
+                GérerDéplacement();
 
                 GérerRotation();
                 CréerPointDeVue();
