@@ -81,9 +81,9 @@ namespace TOOLS
             {
                 //if (!Pause)
                 //{
-                //    Monde = Matrix.Identity * Matrix.CreateScale(…chelle);
-                //    Monde *= Matrix.CreateFromYawPitchRoll(Angle, Rotation.X, Rotation.Z);
-                //    Monde *= Matrix.CreateTranslation(Position);
+               //Monde = Matrix.Identity * Matrix.CreateScale(…chelle);
+               //Monde *= Matrix.CreateFromYawPitchRoll(Angle, Rotation.X, Rotation.Z);
+               //Monde *= Matrix.CreateTranslation(Position);
                 //}
                 Zone = CollisionManagerTest.GetZone(Position);
                 Temps…coulÈDepuisMAJ = 0;
@@ -132,7 +132,7 @@ namespace TOOLS
         //    }
         //}
 
-        public virtual Matrix GetMonde()
+        public Matrix GetMonde()
         {
             return Monde;
         }

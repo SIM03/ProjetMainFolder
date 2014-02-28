@@ -244,8 +244,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Textures\CrossHair1.png">
-      <Name>CrossHair1</Name>
+    <Compile Include="Textures\CrossHair2.png">
+      <Name>CrossHair2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
