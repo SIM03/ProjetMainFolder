@@ -19,7 +19,6 @@
 //        InputManager GestionInput { get; set; }
 //        float IntervalleMAJ { get; set; }
 //        float Temps…coulÈDepuisMAJ { get; set; }
-<<<<<<< .merge_file_a08788
 
 //        PhysicalObject Column;
 //        PhysicalObject Tree;
@@ -30,30 +29,23 @@
 //            : base(game)
 //        {
 //            StaticObjectList = staticObjectList;
-=======
-//        //Game lame { get; set; }
-
-//        public Ability(Game game)
-//            : base(game)
-//        {
-//            //Game = game;
->>>>>>> .merge_file_a08756
+//            Game = game;
 //        }
 
         
 //        public override void Initialize()
 //        {
-<<<<<<< .merge_file_a08788
 //            CreatedObjectList = new List<PhysicalObject>();
 //            GestionnaireDeTextures = Game.Services.GetService(typeof(RessourcesManager<Texture2D>)) as RessourcesManager<Texture2D>;
 //            GestionInput = Game.Services.GetService(typeof(InputManager)) as InputManager;
 //            base.Initialize();
+//         
+//            GestionnaireDeTextures = Game.Services.GetService(typeof(RessourcesManager<Texture2D>)) as RessourcesManager<Texture2D>;
+//            GestionInput = Game.Services.GetService(typeof(InputManager)) as InputManager;
+
+//            base.Initialize();
 //        }
 
-//        protected void LoadContent()
-//        {
-            
-//        }
 //        public override void Update(GameTime gameTime)
 //        {
             
@@ -79,20 +71,6 @@
                 
 //            }
 
-            
-=======
-//            GestionnaireDeTextures = Game.Services.GetService(typeof(RessourcesManager<Texture2D>)) as RessourcesManager<Texture2D>;
-//            GestionInput = Game.Services.GetService(typeof(InputManager)) as InputManager;
-
-//            base.Initialize();
-//        }
-
-//        protected void LoadContent()
-//        {
-            
-//        }
-//        public override void Update(GameTime gameTime)
-//        {
 //            ObjetDeBasePhysique Fence;
 //                if (GestionInput.EstNouveauClicGauche())
 //                {
@@ -102,10 +80,6 @@
 //                {
 //                    Game.Components.Add(new ObjetDeBasePhysique(Game, "AlanTree", 0.5f, new Vector3(0,0,0), new Vector3(CamÈra.Position.X, CamÈra.Position.Y - 100f, CamÈra.Position.Z), IntervalleMAJ));
 //                }
->>>>>>> .merge_file_a08756
-            
-
-
                 
 //            base.Update(gameTime);
 //        }

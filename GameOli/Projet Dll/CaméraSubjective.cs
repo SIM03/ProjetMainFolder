@@ -32,13 +32,9 @@ namespace TOOLS
         const double WAIT_TIME = 1;
         //const float ROTATION_ACCELERATION = 2;
 
-<<<<<<< .merge_file_a98660
         public Vector3 Direction { get; private set; }
         public Vector3 Latéral { get; private set; }
-=======
-        public Vector3 Direction { get; set; }
-        Vector3 Latéral { get; set; }
->>>>>>> .merge_file_a98680
+
         float VitesseTranslation { get; set; }
         float VitesseRotation { get; set; }
 
@@ -55,18 +51,11 @@ namespace TOOLS
         public float Velocity { get; set; }
         public float AirTime { get; set; }
         public bool IsJumping { get; set; }
-        public bool IsOnFloor { get; set; }
+        public bool IsOnFloor { get; protected set; }
 
         float StartingHeight { get; set; }
         double LastJump { get; set; }
-<<<<<<< .merge_file_a98660
-        bool IsJumping { get; set; }
-        
-=======
         float Gravity { get; set; }
->>>>>>> .merge_file_a98680
-        //float ForcedRotationY { get; set; }
-        //float RotationFactor { get; set; }
 
         //Angle de rotation
         public float RotationTangage { get; private set; }
@@ -93,14 +82,6 @@ namespace TOOLS
                 }
             }
         }
-<<<<<<< .merge_file_a98660
-
-        protected bool IsOnFloor { get; set; }
-        
-
-
-=======
->>>>>>> .merge_file_a98680
 
         public CaméraSubjective(Game jeu, Vector3 positionCaméra, Vector3 cible, float intervalleMAJ)
             : base(jeu)
@@ -116,18 +97,12 @@ namespace TOOLS
         {
             OriginalMouseState = new Vector2(Game.Window.ClientBounds.Center.X, Game.Window.ClientBounds.Center.Y);
             Sensivity = SENSIVITY;
-            BufferSize = DEFAULT_BUFFER_SIZE; /* Temporaire pour faute de savoir ou placer l<initialisaton du buffer size */
-            InterpolationModifier = DEFAULT_INTERPOLATION;
-            MINIMUM_MOVEMENT = MINIMUM_MOVEMENT_CONST;
             MouseBuffer = new Queue<Vector2>();
             VitesseRotation = VITESSE_INITIALE_ROTATION;
             VitesseTranslation = VITESSE_INITIALE_TRANSLATION;
-            //Gravity = STARTING_GRAVITY;
             Velocity = 0;
             AirTime = 0f;
             LastJump = WAIT_TIME;
-            //ForcedRotationY = 0;
-            //RotationFactor = 10;
             RotationLacet = 0f;
             RotationTangage = 0f;
             TempsÉcouléDepuisMAJ = 0;
@@ -160,12 +135,10 @@ namespace TOOLS
             if (TempsÉcouléDepuisMAJ >= INTERVALLE_MAJ_STANDARD)
             {
                 GravityHandler(gameTime);
-                //GérerAccélération();
                 GérerDéplacement();
-
+                GestionSouris(gameTime);
                 GérerRotation();
                 CréerPointDeVue();
-                GestionSouris(gameTime);
                 TempsÉcouléDepuisMAJ = 0;
 
             }
@@ -197,16 +170,6 @@ namespace TOOLS
         {
             return GestionInput.EstEnfoncée(touche) ? 1 : 0;
         }
-
-        //private void GérerAccélération()
-        //{
-        //    int valAccélération = (GérerTouche(Keys.Subtract) + GérerTouche(Keys.OemMinus)) - (GérerTouche(Keys.Add) + GérerTouche(Keys.OemPlus));
-        //    if (valAccélération != 0)
-        //    {
-        //        IntervalleMAJ += ACCÉLÉRATION * valAccélération;
-        //        IntervalleMAJ = MathHelper.Max(INTERVALLE_MAJ_STANDARD, IntervalleMAJ);
-        //    }
-        //}
 
         protected virtual void GérerDéplacement()
         {
@@ -248,7 +211,7 @@ namespace TOOLS
 
             //if (!IsJumping)
             //{
-               LastJump = (LastJump + gametime.ElapsedGameTime.TotalSeconds);
+               LastJump += gametime.ElapsedGameTime.TotalSeconds;
             //}
 
             //if (LastJump < 1.4f * WAIT_TIME)
@@ -263,26 +226,11 @@ namespace TOOLS
             return Vertical;
         }
 
-        //private void LandCam()
-        //{
-        //    if (ForcedRotationY <= 0)
-        //    {
-        //        ForcedRotationY -= RotationFactor;
-        //        RotationFactor *= ROTATION_ACCELERATION;
-        //    }
-        //    if (ForcedRotationY >= 5000)
-        //    {
-        //        ForcedRotationY += RotationFactor;
-        //        RotationFactor /= ROTATION_ACCELERATION;
-        //    }
-        //}
-
         private void GérerRotation()
         {
-            Vector2 RotationXY = BufferInterpolation();
-            //RotationXY.Y += ForcedRotationY * DELTA_TANGAGE;
-            GérerLacet(MathHelper.WrapAngle(RotationXY.X * DELTA_LACET));
-            GérerTangage(MathHelper.WrapAngle(RotationXY.Y * DELTA_TANGAGE));
+            Vector2 RotationXY = new Vector2((OriginalMouseState.X - GestionInput.PositionSouris().X), (OriginalMouseState.Y - GestionInput.PositionSouris().Y));
+            GérerLacet(MathHelper.WrapAngle(RotationXY.X * DELTA_LACET * Sensivity));
+            GérerTangage(MathHelper.WrapAngle(RotationXY.Y * DELTA_TANGAGE * Sensivity));
         }
 
         private void GérerLacet(float RotationX)
@@ -303,8 +251,6 @@ namespace TOOLS
 
         protected virtual void GestionClavier()
         {
-
-      
             if (GestionInput.EstNouvelleTouche(Keys.Z))
             {
                 EstEnZoom = !EstEnZoom;
@@ -318,35 +264,10 @@ namespace TOOLS
             {
                 Sensivity -= 0.05f;
             }
-            if (GestionInput.EstNouvelleTouche(Keys.NumPad8)||(GestionInput.EstNouvelleTouche(Keys.D2)))
-            {
-                InterpolationModifier += 0.05f;
-            }
-            if (GestionInput.EstNouvelleTouche(Keys.NumPad5) || (GestionInput.EstNouvelleTouche(Keys.D1)))
-            {
-                InterpolationModifier -= 0.05f;
-            }
-            if (GestionInput.EstNouvelleTouche(Keys.NumPad6))
-            {
-                ++BufferSize;
-            }
-            if (GestionInput.EstNouvelleTouche(Keys.NumPad4))
-            {
-                --BufferSize;
-            }
-            if (GestionInput.EstNouvelleTouche(Keys.NumPad9))
-            {
-                MINIMUM_MOVEMENT += 0.1f;
-            }
-            if (GestionInput.EstNouvelleTouche(Keys.NumPad7))
-            {
-                MINIMUM_MOVEMENT -= 0.1f;
-            }
         }
 
         private void GestionSouris(GameTime gametime)
         {
-           // BufferManagement(gametime);
             if (!(GestionInput.PositionSouris().Y <= Game.Window.ClientBounds.Top || GestionInput.PositionSouris().Y >= Game.Window.ClientBounds.Bottom))
             {
                 Mouse.SetPosition((int)GestionInput.PositionSouris().X, (int)Game.Window.ClientBounds.Center.Y);
@@ -357,43 +278,6 @@ namespace TOOLS
             }
         }
 
-        private void BufferManagement(GameTime gametime)
-        {
-            MouseBuffer.Enqueue(new Vector2((OriginalMouseState.X - GestionInput.PositionSouris().X) * (float)gametime.ElapsedGameTime.TotalMilliseconds, (OriginalMouseState.Y - GestionInput.PositionSouris().Y) * (float)gametime.ElapsedGameTime.TotalMilliseconds));
-            if (MouseBuffer.Count > BufferSize)
-            {
-                while (MouseBuffer.Count > BufferSize)
-                {
-                    MouseBuffer.Dequeue();
-                }
-            }
-        }
-
-        private Vector2 BufferInterpolation()
-        {
-            //float yValue = 0f;
-            //float xValue = 0f;
-            //float weight = 1.0f;
-            //for (int i = 0; i < MouseBuffer.Count; i++)
-            //{
-            //    if (MouseBuffer.ElementAt(i) != Vector2.Zero && (Math.Abs(MouseBuffer.ElementAt(i).Y) > MINIMUM_MOVEMENT || Math.Abs(MouseBuffer.ElementAt(i).X) > MINIMUM_MOVEMENT))
-            //    {
-            //        xValue += (MouseBuffer.ElementAt(i).X * weight) * Sensivity;
-            //        yValue += (MouseBuffer.ElementAt(i).Y * weight) * Sensivity;
-            //        weight *= InterpolationModifier;
-            //    }
-            //}
-            //if (Math.Abs(xValue) < MINIMUM_MOVEMENT)
-            //    xValue = 0;
-
-            //if (Math.Abs(yValue) < MINIMUM_MOVEMENT)
-            //    yValue = 0;
-            
-            //Vector2 Transformation = new Vector2(xValue, yValue);
-            Vector2 Transformation = new Vector2((OriginalMouseState.X - GestionInput.PositionSouris().X), (OriginalMouseState.Y - GestionInput.PositionSouris().Y));
-            return Transformation;
-        }
-
         public ValueType GetStats(string parameter)
         {
             ValueType Stat;
@@ -401,15 +285,6 @@ namespace TOOLS
             {
                 case "Sensitivity":
                     Stat = this.Sensivity;
-                    break;
-                case "BufferSize":
-                    Stat = this.BufferSize;
-                    break;
-                case "InterpolationModifier":
-                    Stat = this.InterpolationModifier;
-                    break;
-                case "MINIMUM_MOVEMENT":
-                    Stat = this.MINIMUM_MOVEMENT;
                     break;
                 case "Position":
                     Stat = this.Position;
@@ -430,7 +305,7 @@ namespace TOOLS
                     Stat = this.IsJumping;
                     break;
                 default:
-                    Stat = 333;
+                    Stat = 09190;
                     break;
             }
 

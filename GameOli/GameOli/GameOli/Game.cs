@@ -334,11 +334,11 @@ namespace GAME
         RessourcesManager<Model> GestionnaireDeModèles { get; set; }
         CaméraSubjectivePhysique CaméraJeu { get; set; }
 
-        ObjetDeBasePhysique Cube { get; set; }
-        ObjetDeBasePhysique Cube1 { get; set; }
-        ObjetDeBasePhysique Cube2 { get; set; }
-        ObjetDeBasePhysique Cube3 { get; set; }
-        ObjetDeBasePhysique Cube4 { get; set; }
+        PhysicalObject Cube { get; set; }
+        PhysicalObject Cube1 { get; set; }
+        PhysicalObject Cube2 { get; set; }
+        PhysicalObject Cube3 { get; set; }
+        PhysicalObject Cube4 { get; set; }
 
         PlanTexturé Floor { get; set; }
 
@@ -360,7 +360,7 @@ namespace GAME
         protected override void Initialize()
         {
             ActualLevel = 0;
-            DataManager = new ExcelDataManager(this);
+            
             GestionnaireDeFonts = new RessourcesManager<SpriteFont>(this, "Fonts");
             GestionnaireDeTextures = new RessourcesManager<Texture2D>(this, "Textures");
             GestionnaireDeModèles = new RessourcesManager<Model>(this, "Models");

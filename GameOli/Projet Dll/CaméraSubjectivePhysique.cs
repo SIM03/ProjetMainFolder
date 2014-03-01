@@ -6,7 +6,7 @@ namespace TOOLS
 {
     public class CaméraSubjectivePhysique : CaméraSubjective
     {
-        const float RAYON_COLLISION = 1f;
+        const float RAYON_COLLISION = 2f;
 
         List<IPhysicalObject> StaticObjectList { get; set; }
         List<DynamicPhysicalObject> DynamicObjectList { get; set; }
