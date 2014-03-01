@@ -16,11 +16,13 @@ namespace TOOLS
         Vector3 CameraPosition { get; set; }
         Vector3 CameraTarget { get; set; }
 
+        Caméra CaméraJeu { get; set; }
         Game Jeu { get; set; }
 
-        public ExcelDataManager(Game game)
+        public ExcelDataManager(Game game,Caméra camerajeu)
         {
             Jeu = game;
+            CaméraJeu = camerajeu;
         }
         
         public Vector3 LoadCameraPosition(int levelToLoad)

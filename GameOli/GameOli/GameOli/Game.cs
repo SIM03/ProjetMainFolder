@@ -97,7 +97,7 @@ namespace GAME
         protected override void Initialize()
         {
             ActualLevel = 0;
-            DataManager = new ExcelDataManager(this);
+           
             CollisionManagerTest = new CollisionManager(this);
             GestionnaireDeFonts = new RessourcesManager<SpriteFont>(this, "Fonts");
             GestionnaireDeTextures = new RessourcesManager<Texture2D>(this, "Textures");
@@ -109,6 +109,9 @@ namespace GAME
             Vector3 positionCamera = new Vector3(0, 500, 10);
             Vector3 rotationCamera = new Vector3(0, 500, 0);
             CaméraJeu = new CaméraSubjectivePhysique(this, positionCamera, rotationCamera, StaticObjectList, DynamicObjectList, INTERVALLE_MAJ_STANDARD);
+
+            /// DataManager Initialization
+            DataManager = new ExcelDataManager(this, CaméraJeu);
 
             /// Déclaration Camera (Excel)
             //CaméraJeu = new CaméraSubjectivePhysique(this, DataManager.ResetCameraPosition(ActualLevel), DataManager.ResetCameraTarget(ActualLevel), StaticObjectList, INTERVALLE_MAJ_STANDARD);
