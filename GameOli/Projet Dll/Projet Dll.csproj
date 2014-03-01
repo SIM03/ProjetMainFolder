@@ -105,11 +105,8 @@
     <Compile Include="CaméraSubjective.cs" />
     <Compile Include="CaméraSubjectivePhysique.cs" />
     <Compile Include="CollisionManager.cs" />
-<<<<<<< .merge_file_a09888
     <Compile Include="DynamicPhysicalObject.cs" />
-=======
     <Compile Include="ExcelApp.cs" />
->>>>>>> .merge_file_a09908
     <Compile Include="InputManager.cs" />
     <Compile Include="RayTracer.cs" />
     <Compile Include="ObjetDeBase.cs" />

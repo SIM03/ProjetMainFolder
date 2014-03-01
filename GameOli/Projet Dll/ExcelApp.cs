@@ -10,7 +10,7 @@ namespace TOOLS
     public static class ExcelApp
     {
         static Excel.Application ExcelApplication = new Excel.Application();
-        static Excel.Workbook Workbook = ExcelApplication.Workbooks.Open("D:\\Mes documents\\ProjetMainFolder\\GameOli\\GameOli\\GameOliContent\\Database\\Database.xls");
+        static Excel.Workbook Workbook = ExcelApplication.Workbooks.Open("C:\\Mes documents\\Prog\\GameOli\\GameOli\\GameOliContent\\Database\\Database.xls");
 
         public static string GetCell(int col, int row, int sheet)
         {

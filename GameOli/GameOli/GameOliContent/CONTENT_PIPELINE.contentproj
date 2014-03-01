@@ -244,17 +244,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-<<<<<<< .merge_file_a08960
     <Compile Include="Textures\CrossHair2.png">
       <Name>CrossHair2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-=======
+    </Compile>
     <Compile Include="Database\Database.xls">
       <Name>Database</Name>
       <Importer>EffectImporter</Importer>
       <Processor>PassThroughProcessor</Processor>
->>>>>>> .merge_file_a08992
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
