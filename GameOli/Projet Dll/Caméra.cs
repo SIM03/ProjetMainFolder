@@ -13,7 +13,11 @@ namespace TOOLS
         public BoundingFrustum Frustum { get; protected set; }
 
         // Propriétés relatives au "Point de vue"
+<<<<<<< .merge_file_a86104
         public Vector3 Position { get; protected set; }
+=======
+        public Vector3 Position { get; set; }
+>>>>>>> .merge_file_a98308
         public Vector3 Cible { get; protected set; }
         public Vector3 OrientationVerticale { get; protected set; }
 
@@ -64,7 +68,7 @@ namespace TOOLS
         {
             //Initialisation des propriétés de la matrice de projection (volume de visualisation)
             AngleOuvertureObjectif = angleOuvertureObjectif;
-            AspectRatio = Game.GraphicsDevice.Viewport.AspectRatio;
+            //AspectRatio = Game.GraphicsDevice.Viewport.AspectRatio;
             DistancePlanRapproché = distancePlanRapproché;
             DistancePlanÉloigné = distancePlanÉloigné;
             //Création de la matrice de projection (volume de visualisation)

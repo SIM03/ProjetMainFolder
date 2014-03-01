@@ -11,13 +11,21 @@ with.
     <!--
     Modify this string to change the font that will be imported.
     -->
+<<<<<<< .merge_file_a09548
     <FontName>Arial</FontName>
+=======
+    <FontName>Calibri</FontName>
+>>>>>>> .merge_file_a09556
 
     <!--
     Size is a float value, measured in points. Modify this value to change
     the size of the font.
     -->
+<<<<<<< .merge_file_a09548
     <Size>20</Size>
+=======
+    <Size>12</Size>
+>>>>>>> .merge_file_a09556
 
     <!--
     Spacing is a float value, measured in pixels. Modify this value to change
