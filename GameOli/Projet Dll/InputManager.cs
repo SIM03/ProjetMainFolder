@@ -24,6 +24,9 @@ namespace TOOLS
         const int CLIC_GAUCHE = 0;
         const int CLIC_DROIT = 1;
 
+        float LastScrollWheelValue { get; set; }
+        
+
         public InputManager(Game game)
             : base(game)
         { }
@@ -35,6 +38,8 @@ namespace TOOLS
 
             NouveauxClics = new ButtonState[2];
             AnciensClics = new ButtonState[2];
+
+            LastScrollWheelValue = 0;
             base.Initialize();
         }
 
@@ -109,6 +114,16 @@ namespace TOOLS
             int Y = Mouse.GetState().Y;
             return new Vector2(X, Y);
         }
+
+        public float ScrollingValue()
+        {
+            float value;
+            value = (Mouse.GetState().ScrollWheelValue - LastScrollWheelValue);
+            LastScrollWheelValue= Mouse.GetState().ScrollWheelValue;
+            return value;
+        }
+
+       
 
     }
 }

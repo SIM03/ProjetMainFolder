@@ -64,7 +64,7 @@ namespace TOOLS
         {
             //Initialisation des propriétés de la matrice de projection (volume de visualisation)
             AngleOuvertureObjectif = angleOuvertureObjectif;
-            //AspectRatio = Game.GraphicsDevice.Viewport.AspectRatio;
+            AspectRatio = Game.GraphicsDevice.Viewport.AspectRatio;
             DistancePlanRapproché = distancePlanRapproché;
             DistancePlanÉloigné = distancePlanÉloigné;
             //Création de la matrice de projection (volume de visualisation)

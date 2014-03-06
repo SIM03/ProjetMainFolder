@@ -6,7 +6,7 @@ namespace TOOLS
 {
     public class CaméraSubjectivePhysique : CaméraSubjective
     {
-        const float RAYON_COLLISION = 2f;
+        const float RAYON_COLLISION = 1f;
 
         List<IPhysicalObject> StaticObjectList { get; set; }
         List<DynamicPhysicalObject> DynamicObjectList { get; set; }
@@ -54,9 +54,7 @@ namespace TOOLS
             if (ActiveGrid)
             {
                 Zone = CollisionManagerTest.GetZone(Position);
-                GérerDéplacement();
             }
-            
             base.Update(gameTime);
         }
             
@@ -64,9 +62,11 @@ namespace TOOLS
         {
             Vector3 anciennePosition = Position;
             base.GérerDéplacement();
-            BoîteCollision = new BoundingBox(new Vector3(Position.X + 1, Position.Y - 100, Position.Z + 1), new Vector3(Position.X - 1, Position.Y, Position.Z - 1));
-            //if (CollisionAppréhendée(Position))
-            if(CollisionManagerTest.IsObjectNear(this, StaticObjectList))
+            if (!ActiveGrid && CollisionAppréhendée(Position))
+            {
+                Position = anciennePosition;
+            }
+            if(ActiveGrid && CollisionManagerTest.IsObjectNear(this, StaticObjectList))
             {
                 Position = anciennePosition;
             }
@@ -89,7 +89,7 @@ namespace TOOLS
         protected override void GestionClavier()
         {
             base.GestionClavier();
-            if (GestionInput.EstNouvelleTouche(Keys.G))
+            if (GestionInput.EstNouvelleTouche(Keys.C))
             {
                 if (ActiveGrid)
                 {
@@ -129,7 +129,7 @@ namespace TOOLS
             bool collisionStaticEnVue;
             bool collisionDynamicEnVue;
 
-            BoîteCollision = new BoundingBox(new Vector3(nouvellePosition.X + 1, nouvellePosition.Y - 100, nouvellePosition.Z + 1), new Vector3(nouvellePosition.X - 1, nouvellePosition.Y, nouvellePosition.Z - 1));
+            BoîteCollision = new BoundingBox(new Vector3(nouvellePosition.X - 0.5f, nouvellePosition.Y - 2, nouvellePosition.Z - 0.5f), new Vector3(nouvellePosition.X + 0.5f, nouvellePosition.Y + 1f, nouvellePosition.Z + 0.5f));
 
             collisionStaticEnVue = false;
             collisionDynamicEnVue = false;

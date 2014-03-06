@@ -21,7 +21,7 @@ namespace TOOLS
         public Vector3 Rotation { get; protected set; }
         InputManager GestionInput { get; set; }
         RessourcesManager<Model> GestionnaireDeModèles { get; set; }
-        Caméra CaméraJeu { get; set; }
+        protected CaméraSubjectivePhysique CaméraJeu { get; set; }
         public List<BoundingBox> ShellList { get; set; }
         bool Pause { get; set; }
 
@@ -53,7 +53,7 @@ namespace TOOLS
         public override void Initialize()
         {
             TempsÉcouléDepuisMAJ = 0;
-            CaméraJeu = Game.Services.GetService(typeof(CaméraSubjective)) as Caméra;
+            CaméraJeu = Game.Services.GetService(typeof(CaméraSubjectivePhysique)) as CaméraSubjectivePhysique;
             GestionInput = Game.Services.GetService(typeof(InputManager)) as InputManager;
             GestionnaireDeModèles = Game.Services.GetService(typeof(RessourcesManager<Model>)) as RessourcesManager<Model>;
             Modèle = GestionnaireDeModèles.Find(NomModèle);
@@ -81,9 +81,9 @@ namespace TOOLS
             {
                 //if (!Pause)
                 //{
-               //Monde = Matrix.Identity * Matrix.CreateScale(Échelle);
-               //Monde *= Matrix.CreateFromYawPitchRoll(Angle, Rotation.X, Rotation.Z);
-               //Monde *= Matrix.CreateTranslation(Position);
+                //    Monde = Matrix.Identity * Matrix.CreateScale(Échelle);
+                //    Monde *= Matrix.CreateFromYawPitchRoll(Angle, Rotation.X, Rotation.Z);
+                //    Monde *= Matrix.CreateTranslation(Position);
                 //}
                 Zone = CollisionManagerTest.GetZone(Position);
                 TempsÉcouléDepuisMAJ = 0;
@@ -132,7 +132,7 @@ namespace TOOLS
         //    }
         //}
 
-        public Matrix GetMonde()
+        public virtual Matrix GetMonde()
         {
             return Monde;
         }

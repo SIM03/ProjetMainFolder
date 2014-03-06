@@ -14,9 +14,9 @@ namespace TOOLS
 {
     public class CaméraSubjective : Caméra
     {
-        const float ACCÉLÉRATION = 0.001f;
+        const float ACCÉLÉRATION = 0.0001f;
         const float VITESSE_INITIALE_ROTATION = 20f;
-        const float VITESSE_INITIALE_TRANSLATION = 1f;
+        const float VITESSE_INITIALE_TRANSLATION = 0.2f;
         const float DELTA_LACET = MathHelper.Pi / 10000; // 1 degré à la fois
         const float DELTA_TANGAGE = MathHelper.Pi / 10000; // 1 degré à la fois
 
@@ -26,15 +26,14 @@ namespace TOOLS
         const float SENSIVITY = 1.00f;
         const float DEFAULT_INTERPOLATION = 0.50f;
         const float MINIMUM_MOVEMENT_CONST = 1f;
-        const float GRAVITY_FACTOR = 2;
+        const float GRAVITY_FACTOR = 0.1f;
         //const float STARTING_GRAVITY = -13; // Gravity resets itself at this value when character touches the ground
-        const float JUMPING_HEIGHT = 15;
+        const float JUMPING_HEIGHT = 0.5f;
         const double WAIT_TIME = 1;
         //const float ROTATION_ACCELERATION = 2;
 
-        public Vector3 Direction { get; private set; }
-        public Vector3 Latéral { get; private set; }
-
+        public Vector3 Direction { get; set; }
+        public Vector3 Latéral { get; set; }
         float VitesseTranslation { get; set; }
         float VitesseRotation { get; set; }
 
@@ -47,15 +46,16 @@ namespace TOOLS
         public float Sensivity { get; private set; }
         public float InterpolationModifier { get; private set; }
         public float MINIMUM_MOVEMENT { get; private set; } /* Future Const (testing parameter only)*/
-
-        public float Velocity { get; set; }
-        public float AirTime { get; set; }
-        public bool IsJumping { get; set; }
-        public bool IsOnFloor { get; protected set; }
-
+        float Gravity { get; set; }
+        float Velocity { get; set; }
+        protected float AirTime { get; set; }
         float StartingHeight { get; set; }
         double LastJump { get; set; }
-        float Gravity { get; set; }
+        bool IsJumping { get; set; }
+        
+        //float ForcedRotationY { get; set; }
+        //float RotationFactor { get; set; }
+
 
         //Angle de rotation
         public float RotationTangage { get; private set; }
@@ -63,6 +63,7 @@ namespace TOOLS
 
         public float DéplacementDirection { get; private set; }
         public float DéplacementLatéral { get; private set; }
+
 
         bool estEnZoom;
         bool EstEnZoom
@@ -83,6 +84,11 @@ namespace TOOLS
             }
         }
 
+        protected bool IsOnFloor { get; set; }
+        
+
+
+
         public CaméraSubjective(Game jeu, Vector3 positionCaméra, Vector3 cible, float intervalleMAJ)
             : base(jeu)
         {
@@ -97,6 +103,9 @@ namespace TOOLS
         {
             OriginalMouseState = new Vector2(Game.Window.ClientBounds.Center.X, Game.Window.ClientBounds.Center.Y);
             Sensivity = SENSIVITY;
+            BufferSize = DEFAULT_BUFFER_SIZE; /* Temporaire pour faute de savoir ou placer l<initialisaton du buffer size */
+            InterpolationModifier = DEFAULT_INTERPOLATION;
+            MINIMUM_MOVEMENT = MINIMUM_MOVEMENT_CONST;
             MouseBuffer = new Queue<Vector2>();
             VitesseRotation = VITESSE_INITIALE_ROTATION;
             VitesseTranslation = VITESSE_INITIALE_TRANSLATION;
@@ -136,9 +145,10 @@ namespace TOOLS
             {
                 GravityHandler(gameTime);
                 GérerDéplacement();
-                GestionSouris(gameTime);
-                GérerRotation();
+
+                GérerRotation(gameTime);
                 CréerPointDeVue();
+                GestionSouris(gameTime);
                 TempsÉcouléDepuisMAJ = 0;
 
             }
@@ -171,48 +181,41 @@ namespace TOOLS
             return GestionInput.EstEnfoncée(touche) ? 1 : 0;
         }
 
+        
         protected virtual void GérerDéplacement()
         {
-            float DéplacementDirection = (GérerTouche(Keys.W) - GérerTouche(Keys.S)) * VitesseTranslation;
-            float DéplacementLatéral = (GérerTouche(Keys.D) - GérerTouche(Keys.A)) * VitesseTranslation;
-            if (DéplacementDirection != 0)
-                Position += new Vector3(Direction.X, 0, Direction.Z) * DéplacementDirection;
-            if (DéplacementLatéral != 0)
-                Position += Latéral * DéplacementLatéral;
-        }
-
-        public void ManageTeleportation(Vector3 newCameraPosition, Vector3 newCameraTarget)
-        {
-            Position = newCameraPosition;
-            Direction = newCameraTarget;
+            float déplacementDirection = (GérerTouche(Keys.W) - GérerTouche(Keys.S)) * VitesseTranslation;
+            float déplacementLatéral = (GérerTouche(Keys.D) - GérerTouche(Keys.A)) * VitesseTranslation;
+            if (déplacementDirection != 0)
+                Position += new Vector3(Direction.X, 0, Direction.Z) * déplacementDirection;
+            if (déplacementLatéral != 0)
+                Position += Latéral * déplacementLatéral;
         }
 
         protected float JumpHandler(GameTime gametime)
         {
             float Vertical = 0;
-
             if (GestionInput.EstEnfoncée(Keys.Space) && IsOnFloor)// && (LastJump >= WAIT_TIME) && !IsJumping)
             {
-                //IsJumping = true;
+                IsJumping = true;
                 Vertical = JUMPING_HEIGHT;
                 LastJump = 0;
             }
+            if (IsJumping)
+            {
+                if (IsOnFloor)
+                {
+                    IsJumping = false;
+                }
 
-            //if (IsJumping)
-            //{
-            //    if (IsOnFloor)
-            //    {
-            //        IsJumping = false;
-            //    }
+                else
+                    Vertical = JUMPING_HEIGHT;
+            }
 
-            //    else
-            //        Vertical = JUMPING_HEIGHT;
-            //}
-
-            //if (!IsJumping)
-            //{
-               LastJump += gametime.ElapsedGameTime.TotalSeconds;
-            //}
+            if (!IsJumping)
+            {
+               LastJump = (LastJump + gametime.ElapsedGameTime.TotalSeconds);
+            }
 
             //if (LastJump < 1.4f * WAIT_TIME)
             //{
@@ -226,31 +229,48 @@ namespace TOOLS
             return Vertical;
         }
 
-        private void GérerRotation()
+        //private void LandCam()
+        //{
+        //    if (ForcedRotationY <= 0)
+        //    {
+        //        ForcedRotationY -= RotationFactor;
+        //        RotationFactor *= ROTATION_ACCELERATION;
+        //    }
+        //    if (ForcedRotationY >= 5000)
+        //    {
+        //        ForcedRotationY += RotationFactor;
+        //        RotationFactor /= ROTATION_ACCELERATION;
+        //    }
+        //}
+
+        private void GérerRotation(GameTime gameTime)
         {
-            Vector2 RotationXY = new Vector2((OriginalMouseState.X - GestionInput.PositionSouris().X), (OriginalMouseState.Y - GestionInput.PositionSouris().Y));
-            GérerLacet(MathHelper.WrapAngle(RotationXY.X * DELTA_LACET * Sensivity));
-            GérerTangage(MathHelper.WrapAngle(RotationXY.Y * DELTA_TANGAGE * Sensivity));
+            Vector2 RotationXY = BufferInterpolation(gameTime);
+            //RotationXY.Y += ForcedRotationY * DELTA_TANGAGE;
+            GérerLacet(MathHelper.WrapAngle(RotationXY.X * DELTA_LACET));
+            GérerTangage(MathHelper.WrapAngle(RotationXY.Y * DELTA_TANGAGE));
         }
 
         private void GérerLacet(float RotationX)
         {
-            RotationLacet = RotationX;
-            if (RotationLacet != 0)
-                Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Vector3.Up, RotationLacet));
+            float rotationLacet = RotationX;
+            if (rotationLacet != 0)
+                Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Vector3.Up, rotationLacet));
         }
         private void GérerTangage(float RotationY)
         {
-            float RotationTangage = RotationY;
-            if (RotationTangage != 0)
+            float rotationTangage = RotationY;
+            if (rotationTangage != 0)
             {
-                Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Latéral, RotationTangage));
+                Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Latéral, rotationTangage));
                 Latéral = Vector3.Normalize(Vector3.Cross(Direction, Vector3.Up));
             }
         }
 
         protected virtual void GestionClavier()
         {
+
+      
             if (GestionInput.EstNouvelleTouche(Keys.Z))
             {
                 EstEnZoom = !EstEnZoom;
@@ -264,10 +284,35 @@ namespace TOOLS
             {
                 Sensivity -= 0.05f;
             }
+            if (GestionInput.EstNouvelleTouche(Keys.NumPad8)||(GestionInput.EstNouvelleTouche(Keys.D2)))
+            {
+                InterpolationModifier += 0.05f;
+            }
+            if (GestionInput.EstNouvelleTouche(Keys.NumPad5) || (GestionInput.EstNouvelleTouche(Keys.D1)))
+            {
+                InterpolationModifier -= 0.05f;
+            }
+            if (GestionInput.EstNouvelleTouche(Keys.NumPad6))
+            {
+                ++BufferSize;
+            }
+            if (GestionInput.EstNouvelleTouche(Keys.NumPad4))
+            {
+                --BufferSize;
+            }
+            if (GestionInput.EstNouvelleTouche(Keys.NumPad9))
+            {
+                MINIMUM_MOVEMENT += 0.1f;
+            }
+            if (GestionInput.EstNouvelleTouche(Keys.NumPad7))
+            {
+                MINIMUM_MOVEMENT -= 0.1f;
+            }
         }
 
         private void GestionSouris(GameTime gametime)
         {
+            BufferManagement(gametime);
             if (!(GestionInput.PositionSouris().Y <= Game.Window.ClientBounds.Top || GestionInput.PositionSouris().Y >= Game.Window.ClientBounds.Bottom))
             {
                 Mouse.SetPosition((int)GestionInput.PositionSouris().X, (int)Game.Window.ClientBounds.Center.Y);
@@ -278,6 +323,44 @@ namespace TOOLS
             }
         }
 
+        private void BufferManagement(GameTime gametime)
+        {
+            MouseBuffer.Enqueue(new Vector2((OriginalMouseState.X - GestionInput.PositionSouris().X) * (float)gametime.ElapsedGameTime.TotalMilliseconds, (OriginalMouseState.Y - GestionInput.PositionSouris().Y) * (float)gametime.ElapsedGameTime.TotalMilliseconds));
+            if (MouseBuffer.Count > BufferSize)
+            {
+                while (MouseBuffer.Count > BufferSize)
+                {
+                    MouseBuffer.Dequeue();
+                }
+            }
+        }
+
+        private Vector2 BufferInterpolation(GameTime gameTime)
+        {
+            //float yValue = 0f;
+            //float xValue = 0f;
+            //float weight = 1.0f;
+            //for (int i = 0; i < MouseBuffer.Count; i++)
+            //{
+            //    if (MouseBuffer.ElementAt(i) != Vector2.Zero && (Math.Abs(MouseBuffer.ElementAt(i).Y) > MINIMUM_MOVEMENT || Math.Abs(MouseBuffer.ElementAt(i).X) > MINIMUM_MOVEMENT))
+            //    {
+            //        xValue += (MouseBuffer.ElementAt(i).X * weight) * Sensivity;
+            //        yValue += (MouseBuffer.ElementAt(i).Y * weight) * Sensivity;
+            //        weight *= InterpolationModifier;
+            //    }
+            //}
+            //if (Math.Abs(xValue) < MINIMUM_MOVEMENT)
+            //    xValue = 0;
+
+            //if (Math.Abs(yValue) < MINIMUM_MOVEMENT)
+            //    yValue = 0;
+
+            //Vector2 Transformation = new Vector2(xValue, yValue);
+            Vector2 Transformation = new Vector2((OriginalMouseState.X - GestionInput.PositionSouris().X) * (float)gameTime.TotalGameTime.TotalSeconds, (OriginalMouseState.Y - GestionInput.PositionSouris().Y) * (float)gameTime.TotalGameTime.TotalSeconds);
+            return Transformation;
+        }
+
+       
         public ValueType GetStats(string parameter)
         {
             ValueType Stat;
@@ -286,26 +369,17 @@ namespace TOOLS
                 case "Sensitivity":
                     Stat = this.Sensivity;
                     break;
-                case "Position":
-                    Stat = this.Position;
+                case "BufferSize":
+                    Stat = this.BufferSize;
                     break;
-                case "Direction":
-                    Stat = this.Direction;
+                case "InterpolationModifier":
+                    Stat = this.InterpolationModifier;
                     break;
-                case "Velocity":
-                    Stat = this.Velocity;
-                    break;
-                case "AirTime":
-                    Stat = this.AirTime;
-                    break;
-                case "IsOnFloor":
-                    Stat = this.IsOnFloor;
-                    break;
-                case "IsJumping":
-                    Stat = this.IsJumping;
+                case "MINIMUM_MOVEMENT":
+                    Stat = this.MINIMUM_MOVEMENT;
                     break;
                 default:
-                    Stat = 09190;
+                    Stat = 333;
                     break;
             }
 

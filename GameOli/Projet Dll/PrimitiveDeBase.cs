@@ -12,7 +12,7 @@ namespace TOOLS
       protected int NbSommets { get; set; }
       protected int NbTriangles { get; set; }
       protected Matrix Monde { get; set; }
-      protected Caméra CaméraJeu { get; private set; }
+      protected CaméraSubjectivePhysique CaméraJeu { get; private set; }
 
       protected PrimitiveDeBase(Game jeu, float homothétieInitiale, Vector3 rotationInitiale, Vector3 positionInitiale)
          : base(jeu)
@@ -31,7 +31,7 @@ namespace TOOLS
 
       protected override void LoadContent()
       {
-         CaméraJeu = Game.Services.GetService(typeof(CaméraSubjective)) as Caméra;
+         CaméraJeu = Game.Services.GetService(typeof(CaméraSubjectivePhysique)) as CaméraSubjectivePhysique;
          base.LoadContent();
       }
 

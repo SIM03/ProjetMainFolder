@@ -46,12 +46,12 @@ namespace TOOLS
 
       public override void Draw(GameTime gameTime)
       {
-         base.Draw(gameTime);
 
+         base.Draw(gameTime);
          SpriteManager.Begin();
          SpriteManager.Draw(ObjectTexture, Position, Color);
          SpriteManager.End();
-
+         
 
       }
    }

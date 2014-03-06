@@ -107,8 +107,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameLevel.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="ExcelDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
