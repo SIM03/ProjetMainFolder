@@ -108,7 +108,8 @@
     <Compile Include="QuadTree.cs" />
     <Compile Include="RessourceDeBase.cs" />
     <Compile Include="RessourcesManager.cs" />
-    <Compile Include="Terrain.cs" />
+    <Compile Include="TerrainSd.cs" />
+    <Compile Include="TerrainQT.cs" />
     <Compile Include="Tuile.cs" />
     <Compile Include="TuileColorée.cs" />
     <Compile Include="TuileTexturée.cs" />

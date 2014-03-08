@@ -31,7 +31,7 @@ namespace GAME
         RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
         RessourcesManager<Model> GestionnaireDeModèles { get; set; }
         Caméra CaméraJeu { get; set; }
-        Terrain Island { get; set; }
+        TerrainSd Island { get; set; }
 
         Texture2D IslandHeightMap { get; set; }
 
@@ -67,8 +67,8 @@ namespace GAME
             //Components.Add(new ObjetDeDemo(this, "Floor", 1f, new Vector3(0, 0, 0), new Vector3(0, 0, 0), INTERVALLE_MAJ_STANDARD));
             IslandHeightMap = GestionnaireDeTextures.Find("IHM");
             //Components.Add(new Terrain(this, 1f, new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(512, 50, 1024), "Canyon", "DétailsTerrain", 5, INTERVALLE_MAJ_STANDARD));
-            Island = new Terrain(this, Vector3.Zero, "HMF2x2High","TextureHMF",CaméraJeu.Vue, CaméraJeu.Projection, GraphicsDevice, Components.IndexOf(CaméraJeu));
-            Components.Add(Island);
+            Island = new TerrainSd(this, GraphicsDevice, Components.IndexOf(CaméraJeu), 2f, Vector3.Zero, Vector3.Zero, new Vector3(1024, 100, 1024), "HMF", "TextureHMF", 1, INTERVALLE_MAJ_STANDARD);
+                Components.Add(Island);
             
             Components.Add(new AfficheurFPS(this,"Arial20",INTERVALLE_MAJ_STANDARD));
 

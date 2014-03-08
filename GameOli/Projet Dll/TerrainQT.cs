@@ -11,10 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace TOOLS
 {
-    /// <summary>
-    /// This is a game component that implements IUpdateable.
-    /// </summary>
-    public class Terrain : Microsoft.Xna.Framework.DrawableGameComponent
+    public class TerrainQt : Microsoft.Xna.Framework.DrawableGameComponent
     {
         Vector3 Position { get; set; }
         string TextureTerrainName { get; set; }
@@ -36,7 +33,7 @@ namespace TOOLS
 
         QuadTree Terrain3d { get; set; }
 
-        public Terrain(Game game, Vector3 position, string heightMapName, string textureTerrain, Matrix viewMatrix, Matrix projectionMatrix, GraphicsDevice graphic, int indexCamera)
+        public TerrainQt(Game game, Vector3 position, string heightMapName, string textureTerrain, Matrix viewMatrix, Matrix projectionMatrix, GraphicsDevice graphic, int indexCamera)
             : base(game)
         {
             Position = position;
@@ -55,6 +52,7 @@ namespace TOOLS
             HeightTexture = TextureManager.Find(HeightMapName);
             Terrain3d = new QuadTree(Game, Position, HeightTexture, ViewMatrix, ProjectionMatrix, Graphic,2);
             Terrain3d.Effect.Texture = TextureManager.Find(TextureTerrainName);
+
             // Initialization of both RS for default and wireframe draw mode
             RS_Default = new RasterizerState();
             RS_Default.CullMode = CullMode.CullCounterClockwiseFace;
