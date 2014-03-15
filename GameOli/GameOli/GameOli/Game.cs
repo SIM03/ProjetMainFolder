@@ -31,7 +31,6 @@ namespace TOOLS
         public const float INTERVALLE_MAJ_STANDARD = 1f / 60f;
         GraphicsDeviceManager GraphicManager { get; set; }
         SpriteBatch GestionSprites { get; set; }
-        ExcelDataManager DataManager { get; set; }
         RessourcesManager<SpriteFont> GestionnaireDeFonts { get; set; }
         RessourcesManager<Texture2D> GestionnaireDeTextures { get; set; }
         RessourcesManager<Model> GestionnaireDeModèles { get; set; }
@@ -63,7 +62,6 @@ namespace TOOLS
         protected override void Initialize()
         {
             ActualLevel = 0;
-            DataManager = new ExcelDataManager(this);
             GestionnaireDeFonts = new RessourcesManager<SpriteFont>(this, "Fonts");
             GestionnaireDeTextures = new RessourcesManager<Texture2D>(this, "Textures");
             GestionnaireDeModèles = new RessourcesManager<Model>(this, "Models");
@@ -138,7 +136,10 @@ namespace TOOLS
             StaticObjectList.Add(Floor);
 
             // ajout de la caméra physique avec excel
-            CaméraJeu = new CaméraSubjectivePhysique(this, DataManager.ResetCameraPosition(ActualLevel), DataManager.ResetCameraTarget(ActualLevel), StaticObjectList, INTERVALLE_MAJ_STANDARD);
+            Vector3 caméraPosition;
+            Vector3 caméraTarget;
+            TextFileManager.LoadPositions("level1", out caméraPosition, out caméraTarget);
+            CaméraJeu = new CaméraSubjectivePhysique(this, caméraPosition, caméraTarget, StaticObjectList, INTERVALLE_MAJ_STANDARD);
             Components.Add(CaméraJeu);
 
             //Components.Add(new Ability(this));
@@ -168,7 +169,6 @@ namespace TOOLS
             Components.Add(LoadingMessage);
 
             //Services.AddService(typeof(Caméra), CaméraJeu);
-            Services.AddService(typeof(ExcelDataManager), DataManager);
             Services.AddService(typeof(RessourcesManager<SpriteFont>), GestionnaireDeFonts);
             Services.AddService(typeof(RessourcesManager<Texture2D>), GestionnaireDeTextures);
             Services.AddService(typeof(RessourcesManager<Model>), GestionnaireDeModèles);
@@ -194,7 +194,6 @@ namespace TOOLS
         {
             if (GestionInput.EstNouvelleTouche(Keys.Escape))
             {
-                ExcelApp.Quit();
                 Exit();
             }
 
@@ -235,38 +234,28 @@ namespace TOOLS
         private void QuickSave()
         {
             SavingMessage.Visible = true;
-            DataManager.SaveCamera(CaméraJeu);
-            //SavingMessage.Visible = false;
+            TextFileManager.SavePositions("level1Save", CaméraJeu);
+            SavingMessage.Visible = false;
         }
 
         private void QuickLoad()
         {
             LoadingMessage.Visible = true;
-            CaméraJeu.Position = DataManager.LoadCameraPosition(ActualLevel);
-            CaméraJeu.Direction = DataManager.LoadCameraTarget(ActualLevel);
-            CaméraJeu.IsOnFloor = DataManager.LoadIsOnFloor(ActualLevel);
-            CaméraJeu.IsJumping = DataManager.LoadIsJumping(ActualLevel);
-            CaméraJeu.Velocity = DataManager.LoadVelocity(ActualLevel);
-            CaméraJeu.AirTime = DataManager.LoadAirTime(ActualLevel);
-            //LoadingMessage.Visible = false;
+            Vector3 caméraPosition;
+            Vector3 caméraTarget;
+            TextFileManager.LoadPositions("level1Save", out caméraPosition, out caméraTarget);
+            CaméraJeu.Position = caméraPosition;
+            CaméraJeu.Direction = caméraTarget;
         }
 
         private void ResetLevel()
         {
             LoadingMessage.Visible = true;
-            CaméraJeu.Position = DataManager.ResetCameraPosition(ActualLevel);
-            CaméraJeu.Direction = Vector3.Normalize(DataManager.ResetCameraTarget(ActualLevel));
-            CaméraJeu.IsOnFloor = DataManager.ResetIsOnFloor(ActualLevel);
-            CaméraJeu.IsJumping = DataManager.ResetIsJumping(ActualLevel);
-            CaméraJeu.Velocity = DataManager.ResetVelocity(ActualLevel);
-            CaméraJeu.AirTime = DataManager.ResetAirTime(ActualLevel);
-        }
-
-        public void CreateCamera(Game jeu, Vector3 CameraPosition, Vector3 CameraTarget)
-        {
-            CaméraJeu = new CaméraSubjectivePhysique(jeu, CameraPosition, CameraTarget, StaticObjectList, INTERVALLE_MAJ_STANDARD);
-            Components.Add(CaméraJeu);
-            Services.AddService(typeof(Caméra), CaméraJeu);
+            Vector3 caméraPosition;
+            Vector3 caméraTarget;
+            TextFileManager.LoadPositions("level1", out caméraPosition, out caméraTarget);
+            CaméraJeu.Position = caméraPosition;
+            CaméraJeu.Direction = caméraTarget;
         }
     }
 }

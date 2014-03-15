@@ -104,7 +104,6 @@
     <Compile Include="CaméraSubjective.cs" />
     <Compile Include="CaméraSubjectivePhysique.cs" />
     <Compile Include="CollisionManager.cs" />
-    <Compile Include="ExcelApp.cs" />
     <Compile Include="InputManager.cs" />
     <Compile Include="ObjetDeBase.cs" />
     <Compile Include="ObjetDeBasePhysique.cs" />

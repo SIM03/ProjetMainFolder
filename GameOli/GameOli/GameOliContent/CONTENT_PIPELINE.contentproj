@@ -251,11 +251,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Database\Database.xls">
-      <Name>Database</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>PassThroughProcessor</Processor>
-    </Compile>
+    <Content Include="Database\level1.txt">
+      <Name>level1</Name>
+    </Content>
+    <Content Include="Database\level1Save.txt">
+      <Name>level1Save</Name>
+    </Content>
+    <Content Include="Database\level2.txt">
+      <Name>level2</Name>
+    </Content>
+    <Content Include="Database\level2Save.txt">
+      <Name>level2Save</Name>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 
