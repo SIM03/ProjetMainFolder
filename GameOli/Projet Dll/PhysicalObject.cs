@@ -79,12 +79,6 @@ namespace TOOLS
             GérerClavier();
             if (TempsÉcouléDepuisMAJ > IntervalleMAJ)
             {
-                //if (!Pause)
-                //{
-                //    Monde = Matrix.Identity * Matrix.CreateScale(Échelle);
-                //    Monde *= Matrix.CreateFromYawPitchRoll(Angle, Rotation.X, Rotation.Z);
-                //    Monde *= Matrix.CreateTranslation(Position);
-                //}
                 Zone = CollisionManagerTest.GetZone(Position);
                 TempsÉcouléDepuisMAJ = 0;
             }
@@ -117,20 +111,6 @@ namespace TOOLS
             }
             base.Draw(gameTime);
         }
-
-        //public void VisualiserSphèreDeCollision()
-        //{
-        //    foreach (ModelMesh maille in Modèle.Meshes)
-        //    {
-        //        BoundingSphere sphèreDeCollision = maille.BoundingSphere;
-        //        Matrix mondeLocal = maille.ParentBone.Transform;
-        //        sphèreDeCollision = sphèreDeCollision.Transform(mondeLocal);
-        //        sphèreDeCollision = sphèreDeCollision.Transform(Monde);
-        //        SphèreDeCollision Sphère = new SphèreDeCollision(Game, sphèreDeCollision.Center, sphèreDeCollision.Radius, new Vector2(12, 12), "rouge", 0.01f);
-        //        Sphère.Visible = false;
-        //        Game.Components.Insert(Game.Components.Count - 2, Sphère); // j'utilise "insert" pour insérer les composants avant l'affichage 2D terminal
-        //    }
-        //}
 
         public virtual Matrix GetMonde()
         {

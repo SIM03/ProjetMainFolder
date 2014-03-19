@@ -31,7 +31,39 @@ namespace TOOLS
         {
             GestionnaireDeTextures = Game.Services.GetService(typeof(RessourcesManager<Texture2D>)) as RessourcesManager<Texture2D>;
             TexturePlan = GestionnaireDeTextures.Find(NomTexturePlan);
+            CreerListeBoites();
             base.LoadContent();
+        }
+
+        private void CreerListeBoites()
+        {
+            ShellList = new List<BoundingBox>();
+            BoundingBox boîtePhysique;
+            Vector3[] listeDesCoins;
+            GetCorners(out listeDesCoins);
+            
+            Matrix mondeLocal = GetMonde();
+            Vector3.Transform(listeDesCoins, ref mondeLocal, listeDesCoins);
+            boîtePhysique = BoundingBox.CreateFromPoints(listeDesCoins);
+            ShellList.Add(boîtePhysique);
+
+            //On crée la primitive (un cube) qui servira à visualiser la boîte de collision et on l'ajoute à la liste des components
+            BoîteDeCollision boîteVisuelle = new BoîteDeCollision(Game, this, ShellList[0], Color.Firebrick, 0.01f);
+            Game.Components.Insert(Game.Components.Count - 2, boîteVisuelle); // j'utilise "insert" pour insérer les composants avant l'affichage 2D terminal
+        }
+
+        private void GetCorners(out Vector3[] listeDesCoins)
+        {
+            listeDesCoins = new Vector3[8];
+            listeDesCoins[0] = PtsSommets[0, 0];
+            listeDesCoins[1] = PtsSommets[0, PtsSommets.GetLength(1) - 1];
+            listeDesCoins[2] = PtsSommets[PtsSommets.GetLength(0) - 1, 0];
+            listeDesCoins[3] = PtsSommets[PtsSommets.GetLength(0) - 1, PtsSommets.GetLength(1) - 1];
+
+            listeDesCoins[5] = new Vector3(PtsSommets[0, PtsSommets.GetLength(1) - 1].X, PtsSommets[0, PtsSommets.GetLength(1) - 1].Y, PtsSommets[0, PtsSommets.GetLength(1) - 1].Z);
+            listeDesCoins[6] = new Vector3(PtsSommets[PtsSommets.GetLength(0) - 1, 0].X, PtsSommets[PtsSommets.GetLength(0) - 1, 0].Y, PtsSommets[PtsSommets.GetLength(0) - 1, 0].Z);
+            listeDesCoins[7] = new Vector3(PtsSommets[PtsSommets.GetLength(0) - 1, PtsSommets.GetLength(1) - 1].X, PtsSommets[PtsSommets.GetLength(0) - 1, PtsSommets.GetLength(1) - 1].Y, PtsSommets[PtsSommets.GetLength(0) - 1, PtsSommets.GetLength(1) - 1].Z);
+            listeDesCoins[4] = new Vector3(PtsSommets[0, 0].X, PtsSommets[0, 0].Y, PtsSommets[0, 0].Z);
         }
 
         protected override void CréerTableauSommets()
@@ -97,16 +129,16 @@ namespace TOOLS
 
         public bool CheckCollison(BoundingBox boîteCollision)
         {
-            ShellList = new List<BoundingBox>();
-            ShellList.Add(new BoundingBox(new Vector3(Position.X + Étendue.X / 2, Position.Y + Étendue.Y/2, Position.Z), new Vector3(Position.X - Étendue.X / 2, Position.Y - Étendue.Y/2, Position.Z - 1)));
+            //ShellList = new List<BoundingBox>();
+            //ShellList.Add(new BoundingBox(new Vector3(Position.X + Étendue.X / 2, Position.Y + Étendue.Y/2, Position.Z), new Vector3(Position.X - Étendue.X / 2, Position.Y - Étendue.Y/2, Position.Z - 1)));
             bool collision = false;
             foreach (BoundingBox shell in ShellList)
             {
                 BoundingBox collisionBox = shell;
-                Vector3[] listeDesCoins = collisionBox.GetCorners();
-                Matrix mondeLocal = GetMonde();
-                Vector3.Transform(listeDesCoins, ref mondeLocal, listeDesCoins);
-                collisionBox = BoundingBox.CreateFromPoints(listeDesCoins);
+                //Vector3[] listeDesCoins = collisionBox.GetCorners();
+                //Matrix mondeLocal = GetMonde();
+                //Vector3.Transform(listeDesCoins, ref mondeLocal, listeDesCoins);
+                //collisionBox = BoundingBox.CreateFromPoints(listeDesCoins);
                 if (collisionBox.Intersects(boîteCollision))
                 {
                     collision = true;

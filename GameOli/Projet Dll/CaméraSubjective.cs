@@ -17,8 +17,8 @@ namespace TOOLS
         const float ACCÉLÉRATION = 0.0001f;
         const float VITESSE_INITIALE_ROTATION = 20f;
         const float VITESSE_INITIALE_TRANSLATION = 0.2f;
-        const float DELTA_LACET = MathHelper.Pi / 10000; // 1 degré à la fois
-        const float DELTA_TANGAGE = MathHelper.Pi / 10000; // 1 degré à la fois
+        public float DELTA_LACET = MathHelper.Pi / 10000; // 1 degré à la fois
+        public float DELTA_TANGAGE = MathHelper.Pi / 10000; // 1 degré à la fois
 
         const float DELTA_ROULIS = MathHelper.Pi / 180; // 1 degré à la fois
         const float INTERVALLE_MAJ_STANDARD = 1f / 60f;
@@ -253,16 +253,16 @@ namespace TOOLS
 
         private void GérerLacet(float RotationX)
         {
-            float rotationLacet = RotationX;
-            if (rotationLacet != 0)
-                Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Vector3.Up, rotationLacet));
+            RotationLacet = RotationX;
+            if (RotationLacet != 0)
+                Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Vector3.Up, RotationLacet));
         }
         private void GérerTangage(float RotationY)
         {
-            float rotationTangage = RotationY;
-            if (rotationTangage != 0)
+            RotationTangage = RotationY;
+            if (RotationTangage != 0)
             {
-                Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Latéral, rotationTangage));
+                Direction = Vector3.Transform(Direction, Matrix.CreateFromAxisAngle(Latéral, RotationTangage));
                 Latéral = Vector3.Normalize(Vector3.Cross(Direction, Vector3.Up));
             }
         }

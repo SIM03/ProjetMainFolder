@@ -8,122 +8,120 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TOOLS
 {
-    public class RayTracer : Microsoft.Xna.Framework.GameComponent
-    {
-        Matrix View { get; set; }
-        Matrix Projection { get; set; }
+   public class RayTracer : Microsoft.Xna.Framework.GameComponent
+   {
+      Matrix View { get; set; }
+      Matrix Projection { get; set; }
 
-        GraphicsDevice Graphics { get; set; }
-        List<DynamicPhysicalObject> Models { get; set; }
-        Caméra GameCamera { get; set; }
+      GraphicsDevice Graphics { get; set; }
+      List<DynamicPhysicalObject> Models { get; set; }
+      Caméra GameCamera { get; set; }
 
-        InputManager MouseManager { get; set; }
-        Afficheur2D Crosshair { get; set; }
+      InputManager MouseManager { get; set; }
+      Afficheur2D Crosshair { get; set; }
 
-        public RayTracer(Game game, Caméra gameCamera, GraphicsDevice graphics, List<DynamicPhysicalObject> models, Afficheur2D crosshair)
-            : base(game)
-        {
-            GameCamera = gameCamera;
-            View = GameCamera.Vue;
-            Projection = GameCamera.Projection;
-            Graphics = graphics;
-            Models = models;
-            Crosshair = crosshair;
-        }
+      List<Ray> Rays { get; set; }
 
-        public override void Initialize()
-        {
-            Crosshair.Color = Color.RoyalBlue;
-            MouseManager = Game.Services.GetService(typeof(InputManager)) as InputManager;
-            base.Initialize();
-        }
+      public RayTracer(Game game, Caméra gameCamera, GraphicsDevice graphics, List<DynamicPhysicalObject> models, Afficheur2D crosshair)
+         : base(game)
+      {
+         GameCamera = gameCamera;
+         View = GameCamera.Vue;
+         Projection = GameCamera.Projection;
+         Graphics = graphics;
+         Models = models;
+         Crosshair = crosshair;
+      }
 
-        public override void Update(GameTime gameTime)
-        {
-            View = GameCamera.Vue;
-            Projection = GameCamera.Projection;
-            CheckMouse();
-            base.Update(gameTime);
-        }
+      public override void Initialize()
+      {
+         Crosshair.Color = Color.RoyalBlue;
+         MouseManager = Game.Services.GetService(typeof(InputManager)) as InputManager;
+         base.Initialize();
+      }
 
-        Ray GetPickRay()
-        {
-            //Vector3 nearPoint = new Vector3(Game.Window.ClientBounds.Width / 2, Game.Window.ClientBounds.Height / 2, GameCamera.Position.Z);
-            //Vector3 farPoint = new Vector3(Game.Window.ClientBounds.Width / 2, Game.Window.ClientBounds.Height / 2, GameCamera.Position.Z + 1);
+      public override void Update(GameTime gameTime)
+      {
+         View = GameCamera.Vue;
+         Projection = GameCamera.Projection;
+         CheckMouse();
+         base.Update(gameTime);
+      }
 
-            //nearPoint = Graphics.Viewport.Unproject(nearPoint, GameCamera.Projection, GameCamera.Vue, Matrix.Identity);
-            //farPoint = Graphics.Viewport.Unproject(farPoint, GameCamera.Projection, GameCamera.Vue, Matrix.Identity);
+      List<Ray> GetPickRay()
+      {
+         Rays = new List<Ray>();
 
-            //Vector3 direction = farPoint - nearPoint;
-            //Vector3.Normalize(direction);
+         float mouseX = Game.Window.ClientBounds.Width / 2;
+         float mouseY = Game.Window.ClientBounds.Height / 2;
 
-            //return new Ray(nearPoint, direction);
+         Matrix World = Matrix.Identity;
 
-            float mouseX = Game.Window.ClientBounds.Width / 2;
-            float mouseY = Game.Window.ClientBounds.Height / 2;
+         for (int i = (int)mouseX - 1; i <= mouseX + 1; i++)
+         {
+            for (int j = (int)mouseY - 1; j <= mouseY + 1; j++)
+            {
+               Vector3 nearSource = new Vector3(i, j, GameCamera.Position.Z);
+               Vector3 farSource = new Vector3(i, j, GameCamera.Position.Z + 1);
 
-            Vector3 nearSource = new Vector3(mouseX, mouseY, GameCamera.Position.Z);
-            Vector3 farSource = new Vector3(mouseX, mouseY, GameCamera.Position.Z + 1);
+               Vector3 nearPoint = Graphics.Viewport.Unproject(nearSource, Projection, View, World);
+               Vector3 farPoint = Graphics.Viewport.Unproject(farSource, Projection, View, World);
 
-            Matrix World = Matrix.Identity;
+               Vector3 direction = farPoint - nearPoint;
+               direction.Normalize();
+               Ray pickRay = new Ray(nearPoint, direction);
 
-            Vector3 nearPoint = Graphics.Viewport.Unproject(nearSource, Projection, View, World);
-            Vector3 farPoint = Graphics.Viewport.Unproject(farSource, Projection, View, World);
+               Rays.Add(pickRay);
+            }
+         }
+         return Rays;
+      }
 
-            //Create the Ray
-            Vector3 direction = farPoint - nearPoint;
-            direction.Normalize();
-            Ray pickRay = new Ray(nearPoint, direction);
+      public void CheckMouse()
+      {
 
-            return pickRay;
-        }
+         List<Ray> Rays = GetPickRay();
 
-        public void CheckMouse()
-        {
+         //Distance de sélection
+         float selectedDistance = float.MaxValue;
 
-            Ray ray = GetPickRay();
-            //Distance de sélection
-            float selectedDistance = float.MaxValue;
+         Crosshair.Color = Color.DeepSkyBlue;
 
+         foreach (Ray ray in Rays)
+         {
             foreach (DynamicPhysicalObject Obj in Models)
             {
-                foreach (BoundingBox Box in Obj.ShellList)
-                {
-                    Vector3[] listeDesCoins = Box.GetCorners();
-                    Matrix mondeLocal = Obj.GetMonde();
-                    Vector3.Transform(listeDesCoins, ref mondeLocal, listeDesCoins);
-                    BoundingBox boîteDeCollisionDuMaillage = BoundingBox.CreateFromPoints(listeDesCoins);
+               foreach (BoundingBox Box in Obj.ShellList)
+               {
+                  Vector3[] listeDesCoins = Box.GetCorners();
+                  Matrix mondeLocal = Obj.GetMonde();
+                  Vector3.Transform(listeDesCoins, ref mondeLocal, listeDesCoins);
+                  BoundingBox boîteDeCollisionDuMaillage = BoundingBox.CreateFromPoints(listeDesCoins);
 
-                    Nullable<float> result = ray.Intersects(boîteDeCollisionDuMaillage);
-                    if (Obj.Selected && MouseManager.EstNouveauClicGauche())
-                    {
-                        Obj.Selected = false;
-                    }
-                    else
-                    {
-                        if (result < selectedDistance && MouseManager.EstNouveauClicGauche())
-                        {
-                            Crosshair.Color = Color.Firebrick;
-                            Obj.Selected = true;
-                        }
-                        else if (result < selectedDistance)
-                        {
-                            Crosshair.Color = Color.Chartreuse;
-                        }
-                        else
-                        {
-                            Crosshair.Color = Color.AliceBlue;
-                        }
-                    }
+                  Nullable<float> result = ray.Intersects(boîteDeCollisionDuMaillage);
 
-                    
+                  if (Obj.Selected && MouseManager.EstNouveauClicGauche())
+                     Obj.Selected = false;
 
-                    
-                }
+                  else if (Obj.Selected)
+                     Crosshair.Color = Color.Firebrick;
+
+                  else if (result < selectedDistance && MouseManager.EstNouveauClicGauche())
+                  {
+                     Crosshair.Color = Color.Firebrick;
+                     Obj.Selected = true;
+                  }
+
+                  else if (result < selectedDistance && !Obj.Selected)
+                  {
+                     Crosshair.Color = Color.Chartreuse;
+                  }
+               }
 
             }
+         }
 
 
-        }
-    }
+      }
+   }
 }
