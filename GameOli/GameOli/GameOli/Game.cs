@@ -246,6 +246,7 @@ namespace TOOLS
             TextFileManager.LoadPositions("level1Save", out caméraPosition, out caméraTarget);
             CaméraJeu.Position = caméraPosition;
             CaméraJeu.Direction = caméraTarget;
+            CaméraJeu.Velocity = 0;
         }
 
         private void ResetLevel()
@@ -256,6 +257,7 @@ namespace TOOLS
             TextFileManager.LoadPositions("level1", out caméraPosition, out caméraTarget);
             CaméraJeu.Position = caméraPosition;
             CaméraJeu.Direction = caméraTarget;
+            CaméraJeu.Velocity = 0;
         }
     }
 }
