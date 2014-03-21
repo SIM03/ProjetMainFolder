@@ -264,7 +264,12 @@
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Terrain Pipeline\TerrainPipeline.csproj">
+      <Project>{B8F73B44-C7E4-46C5-8B37-DE70C2E893C4}</Project>
+      <Name>TerrainPipeline</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Sounds\SoundEffect\FootSteps.wav">
       <Name>FootSteps</Name>
@@ -288,6 +293,16 @@
     <Content Include="Sounds\Sounds.txt">
       <Name>Sounds</Name>
     </Content>
+    <Compile Include="Textures\TerrainMeshHM.png">
+      <Name>Terrain</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TerrainProcessor</Processor>
+    </Compile>
+    <Compile Include="Textures\TextureTerrain.png">
+      <Name>TextureTerrain</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 
