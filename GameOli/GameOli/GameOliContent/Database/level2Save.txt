@@ -1,0 +1,9 @@
+CameraPosition
+0
+31,01
+-580
+
+CameraTarget
+0
+0
+-1

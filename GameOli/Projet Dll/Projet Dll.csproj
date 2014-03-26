@@ -101,6 +101,7 @@
     <Compile Include="CaméraSubjective.cs" />
     <Compile Include="CaméraSubjectivePhysique.cs" />
     <Compile Include="CollisionManager.cs" />
+    <Compile Include="ScreenNotification.cs" />
     <Compile Include="DynamicPhysicalObject.cs" />
     <Compile Include="InputManager.cs" />
     <Compile Include="ObjetDeBase.cs" />

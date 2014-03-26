@@ -107,11 +107,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Game.cs" />
+    <Compile Include="NewGame.cs" />
     <Compile Include="GameLevel.cs" />
-    <Compile Include="OldGame.cs" />
+    <Compile Include="Game.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="TextFileManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

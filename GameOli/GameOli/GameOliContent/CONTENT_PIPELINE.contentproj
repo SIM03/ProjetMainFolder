@@ -264,7 +264,13 @@
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="Fonts\Calibri18.spritefont">
+      <Name>Calibri18</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Sounds\SoundEffect\FootSteps.wav">
       <Name>FootSteps</Name>
@@ -285,6 +291,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Database\level1.txt">
+      <Name>level1</Name>
+    </Content>
+    <Content Include="Database\level1Save.txt">
+      <Name>level1Save</Name>
+    </Content>
+    <Content Include="Database\level2.txt">
+      <Name>level2</Name>
+    </Content>
+    <Content Include="Database\level2Save.txt">
+      <Name>level2Save</Name>
+    </Content>
     <Content Include="Sounds\Sounds.txt">
       <Name>Sounds</Name>
     </Content>

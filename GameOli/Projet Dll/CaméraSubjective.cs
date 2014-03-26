@@ -47,7 +47,7 @@ namespace TOOLS
         public float InterpolationModifier { get; private set; }
         public float MINIMUM_MOVEMENT { get; private set; } /* Future Const (testing parameter only)*/
         float Gravity { get; set; }
-        float Velocity { get; set; }
+        public float Velocity { get; set; }
         protected float AirTime { get; set; }
         float StartingHeight { get; set; }
         double LastJump { get; set; }
@@ -374,6 +374,21 @@ namespace TOOLS
                     break;
                 case "InterpolationModifier":
                     Stat = this.InterpolationModifier;
+                    break;
+                case "Position":
+                    Stat = this.Position;
+                    break;
+                case "Direction":
+                    Stat = this.Direction;
+                    break;
+                case "Velocity":
+                    Stat = this.Velocity;
+                    break;
+                case "AirTime":
+                    Stat = this.Velocity;
+                    break;
+                case "IsOnFloor":
+                    Stat = this.IsOnFloor;
                     break;
                 case "MINIMUM_MOVEMENT":
                     Stat = this.MINIMUM_MOVEMENT;
