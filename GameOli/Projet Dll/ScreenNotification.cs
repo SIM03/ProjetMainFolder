@@ -12,14 +12,14 @@ namespace TOOLS
         const float FADE_OUT_FPS = 1f / 60;
 
         float NotificationTimeInSeconds { get; set; }
-        float TotalSecondsWhenFadeStart { get; set; }
         float TotalSecondsWhenVisible { get; set; }
-        float ElapsedNotificationTimeSinceVisible { get; set; }
+        float TotalSecondsWhenFadeStart { get; set; }
+        float ElapsedTimeSinceVisible { get; set; }
 
         float FadeOutSeconds { get; set; }
         float Transparency { get; set; }
 
-        public ScreenNotification(Game game, Caméra gameCamera, string title, string parameter, string font, float offsetx, float offsety, float intervalleMAJ, float notificationTimeInSeconds)
+        public ScreenNotification(Game game, CaméraSubjectivePhysique gameCamera, string title, string parameter, string font, float offsetx, float offsety, float intervalleMAJ, float notificationTimeInSeconds)
             : base(game, gameCamera, title, parameter, font, offsetx, offsety, intervalleMAJ)
         {
             NotificationTimeInSeconds = notificationTimeInSeconds;
@@ -27,7 +27,7 @@ namespace TOOLS
 
         public override void Initialize()
         {
-            ElapsedNotificationTimeSinceVisible = 0;
+            ElapsedTimeSinceVisible = 0;
             TotalSecondsWhenVisible = 0;
             TotalSecondsWhenFadeStart = 0;
             Transparency = 1;  // opaque

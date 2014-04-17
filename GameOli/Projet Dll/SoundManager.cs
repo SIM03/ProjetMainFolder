@@ -90,7 +90,7 @@ namespace TOOLS
             SoundEffectList.Add(SoundEffectManager.Find(SoundEffectName));
          }
 
-         MediaPlayer.Play(SongList[0]);
+         //MediaPlayer.Play(SongList[0]);
          base.Initialize();
       }
 

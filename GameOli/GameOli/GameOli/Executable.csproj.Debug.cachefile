@@ -44,5 +44,7 @@ Content\Textures\CrossHair2.xnb
 Content\Sounds\SoundEffect\FootSteps.xnb
 Content\Sounds\SoundEffect\Pop.xnb
 Content\Sounds\Music\Wow.xnb
-Content\Fonts\Calibri18.xnb
+Content\Fonts\Calibri16.xnb
 Content\Sounds\Music\Wow.wma
+Content\Database\level2.xml
+Content\Database\level1.xml

@@ -40,7 +40,7 @@ namespace TOOLS
             set { angle = value; }
         }
 
-        public PhysicalObject(Game jeu, String nomModèle, float échelleInitiale, Vector3 rotationInitiale, Vector3 positionInitiale, float intervalleMAJ)
+        public PhysicalObject(Game jeu, string nomModèle, float échelleInitiale, Vector3 rotationInitiale, Vector3 positionInitiale, float intervalleMAJ)
             : base(jeu)
         {
             NomModèle = nomModèle;

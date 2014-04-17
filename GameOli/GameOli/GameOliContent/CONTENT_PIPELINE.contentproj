@@ -265,8 +265,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Fonts\Calibri18.spritefont">
-      <Name>Calibri18</Name>
+    <Compile Include="Fonts\Calibri16.spritefont">
+      <Name>Calibri16</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
@@ -291,17 +291,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Database\level1.txt">
-      <Name>level1</Name>
-    </Content>
-    <Content Include="Database\level1Save.txt">
-      <Name>level1Save</Name>
-    </Content>
-    <Content Include="Database\level2.txt">
+    <Content Include="Database\level2.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <Name>level2</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
     </Content>
-    <Content Include="Database\level2Save.txt">
-      <Name>level2Save</Name>
+    <Content Include="Database\level1.xml">
+      <Name>level1</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Sounds\Sounds.txt">
       <Name>Sounds</Name>

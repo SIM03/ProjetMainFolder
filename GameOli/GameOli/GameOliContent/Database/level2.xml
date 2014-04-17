@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!--
+CameraPosition
+0
+31,01
+0
+
+CameraTarget
+0
+0,0001
+-1
+-->
+<Level1>
+    <ListStaticObject>
+        <PhysicalObject index="0">
+            <name>AlanTree</name>
+            <scale>0,2</scale>
+            <rotation>0 0 0</rotation>
+            <position>1000 1500 -400</position>
+            <fps>1/60</fps>
+        </PhysicalObject>
+
+        <PhysicalObject index="1">
+            <name>Column</name>
+            <scale>5</scale>
+            <rotation>0 0 0</rotation>
+            <position>-7 -0,5 -15</position>
+            <fps>1/60</fps>
+        </PhysicalObject>
+
+        <PhysicalObject index="2">
+            <name>Column</name>
+            <scale>8</scale>
+            <rotation>0 0 0</rotation>
+            <position>18 -1 -4</position>
+            <fps>1/60</fps>
+        </PhysicalObject>
+
+        <PhysicalObject index="3">
+            <name>fence</name>
+            <scale>0,1</scale>
+            <rotation>0 0 0</rotation>
+            <position>11 0 15</position>
+            <fps>1/60</fps>
+        </PhysicalObject>
+
+        <TexturedPlan>
+            <scale>1</scale>
+            <rotation>3,14159265358979/2 0 0</rotation>
+            <position>0 50 0</position>
+            <area>64 192</area>
+            <frame>4 3</frame>
+            <name>Roof</name>
+            <fps>1/60</fps>
+        </TexturedPlan>
+
+        <TexturedPlan>
+            <scale>1</scale>
+            <rotation>-3,14159265358979/2 0 0</rotation>
+            <position>0 0 0</position>
+            <area>64 192</area>
+            <frame>4 3</frame>
+            <name>Floor</name>
+            <fps>1/60</fps>
+        </TexturedPlan>
+
+        <TexturedPlan>
+            <scale>1</scale>
+            <rotation>0 0 0</rotation>
+            <position>-5 0 0</position>
+            <area>10 10</area>
+            <frame>4 3</frame>
+            <name>Floor</name>
+            <fps>1/60</fps>
+        </TexturedPlan>
+    </ListStaticObject>
+
+
+    <ListDynamicObject>
+        <DynamicObject index="0">
+            <name>Column</name>
+            <scale>3</scale>
+            <rotation>0 0 0</rotation>
+            <position>0 9,8 -4</position>
+            <fps>1/60</fps>
+            <direction></direction>
+            <mass></mass>
+            <rebound>40</rebound>
+            <friction>5</friction>
+        </DynamicObject>
+
+        <DynamicObject index="1">
+            <name>TennisBall</name>
+            <scale>0,01</scale>
+            <rotation>0 0 0</rotation>
+            <position>0 10 4</position>
+            <fps>1/60</fps>
+            <direction></direction>
+            <mass></mass>
+            <rebound>10</rebound>
+            <friction>30</friction>
+        </DynamicObject>
+    </ListDynamicObject>
+
+    <Camera>
+        <position>0 31,01 0</position>
+        <target>1 0 0</target>
+        <fps>1/60</fps>
+    </Camera>
+</Level1>
+<!--
+Cube1 = new PhysicalObject(this, "Column", 5, new Vector3(0, 0, 0), new Vector3(), INTERVALLE_MAJ_STANDARD);
+Cube2 = new PhysicalObject(this, "Column", 8, new Vector3(0, 0, 0), new Vector3(), INTERVALLE_MAJ_STANDARD);
+Cube3 = new PhysicalObject(this, "Rock1", 50, new Vector3((float)(Math.PI), 0, 0), new Vector3(), INTERVALLE_MAJ_STANDARD);
+Cube4 = new PhysicalObject(this, "fence", 0.1f, new Vector3(0, 0, 0), new Vector3(), INTERVALLE_MAJ_STANDARD);
+
+//DynamicObject
+Column = new DynamicPhysicalObject(this, "Column", 3f, new Vector3(0, 0, 0), new Vector3(0, 9.8f, -4), INTERVALLE_MAJ_STANDARD, StaticObjectList, 40, 5);
+TennisBall = new DynamicPhysicalObject(this, "TennisBall", 0.01f, new Vector3(0, 0, 0), new Vector3(0, 10, 4), INTERVALLE_MAJ_STANDARD, StaticObjectList, 10, 30);
+-->

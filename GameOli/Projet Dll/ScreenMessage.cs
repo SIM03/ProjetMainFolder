@@ -31,15 +31,17 @@ namespace TOOLS
 
         protected Color FontColor { get; set; }
 
-        CaméraSubjective GameCamera { get; set; }
+        CaméraSubjectivePhysique GameCamera { get; set; }
+
+        //DynamicPhysicalObject DynamicObject { get; set; }
         SpriteBatch GestionSprites { get; set; }
         RessourcesManager<SpriteFont> GestionnaireDeFonts { get; set; }
         SpriteFont SpriteFont { get; set; }
 
-        public ScreenMessage(Game game, Caméra gameCamera, string title, string parameter, string font, float offsetx, float offsety, float intervalleMAJ)
+        public ScreenMessage(Game game, CaméraSubjectivePhysique gameCamera, string title, string parameter, string font, float offsetx, float offsety, float intervalleMAJ)
             : base(game)
         {
-            GameCamera = (CaméraSubjective)gameCamera;
+            GameCamera = gameCamera;
             if (title == null)
                 Title = parameter;
             else

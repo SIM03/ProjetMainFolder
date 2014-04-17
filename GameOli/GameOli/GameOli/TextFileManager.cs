@@ -9,93 +9,162 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System.IO;
-using System.Xml;
+using System.Xml.Linq;
+using TOOLS;
 
-namespace TOOLS
+namespace GAME
 {
     public static class TextFileManager
     {
-        public static void LoadPositions(string fileToLoad, out Vector3 caméraPosition, out Vector3 caméraTarget)
+        public static void LoadPhysicalObjects(Game game, string levelToLoad)
         {
-            StreamReader txtReader = new StreamReader("../../../../GameOliContent/Database/" + fileToLoad + ".txt");
-            caméraPosition = LoadCameraPosition(txtReader);
-            caméraTarget = Vector3.Normalize(LoadCameraTarget(txtReader));
-            txtReader.Close();
-        }
+            Stream stream = TitleContainer.OpenStream("Content/Database/level1.xml");
+            XDocument xmlFile = XDocument.Load(stream);
 
-        private static Vector3 LoadCameraPosition(StreamReader txtReader)
-        {
-            Return(txtReader, 1);
-            float positionX = float.Parse(txtReader.ReadLine());
-            float positionY = float.Parse(txtReader.ReadLine());
-            float positionZ = float.Parse(txtReader.ReadLine());
-            
-            Vector3 cameraPosition = new Vector3(positionX, positionY, positionZ);
-
-            return cameraPosition;
-        }
-
-        private static Vector3 LoadCameraTarget(StreamReader txtReader)
-        {
-            Return(txtReader, 2);
-            float targetX = float.Parse(txtReader.ReadLine());
-            float targetY = float.Parse(txtReader.ReadLine());
-            float targetZ = float.Parse(txtReader.ReadLine());
-
-            Vector3 cameraTarget = new Vector3(targetX, targetY, targetZ);
-
-            return cameraTarget;
-        }
-
-        public static void SavePositions(string fileToSave, CaméraSubjective caméraJeu)
-        {
-            StreamWriter TxtWriter = new StreamWriter("../../../../GameOliContent/Database/" + fileToSave + ".txt");
-
-            TxtWriter.WriteLine("CameraPosition");
-            TxtWriter.WriteLine(caméraJeu.Position.X);
-            TxtWriter.WriteLine(caméraJeu.Position.Y);
-            TxtWriter.WriteLine(caméraJeu.Position.Z);
-            TxtWriter.WriteLine();
-            TxtWriter.WriteLine("CameraTarget");
-            TxtWriter.WriteLine(caméraJeu.Direction.X);
-            TxtWriter.WriteLine(caméraJeu.Direction.Y);
-            TxtWriter.WriteLine(caméraJeu.Direction.Z);
-
-            TxtWriter.Close();
-        }
-
-        //public static void LoadWorld(string worldToLoad)
-        //{
-        //    XmlReader worldFile = new XmlReader("../../../../GameOliContent/Database/" + worldToLoad + ".xml");
-        //    if (worldFile.ReadLine() == "<)
-        //    {
-        //        ReadPhysicalObjects(out ObjectList);
-        //    }
-
-        //}
-
-        //public static void SaveDynamicObjects()
-        //{
-
-        //}
-
-        //public static void ReadPhysicalObjects(out objectList)
-        //{
-
-        //}
-
-        //public static void ReadDynamicPhysicalObjects()
-        //{
-
-        //}
-
-
-        private static void Return(StreamReader txtReader, int nbLines)
-        {
-            for (int i = 0; i < nbLines; i++)
+            foreach (XElement physicalObject in xmlFile.Descendants("PhysicalObject"))
             {
-                txtReader.ReadLine();
+                string name = physicalObject.Element("name").Value;
+                float scale = ConvertToFloat(physicalObject.Element("scale").Value);
+                Vector3 rotation = ConvertToVector3(physicalObject.Element("rotation").Value);
+                Vector3 position = ConvertToVector3(physicalObject.Element("position").Value);
+                float intervalleMAJ = ConvertToFloat(physicalObject.Element("fps").Value);
+
+                game.StaticObjectList.Add(new PhysicalObject(game, name, scale, rotation, position, intervalleMAJ));
             }
+            stream.Close();
+        }
+
+        public static void LoadDynamicObjects(Game game, string levelToLoad)
+        {
+            Stream stream = TitleContainer.OpenStream("Content/Database/level1.xml");
+            XDocument xmlFile = XDocument.Load(stream);
+
+            foreach (XElement dynamicObject in xmlFile.Descendants("DynamicObject"))
+            {
+                string name = dynamicObject.Element("name").Value;
+                float scale = ConvertToFloat(dynamicObject.Element("scale").Value);
+                float intervalleMAJ = ConvertToFloat(dynamicObject.Element("fps").Value);
+                float mass = ConvertToFloat(dynamicObject.Element("mass").Value);
+                float rebound = ConvertToFloat(dynamicObject.Element("rebound").Value);
+                float friction = ConvertToFloat(dynamicObject.Element("friction").Value);
+                Vector3 rotation = ConvertToVector3(dynamicObject.Element("rotation").Value);
+                Vector3 position = ConvertToVector3(dynamicObject.Element("position").Value);
+                Vector3 direction = ConvertToVector3(dynamicObject.Element("direction").Value);
+
+                if (mass == 0)
+                    game.DynamicObjectList.Add(new DynamicPhysicalObject(game, name, scale, rotation, position, intervalleMAJ, game.StaticObjectList, rebound, friction));
+                else
+                    game.DynamicObjectList.Add(new DynamicPhysicalObject(game, name, scale, rotation, position, intervalleMAJ, game.StaticObjectList, direction, mass, rebound, friction));
+            }
+            stream.Close();
+        }
+
+        public static void LoadTexturedPlans(Game game, string levelToLoad)
+        {
+            Stream stream = TitleContainer.OpenStream("Content/Database/level1.xml");
+            XDocument xmlFile = XDocument.Load(stream);
+
+            foreach (XElement texturedPlan in xmlFile.Descendants("TexturedPlan"))
+            {
+                float echelleInitiale = ConvertToFloat(texturedPlan.Element("scale").Value);
+                Vector3 rotationInitiale = ConvertToVector3(texturedPlan.Element("rotation").Value);
+                Vector3 positionInitiale = ConvertToVector3(texturedPlan.Element("position").Value);
+                Vector2 étendue = ConvertToVector2(texturedPlan.Element("area").Value);
+                Vector2 charpente = ConvertToVector2(texturedPlan.Element("frame").Value);
+                string nomTexturePlan = texturedPlan.Element("name").Value;
+                float intervalleMAJ = ConvertToFloat(texturedPlan.Element("fps").Value);
+
+                game.StaticObjectList.Add(new PlanTexturé(game, echelleInitiale, rotationInitiale, positionInitiale, étendue, charpente, nomTexturePlan, intervalleMAJ));
+            }
+            stream.Close();
+        }
+
+        public static void LoadCamera(Game game, string levelToLoad)
+        {
+            Stream stream = TitleContainer.OpenStream("Content/Database/level1.xml");
+            XDocument xmlFile = XDocument.Load(stream);
+
+            foreach (XElement camera in xmlFile.Descendants("Camera"))
+            {
+                Vector3 position = ConvertToVector3(camera.Element("position").Value);
+                Vector3 target = ConvertToVector3(camera.Element("target").Value);
+                float intervalleMAJ = ConvertToFloat(camera.Element("fps").Value);
+
+                game.CaméraJeu = new CaméraSubjectivePhysique(game, position, target, game.StaticObjectList, game.DynamicObjectList, intervalleMAJ);
+            }
+            stream.Close();
+        }
+
+        private static Vector3 ConvertToVector3(string stringValue)
+        {
+            Vector3 value = new Vector3(0, 0, 0);
+
+            if (stringValue != "")
+            {
+                // Ex: 23 56 76
+                string[] floatTable = stringValue.Split(' ');
+                float x = ConvertToFloat(floatTable[0]);
+                float y = ConvertToFloat(floatTable[1]);
+                float z = ConvertToFloat(floatTable[2]);
+                value = new Vector3(x, y, z);
+            }
+
+            return value;
+        }
+
+        private static Vector2 ConvertToVector2(string stringValue)
+        {
+            Vector2 value = new Vector2(0, 0);
+
+            if (stringValue != "")
+            {
+                // Ex: 23 56
+                string[] floatTable = stringValue.Split(' ');
+                float x = ConvertToFloat(floatTable[0]);
+                float y = ConvertToFloat(floatTable[1]);
+                value = new Vector2(x, y);
+            }
+
+            return value;
+        }
+
+        private static float ConvertToFloat(string stringValue)
+        {
+            float value = 0;
+            bool isAFraction = false;
+
+            if (stringValue != "")
+            {
+                for (int i = 0; i < stringValue.Length; i++)
+                {
+                    if (stringValue[i] == '/')
+                    {
+                        isAFraction = true;
+                        break;
+                    }
+                }
+
+                if (isAFraction)
+                {
+                    float float1;
+                    string[] floatTable = stringValue.Split('/');
+
+                    if (floatTable[0] == "PI")
+                        float1 = MathHelper.Pi;
+                    else if (floatTable[0] == "-PI")
+                        float1 = -MathHelper.Pi;
+                    else
+                        float1 = float.Parse(floatTable[0]);
+
+                    value = float1 / float.Parse(floatTable[1]);
+                }
+                else
+                {
+                    value = float.Parse(stringValue);
+                }
+            }
+
+            return value;
         }
     }
 }

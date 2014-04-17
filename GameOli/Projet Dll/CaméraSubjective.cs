@@ -131,7 +131,7 @@ namespace TOOLS
         {
             Position = position;
             Cible = cible;
-            Direction = Vector3.Normalize(Cible - Position);
+            Direction = Vector3.Normalize(Cible);
             CréerPointDeVue();
         }
 
@@ -385,7 +385,7 @@ namespace TOOLS
                     Stat = this.Velocity;
                     break;
                 case "AirTime":
-                    Stat = this.Velocity;
+                    Stat = this.AirTime;
                     break;
                 case "IsOnFloor":
                     Stat = this.IsOnFloor;
